@@ -5,7 +5,7 @@ entries:
   levels: two
   folders:
 
-  - title: Products
+  - title: Modules
     output: web,pdf
     folderitems:
     - title: EdNirvana Web
