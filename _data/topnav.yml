@@ -20,7 +20,7 @@ topnav_dropdowns:
         - title: Publisher
           external_url: http://www.risersoft.com/
         
-    - title: Products
+    - title: Modules
       folderitems:
         - title: EdNirvana Web
           url: /ed-web/introduction.html

@@ -11,6 +11,7 @@ comments: false
 
 
 # Course
+
 ## Create Course
 To add a new course, navigate **Admin > Course > New Course**
 
