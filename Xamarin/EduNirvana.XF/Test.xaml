@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
+             mc:Ignorable="d"
+             x:Class="EduNirvana.XF.Test">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout>
+            <Button x:Name="PlayStopButtonText"  
+                    Text="PlayVideo"   
+                    Clicked="PlayStopButtonText_Clicked"  
+                    TextColor="BlueViolet"/>
+            <forms:VideoView HeightRequest="202"  
+                             WidthRequest="202"/>
+            <Button Text="ShowWebViewUsingHtml" Clicked="Button_Clicked"/>
+            <Button Text="ShowWebViewUsingLink" Clicked="Button_Clicked_1"/>
+            <StackLayout x:Name="stackWebView">
+                
+            </StackLayout>
+        </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

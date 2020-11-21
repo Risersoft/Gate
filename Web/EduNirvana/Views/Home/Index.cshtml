@@ -1,0 +1,63 @@
+﻿@using risersoft.shared.cloud.common
+@{
+    ViewData["Title"] = "Home Page";
+    string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/').ToString();
+
+    string banner = risersoft.shared.GlobalCore.GetConfigSetting("banner");
+    if (string.IsNullOrWhiteSpace(banner))
+    {
+        banner = "/Content/images/edunirvana-front.jpg";
+    }
+    else {
+        banner = baseUrl + banner;
+    }
+}
+
+<div class="row" style="margin-bottom:41px">
+    <div class="col-md-8">
+        <img src="@banner" style="width:650px;" class="img-responsive banner-img">
+    </div>
+    <div class="col-md-3 gst-banner-text">
+        <h1 class="gst-banner-text-title">EdNirvana</h1>
+        <p class="lead gst-banner-text-para">Manage your organization’s learning and assessment needs.</p>
+        <p><a href="/app" class="btn btn-primary btn-lg">Start Now &raquo;</a></p>
+
+        <div class="col-md-12" style="margin-top:85px;">
+            <a href="https://play.google.com/store/apps/details?id=com.risersoft.ednirvana" target="_blank"><img class="play" src="~/Content/images/playstore-button.png" style="width:100px;"></a>&nbsp;
+            <a href="#appstore"><img class="app" src="~/Content/images/appstore-button.png" style="width:100px;"></a>
+        </div>
+    </div>
+</div>
+
+<div class="row clsimgb">
+    <div class="col-md-3 footer-nav footer-text">
+        <div class="clsfoot">
+            <h2>Courses</h2>
+            <p>
+                Manage various courses and populate them with content units of various types.
+
+            </p>
+        </div>
+    </div>
+    <div class="col-md-3 footer-nav footer-text">
+        <div class="clsfoot">
+            <h2>Assessments</h2>
+            <p>
+                Design and Administer assessments in terms of tests and assignments.
+
+            </p>
+        </div>
+    </div>
+    <div class="col-md-3 footer-nav footer-text">
+        <div class="clsfoot">
+            <h2>Survey</h2>
+            <p>Design and Administer Survey to get a quick feel of your audience.</p>
+        </div>
+    </div>
+    <div class="col-md-3 footer-text">
+        <div class="clsfoot">
+            <h2>Multi Platform</h2>
+            <p>Securely access your cloud hosted data from web, mobile & desktop.</p>
+        </div>
+    </div>
+</div>

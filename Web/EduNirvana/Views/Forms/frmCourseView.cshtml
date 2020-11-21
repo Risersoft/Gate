@@ -1,0 +1,331 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+
+@model frmCourseViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .panel-title {
+        position: relative;
+    }
+
+        .panel-title::after {
+            content: "\f107";
+            color: #fff;
+            top: 3px;
+            right: 10px;
+            position: absolute;
+            font-family: "FontAwesome"
+        }
+
+        .panel-title[aria-expanded="true"]::after {
+            content: "\f106";
+        }
+
+    @@media screen and (min-width: 360px) {
+        .ddl-menu {
+            margin-top: 40px;
+        }
+    }
+
+    @@media screen and (min-width: 780px) {
+        .ddl-menu {
+            margin-top: 0px;
+        }
+    }
+
+    #hover-content {
+        display: none;
+    }
+
+    #parent:hover #hover-content {
+        display: block;
+        z-index: 999999;
+        position: absolute;
+        width: 485px;
+        background-color: #808080;
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-8">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">Course View - {{CourseInfo.CourseName}} ({{CourseInfo.CourseCode}})</h5>
+            </div>
+            <div class="col-md-4">
+                <nav class="navbar navbar-expand-md navbar-light bg-light" style="float:right;margin-top: 5%;">
+                    <div id="navbarCollapse">
+                        <ul class="nav navbar-nav" style="margin-top: 4px;">
+                            <li class="nav-item dropdown">
+                                <button type="button" id="btnAddNew" Class="btn btn-default btnf dropdown-toggle" data-toggle="dropdown" title="Download References"><i class="fa fa-download"></i></button>
+                                <div class="dropdown-menu ddl-menu" style="margin-left: -50px;">
+                                    <table>
+                                        <tr ng-repeat="fls in courseFiles">
+                                            <td><span class="dropdown-item" style="cursor:pointer" ng-click="downloadFile(fls.FileURL)" title="{{fls.FileName}}">{{fls.tFlName}}</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="Download References"><i class="fa fa-info-circle" style="font-size: 20px;color: #027fbd;"></i></a>
+                </nav>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <div class="form-row" ng-show="contentDescription.length>0">
+                    <div class="col-md-12">
+                        <label for="inputEmail4"><b>Description : </b></label>
+                        <p ng-bind-html="contentDescription"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="showPreview" style="margin-top:15px; margin-bottom:15px;"></div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" style="margin-left: -60px;">
+                        <a href="javascript:void(0)" id="btnContinue" class="btn btn-default btnf" ng-class="{ disabled: isDisabledContinue}" ng-click="redirectContentUnit(lastContentUnitID)" value="Continue" style="padding: 10px;font-size: 20px;">Continue</a>
+                        <a href="javascript:void(0)" id="btnStart" class="btn btn-default btnf" ng-class="{ disabled: isDisabledStart}" ng-click="redirectContentUnit(firstContentUnitID)" value="Start" style="padding: 10px;font-size: 20px;">Start</a>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <div class="row" style="margin-left:2px;">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="content-tab" data-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">Content List</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent" style="width:99%;">
+                        <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="content-tab">
+                            <div class="clearfix" style="margin-top:20px;"></div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <div id="generateHTML">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, usSpinnerService, $window) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Set Course Id
+                $scope.CouseId = $scope.model.dsForm.DT[0].courseid;
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //disabled in edit mode
+                $scope.isDisabled = $scope.model.frmMode == 2 ? "" : "disabled";
+                //Bind in TextArea Field
+                $scope.contentDescription = $scope.CourseInfo.DescriptionHTML;
+                //Bind Content List
+                $scope.contents = $scope.model.GridViews.ContentList.MainGrid.myDS.dt;
+                //Bind Files List
+                $scope.courseFiles = $scope.model.GridViews.File.MainGrid.myDS.dt;
+
+                if ($scope.courseFiles.length > 0) {
+                    for (var i = 0; i < $scope.courseFiles.length; i++) {
+                        strLeng = $scope.courseFiles[i].FileName.length;
+                        var trnFlName = truncate($scope.courseFiles[i].FileName, 25);
+                        $scope.courseFiles[i].tFlName = trnFlName;
+                    }
+                }
+
+                for (var i = 0; i < $scope.contents.length; i++) {
+                    if ($scope.contents[i].ContentType == 'Assignment' || $scope.contents[i].ContentType == 'Test' || $scope.contents[i].ContentType == 'Survey') {
+                        $scope.contents[i].showPrevIcon = false;
+                        if ($scope.model.dsForm.DT[0].RoleCode == "INS") {
+                            $scope.contents[i].showPrevIcon = true;
+                        }
+                    }
+                    else
+                        $scope.contents[i].showPrevIcon = true;
+                }
+
+                //Call Function to generate View
+                generateAccordianView($scope.contents);
+
+                if ($scope.contents.length == 0) {
+                    $scope.isDisabledContinue = "disabled";
+                    $scope.isDisabledStart = "disabled";
+                }
+
+                if ($scope.contents.length > 0) {
+                    $scope.firstContentUnitID = $scope.contents[0].ContentUnitID;
+                    if ($scope.model.dsForm.DT[0].LastContentUnitid != undefined) {
+
+                        var cItemLength = $scope.contents.length;
+                        if ($scope.model.dsForm.DT[0].LastContentUnitid == $scope.contents[cItemLength - 1].ContentUnitID) {
+                            $scope.isDisabledContinue = "disabled";
+                            $('#showPreview').css('text-align', 'center');
+                            $('#showPreview').html('<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px"> You have successfully finished the course.</span>');
+                            $('#showPreview').show();
+                        }
+                        else {
+                            $scope.lastContentUnitID = $scope.model.dsForm.DT[0].LastContentUnitid;
+                            $scope.isDisabledContinue = "";
+                        }
+                    } else {
+                        $scope.isDisabledContinue = "disabled";
+                    }
+                }
+                else { $scope.isDisabledContinue = "disabled"; }
+            };
+
+            loadmodel($scope.model);
+
+            function generateAccordianView(lstAry) {
+                var strHtml = '';
+                var strAccordian = '';
+                var strTitle = '';
+                var strSectionTitle = '';
+
+                if (lstAry.length > 0) {
+                    if (lstAry[0].ContentType !== 'section')
+                        strHtml += '<table id="tblContents" class="table table-sm" style="width:100%"><thead><tr><th style="width:50px">#</th><th style="width:500px">Title</th><th style="width: 150px;">Content Type</th><th style="width: 150px;">Document Type</th><th style="width: 85px;">Action</th></tr></thead><tbody>';
+
+                    for (var i = 0; i < lstAry.length; i++) {
+                        if (lstAry[i].ParentUnitID == undefined) {
+                            if (lstAry[i].ContentType !== 'section') {
+                                strHtml += '<tr>';
+                                strHtml += '<td>' + parseInt(i + 1) + '.</td>';
+
+                                if (lstAry[i].Title.length > 90)
+                                    strTitle = lstAry[i].Title.slice(0, 90) + '...';
+                                else
+                                    strTitle = lstAry[i].Title;
+
+                                strHtml += '<td id="parent">' + strTitle + '<div id="hover-content">' + lstAry[i].Title + '</div></td>';
+                                if (lstAry[i].ContentType != undefined)
+                                    strHtml += '<td>' + lstAry[i].ContentType + '</td>';
+                                else
+                                    strHtml += '<td></td>';
+                                if (lstAry[i].DocType != undefined)
+                                    strHtml += '<td>' + lstAry[i].DocType + '</td>';
+                                else
+                                    strHtml += '<td></td>';
+
+                                strHtml += '<td><a href="javascript:void(0)" onclick="angular.element(this).scope().redirectContentUnit(' + lstAry[i].ContentUnitID + ')" ng-show="' + lstAry[i].showPrevIcon + '"><i class="fa fa-eye"></i></a>&nbsp;&nbsp;</td>';
+                                strHtml += '</tr>';
+                            }
+
+                            if (lstAry[i].ContentType == 'section') {
+                                var strAccorTable = '';
+                                let result = [];
+                                result = lstAry.filter(a => a.ParentUnitID == lstAry[i].ContentUnitID);
+
+                                for (var x = 0; x < result.length; x++) {
+                                    strAccorTable += '<tr>';
+                                    strAccorTable += '<td>' + parseInt(x + 1) + '.</td>';
+
+                                    if (result[x].Title.length > 90)
+                                        strSectionTitle = result[x].Title.slice(0, 90) + '...';
+                                    else
+                                        strSectionTitle = result[x].Title;
+
+                                    strAccorTable += '<td id="parent">' + strSectionTitle + '<div id="hover-content">' + result[x].Title +'</div></td>';
+
+                                    if (result[x].ContentType != undefined)
+                                        strAccorTable += '<td>' + result[x].ContentType + '</td>';
+                                    else
+                                        strAccorTable += '<td></td>';
+                                    if (result[x].DocType != undefined)
+                                        strAccorTable += '<td>' + result[x].DocType + '</td>';
+                                    else
+                                        strAccorTable += '<td></td>';
+
+                                    strAccorTable += '<td><a href="javascript:void(0)" onclick="angular.element(this).scope().redirectContentUnit(' + result[x].ContentUnitID + ')" ng-show="' + result[x].showPrevIcon + '"><i class="fa fa-eye"></i></a>&nbsp;&nbsp;</td>';
+                                    strAccorTable += '</tr>';
+                                }
+
+                                if (lstAry[i].IsVisibleLearners) {
+                                    strAccordian += '<div class="panel-group" id="accordion"><div class="panel panel-default"><div class="panel-heading">';
+                                    strAccordian += '<h4 class="panel-title" data-toggle="collapse" data-target="#collapse' + i + '" style="background-color: #027fbd;padding: 5px;color:#fff">';
+                                    strAccordian += '' + lstAry[i].Title +'';
+                                    strAccordian += '</h4></div><div id="collapse' + i + '" class="panel-collapse collapse"><div class="panel-body">';
+                                    strAccordian += '<table id="tblContents" class="table table-sm" style="width:100%"><thead><tr><th style="width:50px">#</th><th style="width:500px">Title</th><th style="width: 150px;">Content Type</th><th style="width: 150px;">Document Type</th><th style="width: 85px;">Action</th></tr></thead><tbody>';
+                                    strAccordian += strAccorTable;
+                                    strAccordian += '</tbody></table></div></div></div>';
+                                }
+                            }
+                        }
+                    }
+
+                    if (lstAry.length > 0) { strHtml += '</tbody></table>'; }
+                    else { strHtml += '<tr><td colspan="5" style="text-align:center;font-size: 20px;">No Records Found...</td></tr></tbody></table>' };
+
+                    if (strAccordian != "") {
+                        strHtml += strAccordian;
+                    }
+
+                    $('#generateHTML').append(strHtml);
+                }
+            }
+
+            function truncate(str, n) {
+                return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
+            };
+
+            $scope.downloadFile = function (filename) {
+                $scope.download('frmCourseView', filename);
+            }
+
+            $scope.redirectContentUnit = function (contentUID) {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                var payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: contentUID, rowData: JSON.stringify(courseContent) };
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}

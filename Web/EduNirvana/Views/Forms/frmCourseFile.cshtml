@@ -1,0 +1,180 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+
+@model frmCourseFileModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        <input type="hidden" id="fileStatus" />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Course File</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputEmail4">Course<span class="red">*</span></label>
+                <select class="form-control" style="max-width: 100%;" ng-model="CourseInfo.CourseIDSelected" ng-disabled="courseDisabled" name="course" ng-options="course.CourseName for course in Course track by course.CourseID" required ng-class="{true: 'error'}[submitted() && userform.course.$invalid]"></select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">File Name<span class="red">*</span></label>
+                <input type="text" class="form-control filename" style="max-width:100%" name="filename" ng-model="CourseInfo.FileName" required ng-class="{true: 'error'}[submitted() && userform.filename.$invalid]" />
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">File URL </label>
+                <input type="text" class="form-control" id="fileurl" name="fileurl" ng-model="CourseInfo.FileURL" style="max-width:100%" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">File Size (kb)</label>
+                <input type="text" class="form-control" id="filesize" name="filesize" ng-model="CourseInfo.FileSizeKB" style="max-width:100%" disabled />
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">File Type </label>
+                <input type="text" class="form-control" id="fileType" name="courselvl" ng-model="CourseInfo.FileType" style="max-width:100%" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-11">
+                <label for="inputEmail4">File</label>
+                <input type="file" class="form-control" style="max-width: 99%;" id="attach_filename" name="attach_filename" accept=".pdf, .doc, .docx" onchange="angular.element(this).scope().SelectFile(event)" />
+            </div>
+            <div class="form-group col-md-1">
+                <label for="inputEmail4"></label>
+                <button type="button" id="btnUpload" class="btn btn-default btnf" ng-click="Upload()" style="margin-top:10px;">Upload</button>
+            </div>
+        </div>
+        <!-- End Page Content-->
+        <hr />
+        @Html.Partial("_SavePanel")
+        <!-- Modal -->
+        <div class="modal fade" id="errorModel" role="dialog" style="z-index: 99999;">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                        <h4 class="modal-title">Error</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 16px;">Please check your uploaded file extension, Only Allow doc, docx and pdf. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-default" ng-click="closeErrorDialog()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnsave').prop('disabled', true);
+        });
+
+        rsApp.controller('FormController', function ($scope, $http, usSpinnerService) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var loadmodel = function (result) {
+                //Set Result Data in scope
+                $scope.model = result;
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Category DropDown List
+                $scope.Course = $scope.model.dsCombo.Course;
+                //Bind Dropdown Selected Value
+                $scope.CourseInfo.CourseIDSelected = $.grep($scope.Course, function (item, index) { return item.CourseID == $scope.model.dsForm.DT[0].CourseID })[0];
+
+                if ($scope.model.dsForm.DT.length > 0 && $scope.model.dsForm.DT[0].CourseID != null) {
+                    $scope.courseDisabled = true;
+                }
+
+                $scope.UploadFiles = [];
+                //Show Hide Back to Previous Button
+                if ($scope.CourseInfo.CourseID !== undefined) {
+                    $scope.showbacktoprev = true;
+                    $('#btnback').hide();
+                }
+                else {
+                    $scope.showbacktoprev = false;
+                    $('#btnback').show();
+                }
+            }
+
+            loadmodel($scope.model);
+
+            $scope.SelectFile = function (e) {
+                //log / access file size in bytes
+                var fSize = parseFloat(e.target.files[0].size/1024);
+                $('#filesize').val(fSize);
+                $('#fileType').val(e.target.files[0].type);
+                $('.filename').val(e.target.files[0].name);
+                $scope.CourseInfo.FileSizeKB = fSize; //e.target.files[0].size;
+                $scope.CourseInfo.FileType = e.target.files[0].type;
+                $scope.CourseInfo.FileName = e.target.files[0].name;
+            };
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) { };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.CourseInfo.FileUrl = $scope.UploadFiles[0].blobname;
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'CourseFile', ID: $scope.model.dsForm.DT[0].CourseFileID, AcceptWarning: false };
+                return payload;
+            };
+
+            //Back to Previous
+            $scope.backtoprev = function () {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                var payload = { fKey: 'frmCourseContent', fMode: 'acEditM', IDX: $scope.CourseInfo.CourseID, rowData: JSON.stringify(courseContent) }; // for edit
+
+                $.post(base, payload, function (result) {
+                    $scope.status = 'loaded';
+                    window.location = result;
+                });
+            }
+
+            @Html.RenderFile("~/scripts/attchment.js");
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+
+

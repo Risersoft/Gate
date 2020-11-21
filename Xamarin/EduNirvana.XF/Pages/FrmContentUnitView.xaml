@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<framework:BasePage  
+             xmlns:framework="clr-namespace:Risersoft.Framework.Pages.Framework;assembly=Risersoft.Framework"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms" 
+             mc:Ignorable="d"
+             x:Class="EduNirvana.XF.Pages.FrmContentUnitView" Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text ="    Next" 
+                  Clicked="ToolbarItem_Clicked_Next" />
+        <ToolbarItem IconImageSource="HamBurger.png"  
+              Clicked="ToolbarItem_Clicked_Ham" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+     <StackLayout>
+            <StackLayout x:Name="stackShowData" Padding="10" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    
+            </StackLayout>
+            <StackLayout x:Name="stackSection" BackgroundColor="LightGray" Padding="10" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false" HeightRequest="100">
+                <Label x:Name="lblSection" FontSize="Large" TextColor="Black" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <forms:VideoView ShowControls="True" BackgroundColor="Black" VideoAspect="AspectFill" VerticalOptions="FillAndExpand"  
+                              x:Name="videoPlayer" IsVisible="False" />
+            <StackLayout HeightRequest="30" Orientation="Horizontal" Padding="10" BackgroundColor="Gray" x:Name="stackDownloadVideo" IsVisible="False">
+                <Label Text="Download File" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                <Image Source="iconDownload.png" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" Aspect="AspectFit"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+           
+            <StackLayout  BackgroundColor="LightGray" Padding="10" Spacing="20" x:Name="stackRes" VerticalOptions="CenterAndExpand" IsVisible="false">
+                <Label x:Name="lblTitle" TextColor="Black"  HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium" FontAttributes="Bold"/>
+                <StackLayout x:Name="stacktestInfo" >
+                    <Label x:Name="NoOFQuestions" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                    <Label x:Name="TotalMarks" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                    <Label x:Name="TimeLimit" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                </StackLayout>
+               
+                <Label x:Name="lblMessage" TextColor="Black" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large"/>
+               <StackLayout x:Name="stackResult" IsVisible="false" Spacing="20">
+                <Label x:Name="lblMainMessage" TextColor="Black" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Large"/>
+                <Label x:Name="lblTotalMarks" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                <Label x:Name="lblMarksObtained" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+               </StackLayout>
+                
+               <StackLayout>
+                    <Button x:Name="btnStart" Text="Start" BackgroundColor="DodgerBlue" TextColor="White" HorizontalOptions="FillAndExpand" IsVisible="False" Clicked="btnStart_Clicked"/>
+                    <Button x:Name="btnStartNew" Text="Start New" TextColor="White" BackgroundColor="DodgerBlue" HorizontalOptions="FillAndExpand" IsVisible="False" Clicked="btnStartNew_Clicked"/>
+                    <Button x:Name="btnContinue" Text="Continue" BackgroundColor="DodgerBlue" TextColor="White" HorizontalOptions="FillAndExpand" IsVisible="False" Clicked="btnContinue_Clicked"/>
+               </StackLayout>
+           </StackLayout>
+     </StackLayout>
+    </ContentPage.Content>
+</framework:BasePage>

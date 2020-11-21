@@ -1,0 +1,355 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+@using Syncfusion.EJ2
+
+@model frmAssessAssignViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<script type="text/javascript">
+    var defaultRTEFN;
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+</script>
+<style type="text/css">
+    #clock-container {
+        color: #333;
+        margin: 0 auto;
+        padding: 0.5rem;
+        text-align: center;
+    }
+    #clock-container h1 {
+        font-weight: normal;
+    }
+    #clock-container li {
+        display: inline-block;
+        font-size: 1.5em;
+        list-style-type: none;
+        padding: 1em;
+        text-transform: uppercase;
+    }
+    #clock-container li span {
+        display: block;
+        font-size: 4.5rem;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        <input type="hidden" id="saveQuestionStatus" />
+        <input type="hidden" id="fileStatus" />
+
+        @Html.AntiForgeryToken()
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-9">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">Assess Assignment {{AssessAssignmentName}}</h5>
+            </div>
+            <div class="col-md-3" style="margin-top: 1%;" ng-show="hideDownload">
+                @Html.Partial("_AttachmentView")
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div ng-show="!isEnableOn">
+            <div class="form-row">
+                <div class="form-group" ng-class="{'col-md-8': isHide, 'col-md-7': !isHide }"><label for="inputEmail4"><b>Description: </b></label></div>
+                <div class="form-group row col-md-3" ng-hide="isHide">
+                    <label for="inputEmail4" class="col-sm-7 col-form-label"><b>Marks Obtained:</b></label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control numeric" id="giMarks" style="max-width:100%" name="marksobtained" maxlength="2" ng-model="AssessAssignmentInfo.TotalScore" ng-change="marksValidate(AssessAssignmentInfo.TotalScore, totalAssignmentMarks)" />
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'col-md-4': isHide, 'col-md-2': !isHide }">
+                    <label for="inputEmail4" style="float: right;font-size: 16px;"><b>Total Marks: </b> {{totalAssignmentMarks}}</label>
+                    <label for="inputEmail4" style="float: right;font-size: 16px;" ng-if="model.DatasetCollection.Assign.Visitor[0].rolecode !== 'INS'"><b>Duration(in Mins): </b> {{AssessAssignmentInfo.Duration}}&nbsp;|&nbsp;</label>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <span style="font-size:14px" ng-bind-html="pageDescription"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12" ng-show="!isFormFieldShow">
+                    <div class="control-section">
+                        @Html.EJS().RichTextEditor("defaultfn").Value("").Created("createdfn").Render()
+                    </div>
+                    @Html.EJS().ScriptManager()
+                </div>
+                <div class="form-group col-md-12" ng-show="isFormFieldShow">
+                    <span ng-bind-html="descriptionText" style="color:#1c66a7; font-size"></span>
+                </div>
+                <div class="col-md-12">
+                    @Html.Partial("_Attachment")
+                </div>
+                <div class="form-group col-md-12" ng-hide="isHide">
+                    <label for="inputEmail4"><b>Remarks: </b></label>
+                    <input type="text" name="remarks" class="form-control" style="max-width:100%" ng-model="AssessAssignmentInfo.Remark" />
+                </div>
+            </div>
+            <hr />
+            <div ng-show="!CourseID" style="margin-bottom:10px;">
+                @Html.Partial("_SavePanel")
+            </div>
+            <div class="form-row" ng-show="CourseID">
+                <div id="failure" ng-show="(result=='failure')"><i class="fa fa-2x fa-remove"></i>&nbsp;{{message}}</div>
+                <div class="form-group col-md-12" id="btn_nextPrev">
+                    <a href="javascript:void(0)" class="btn btn-default btnf" ng-click="btnNextSave()">Submit</a>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="isEnableOn">
+            <!-- Display the countdown timer in an element -->
+            <div class="form-row">
+                <div class="col-md-12" id="dCountdown">
+                    <p id="demo"></p>
+                    <div id="clock-container">
+                        <h1>Your Assignment Will Start In:</h1>
+                        <ul>
+                            <li><span id="days"></span>days</li>
+                            <li><span id="hours"></span>Hours</li>
+                            <li><span id="minutes"></span>Minutes</li>
+                            <li><span id="seconds"></span>Seconds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row" ng-if="isCompletedOn">
+            <div class="form-group col-md-12">
+                <div class="col-md-7">
+                    <a href="javascript:void(0)" id="btnStart" class="btn btn-default btnf center" style="padding: 10px;font-size: 20px;">{{AssessAssignmentInfo.ButtonType}}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="errorModel" role="dialog" style="z-index: 99999;">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Error</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 16px;">Please upload valid file like (doc, docx, pdf, ppt and pptx). </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-default" ng-click="closeErrorDialog()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, usSpinnerService, $window) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                debugger;
+                $scope.model = result;
+                $scope.isDisableOn = true;
+                $scope.AssessAssignmentInfo = $scope.model.dsForm.DT[0];
+                //SET Assess Test Name
+                $scope.AssessAssignmentName = " - ( " + $scope.model.dsForm.DT[0].AssessName + " ) ";
+                $scope.totalAssignmentMarks = $scope.model.dsForm.DT[0].TotalWeight;
+                //Save to Tatal Score
+                $scope.dtCollection = $scope.model.DatasetCollection.Assign.Assignment;
+                //List of Files
+                $scope.UploadAttachAssignJson = $scope.model.DatasetCollection.Assign.Assignment[0].AttachmentJson !== undefined ? JSON.parse($scope.model.DatasetCollection.Assign.Assignment[0].AttachmentJson) : [];
+                if ($scope.UploadAttachAssignJson.length > 0) {
+                    for (var i = 0; i < $scope.UploadAttachAssignJson.length; i++) {
+                        var trnFlName = truncate($scope.UploadAttachAssignJson[i].bloborgname, 25);
+                        $scope.UploadAttachAssignJson[i].tFlName = trnFlName;
+                        $scope.UploadAttachAssignJson[i].isDeleted = true;
+                    }
+                }
+
+                $scope.UploadFiles = $scope.model.dsForm.DT[0].AssignAttachJson !== undefined ? JSON.parse($scope.model.dsForm.DT[0].AssignAttachJson) : [];
+                if ($scope.UploadFiles.length > 0) {
+                    for (var i = 0; i < $scope.UploadFiles.length; i++) {
+                        $scope.UploadFiles[i].isDeleted = false;
+                    }
+                }
+
+                //Hide Message span
+                $scope.isShowMsg = false;
+                //DataBind in TextArea Field
+                defaultRTEFN.value = $scope.AssessAssignmentInfo.AssignmentHTML == undefined ? "" : $scope.AssessAssignmentInfo.AssignmentHTML;
+
+                $scope.pageDescription = $scope.model.DatasetCollection.Assign.Assignment[0].DescriptionHTML;
+                $scope.CourseID = $scope.model.dsForm.DT[0].CourseID;
+
+                if ($scope.AssessAssignmentInfo.CourseID == undefined) {
+                    $('#btnback').hide();
+                    $('#btnsave').text("Submit");
+                    $('#btnsave').removeClass('btn-primary').addClass("btn btn-default btnf");
+                    $('#btnsave').css("margin-bottom", "10px");
+                }
+
+                //check User Roles
+                if (Array.isArray($scope.model.DatasetCollection.Assign.Visitor) && $scope.model.DatasetCollection.Assign.Visitor.length > 0) {
+                    if ($scope.model.dsForm.DT[0].UserID == $scope.model.DatasetCollection.Assign.Visitor[0].userid) {
+                        $scope.isHide = true;
+                    } else {
+                        $scope.isHide = false;
+                    }
+                }
+
+                if ($scope.UploadAttachAssignJson.length > 0) {
+                    $scope.hideDownload = true;
+                }
+
+                //EnableOn Date and Time
+                var curDt = new Date($scope.model.dsForm.DT[0].currentTime);
+                var startDt = new Date($scope.model.dsForm.DT[0].EnableOn);
+                var expireDt = new Date($scope.model.dsForm.DT[0].DisableOn);
+
+                if ($scope.model.dsForm.DT[0].lastsubmiton !== undefined) {
+                    if (Array.isArray($scope.model.DatasetCollection.Assign.Visitor) && $scope.model.DatasetCollection.Assign.Visitor.length > 0) {
+                        if ($scope.model.DatasetCollection.Assign.Visitor[0].rolecode == 'INS') {
+                            $scope.isFormDisabled = "disabled";
+                            $scope.isFormFieldShow = true;
+                            $scope.descriptionText = $scope.AssessAssignmentInfo.AssignmentHTML;
+
+                            if ($scope.UploadAttachAssignJson.length > 0) {
+                                $scope.hideDownload = true;
+                                for (var i = 0; i < $scope.UploadAttachAssignJson.length; i++) {
+                                    $scope.UploadAttachAssignJson[i].isDeleted = false;
+                                }
+                            }
+                        }
+                        else {
+                            $scope.isEnableOn = true;
+                            $scope.hideDownload = false;
+                            var strMsg = '<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px">' + $scope.model.dsForm.DT[0].NotifyMsg + '.</span><br/><br/>';
+
+                            if ($scope.model.dsForm.DT[0].Complete_Show_Score) {
+                                if ($scope.model.dsForm.DT[0].TotalScore !== undefined) {
+                                    strMsg += "<span style='font-size: 25px'>Marks Obtained: " + $scope.model.dsForm.DT[0].TotalScore + "</span><br/><br/>";
+                                }
+                            }
+
+                            $('#clock-container').html(strMsg);
+                        }
+                    }
+                    else {
+                        $scope.isEnableOn = true;
+                        $scope.hideDownload = false;
+                        $('#clock-container').html('<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px">' + $scope.model.dsForm.DT[0].NotifyMsg + '.</span>');
+                    }
+                }
+                if (curDt < startDt) {
+                    checkShowTimer(curDt, $scope.model.dsForm.DT[0].EnableOn, $scope.model.dsForm.DT[0].DisableOn);
+                    $scope.hideDownload = false;
+                }
+                if (curDt > expireDt && $scope.model.dsForm.DT[0].lastsubmiton == undefined) {
+                    $scope.isEnableOn = true;
+                    $scope.isDisableOn = false;
+                    $scope.hideDownload = false;
+                    $scope.isMarksObtained = false;
+                    $scope.totalDuration = false;
+
+                    $('#clock-container').html('<i class="fa fa-times-circle" style="color:red"></i><span style="font-size:25px"> ' + $scope.model.dsForm.DT[0].NotifyMsg + '.</span>');
+                    $('#clock-container').css('font-size', '25px');
+                }
+            }
+
+            loadmodel($scope.model);
+
+            function truncate(str, n) {
+                return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
+            };
+
+            $scope.marksValidate = function (gMarks, pMarks) {
+                if (gMarks > pMarks) {
+                    $('#giMarks').addClass('error');
+                    $('#btnsave').attr('disabled', true);
+                } else {
+                    $('#giMarks').removeClass('error');
+                    $('#btnsave').removeAttr('disabled', false);
+                }
+            }
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) {
+                datamodel.DatasetCollection.Assign.Assignment[0].DescriptionHTML = '';
+                datamodel.DatasetCollection.Assign.Assignment[0].DescriptionText = '';
+            };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.AssessAssignmentInfo.AssignmentHTML = base64EncodeUnicode(defaultRTEFN.getHtml());
+                $scope.AssessAssignmentInfo.AssignmentText = base64EncodeUnicode(defaultRTEFN.getText());
+                $scope.AssessAssignmentInfo.AssignAttachJson = JSON.stringify($scope.UploadFiles);
+            };
+
+            $scope.btnNextSave = function () {
+                $scope.isNextDisable = "disabled";
+                $scope.btnsave(true);
+
+                $scope.$watch('saveQuestionStatus', function (saveQuestionStatus) {
+                    if (saveQuestionStatus) {
+                        var valNew = saveQuestionStatus.split("===");
+                        var sSuccessMsg = valNew[0];
+                        var sFileName = valNew[1];
+
+                        $("div.spinnerTarget").removeClass("backdrop");
+                        $("body").css("overflow", "auto");
+                        usSpinnerService.stop('spinner-1');
+
+                        if (sFileName == "Data Saved") {
+                            var base = '/App/Link' + location.search;
+                            var questionInfoContent = {};
+                            angular.copy($scope.AssessAssignmentInfo, questionInfoContent);
+                            questionInfoContent.DescriptionHTML = '';
+                            questionInfoContent.DescriptionText = '';
+                            questionInfoContent.QuestionHTML = '';
+                            questionInfoContent.QuestionText = '';
+                            questionInfoContent.AssignmentHTML = '';
+                            questionInfoContent.AssignmentText = '';
+
+                            var payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: $scope.AssessAssignmentInfo.ContentUnitID, rowData: JSON.stringify(questionInfoContent) };
+                            $.post(base, payload, function (result) {
+                                $scope.status = 'loaded';
+                                window.location = result;
+                            });
+                        }
+                    }
+                });
+            }
+
+            $scope.downloadFile = function (filename) {
+                $scope.download('frmAssessAssignView', filename);
+            }
+
+            @Html.RenderFile("~/Scripts/attchment.js");
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+
+
+
+
+

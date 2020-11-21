@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "risersoft.shared.web.mvc", "..\Common\Web\risersoft.shared.web.mvc\risersoft.shared.web.mvc.csproj", "{E0CC17DC-880D-47B0-B8F5-1C981F76C662}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "risersoft.app.mxform", "..\Common\Forms\risersoft.app.mxform\risersoft.app.mxform.vbproj", "{0E5882D2-22B1-4716-99DF-680A77AE3E19}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "risersoft.app.reports.erp", "..\Common\Reports\risersoft.app.reports.erp\risersoft.app.reports.erp.vbproj", "{CAD33710-07BC-4C86-AF4C-3A24BA8AB6BA}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "_EduNirvana", "Web\EduNirvana\_EduNirvana.vbproj", "{A3FFFF77-95B3-4784-BFA0-CDA7292AB396}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "risersoft.app.mxform.Edu", "Framework\risersoft.app.mxform.Edu\risersoft.app.mxform.Edu.vbproj", "{900A7120-3AA9-4A25-8C8D-8C112685A92B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0CC17DC-880D-47B0-B8F5-1C981F76C662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0CC17DC-880D-47B0-B8F5-1C981F76C662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0CC17DC-880D-47B0-B8F5-1C981F76C662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0CC17DC-880D-47B0-B8F5-1C981F76C662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E5882D2-22B1-4716-99DF-680A77AE3E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E5882D2-22B1-4716-99DF-680A77AE3E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E5882D2-22B1-4716-99DF-680A77AE3E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E5882D2-22B1-4716-99DF-680A77AE3E19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD33710-07BC-4C86-AF4C-3A24BA8AB6BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD33710-07BC-4C86-AF4C-3A24BA8AB6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD33710-07BC-4C86-AF4C-3A24BA8AB6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD33710-07BC-4C86-AF4C-3A24BA8AB6BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FFFF77-95B3-4784-BFA0-CDA7292AB396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FFFF77-95B3-4784-BFA0-CDA7292AB396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FFFF77-95B3-4784-BFA0-CDA7292AB396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FFFF77-95B3-4784-BFA0-CDA7292AB396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{900A7120-3AA9-4A25-8C8D-8C112685A92B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{900A7120-3AA9-4A25-8C8D-8C112685A92B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{900A7120-3AA9-4A25-8C8D-8C112685A92B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{900A7120-3AA9-4A25-8C8D-8C112685A92B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {fdfdbe2f-4881-4886-b563-4fea9e3598ff}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://rsds.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Framework\\risersoft.app.mxform.Edu\\risersoft.app.mxform.Edu.vbproj
+		SccProjectName1 = Framework/risersoft.app.mxform.Edu
+		SccLocalPath1 = Framework\\risersoft.app.mxform.Edu
+		SccProjectUniqueName2 = Web\\EduNirvana\\_EduNirvana.vbproj
+		SccProjectName2 = Web/EduNirvana
+		SccLocalPath2 = Web\\EduNirvana
+		SccProjectUniqueName3 = ..\\Common\\Forms\\risersoft.app.mxform\\risersoft.app.mxform.vbproj
+		SccProjectName3 = ../Common/Forms/risersoft.app.mxform
+		SccLocalPath3 = ..\\Common\\Forms\\risersoft.app.mxform
+		SccProjectUniqueName4 = ..\\Common\\Reports\\risersoft.app.reports.erp\\risersoft.app.reports.erp.vbproj
+		SccProjectName4 = ../Common/Reports/risersoft.app.reports.erp
+		SccLocalPath4 = ..\\Common\\Reports\\risersoft.app.reports.erp
+		SccProjectUniqueName5 = ..\\Common\\Web\\risersoft.shared.web.mvc\\risersoft.shared.web.mvc.csproj
+		SccProjectName5 = ../Common/Web/risersoft.shared.web.mvc
+		SccLocalPath5 = ..\\Common\\Web\\risersoft.shared.web.mvc
+	EndGlobalSection
+EndGlobal

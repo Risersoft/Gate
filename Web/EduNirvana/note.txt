@@ -1,0 +1,20 @@
+﻿TO DO: 
+
+1) test config section implementation is pending
+2) Disable Right Click application
+3) if user switch scrren show the message.
+4) When a Learner is assigned to a test of a course, and the Learner started that test and leave in between. 
+   Then Admin removes that Learner from the test and added that learner again, assessuser under info never was removed, the entry is stick to it..
+5) UI http://learning.frontendmatter.com/angular/index.html#/website-instructor/courses
+6) right click ko to isme bhi we can look at changing to three dots menu with left click only right side par kahin aa jaaye har row mein
+7) If no content of any section is marked visible, the section should be invisible till then.
+8) 
+
+
+Proctoring / anti-cheating:
+- Periodic snapshots
+- Dual Screen / Multi-face / No face Detection
+- Disable Copy Paste & Print Screen lock
+- Plagiarism Check & Keystroke Dynamics
+- Code Replay & Candidate video feed
+- IP Address Tracking & Off Focus

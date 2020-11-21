@@ -1,0 +1,250 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+
+@model frmAssessTestViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    @@media screen and (min-width: 360px) {
+        .ddlClass {
+            width: 90%;
+            padding: .375rem .75rem;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+
+        ul {
+            margin-left: -43px;
+        }
+    }
+
+    #clock-container {
+        color: #333;
+        margin: 0 auto;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+        #clock-container h1 {
+            font-weight: normal;
+        }
+
+        #clock-container li {
+            display: inline-block;
+            font-size: 1.5em;
+            list-style-type: none;
+            padding: 1em;
+            text-transform: uppercase;
+        }
+
+            #clock-container li span {
+                display: block;
+                font-size: 4.5rem;
+                margin-bottom: 30px;
+            }
+
+    .navbar-brand {
+        margin-right: 4rem;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">Assess Test {{AssessTestName}}</h5>
+            </div>
+            <div class="col-md-6" ng-show="!isEnableOn">
+                <h5 style="float:right;margin-top: 5%" id="marksObtained" ng-show="isMarksObtained"></h5>
+                <div class="form-group col-md-12" ng-show="totalDuration">
+                    <div class="row vertical-divider" style="margin-top: 35px;float: right;margin-right: 10px;font-size: 1.25rem;color: #1c66a7;">
+                        <div class="col-xs-6">Total Marks: {{AssessTestInfo.TotalWeight}}</div>
+                        <span style="font-size: 16px;color: #1c66a7;margin-left: 5px;margin-right: 5px;font-size: 25px;"> | </span>
+                        <div class="col-xs-6">Time Limit: {{AssessTestInfo.Duration}} mins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row" ng-show="(contentDescription !='' && contentDescription!=null)">
+            <div class="form-group col-md-12" ng-show="!isMsg">
+                @*<label for="inputEmail4"><b>Description : </b></label>*@
+                <p ng-bind-html="contentDescription"></p>
+            </div>
+        </div>
+
+        <div id="testQuestion" ng-show="!isEnableOn">
+            <div class="row">
+                <div class="col-md-12" id="showPreview" ng-show="isMsg" style="margin-top:15px; margin-bottom:15px;text-align: center;"></div>
+            </div>
+
+            <div class="form-row" ng-show="TotalScore" style="margin-bottom:25px;margin-top:25px;">
+                <div class="form-group col-md-12">
+                    <div id="showTotalScore" style="text-align: center;font-size: 20px;"></div>
+                </div>
+            </div>
+
+            <div class="form-row" ng-if="isCompletedOn">
+                <div class="form-group col-md-12">
+                    <div class="col-md-7">
+                        <a href="javascript:void(0)" id="btnStart" class="btn btn-default btnf center" ng-click="redirectContentUnit(AssessTestInfo.ButtonType, AssessTestInfo.AssessUserID)" style="padding: 10px;font-size: 20px;">{{AssessTestInfo.ButtonType}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="isEnableOn" style="min-height:300px">
+            <!-- Display the countdown timer in an element -->
+            <div class="form-row">
+                <div class="col-md-12" id="dCountdown">
+                    <p id="demo"></p>
+                    <div id="clock-container">
+                        <h1>Your Test Will Start In:</h1>
+                        <ul>
+                            <li><span id="days"></span>days</li>
+                            <li><span id="hours"></span>Hours</li>
+                            <li><span id="minutes"></span>Minutes</li>
+                            <li><span id="seconds"></span>Seconds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var strMarksMsg = '';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //Bind dsForm Data
+                $scope.AssessTestInfo = $scope.model.dsForm.DT[0];
+
+                //Bind in TextArea Field
+                $scope.contentDescription = $scope.AssessTestInfo.DescriptionText;
+                //SET Assess Test Name
+                $scope.AssessTestName = " - ( " + $scope.model.dsForm.DT[0].AssessName + " ) ";
+
+                //Shwo Message IF CompletedOn is NOT NULL
+                if ($scope.AssessTestInfo.CompletedOn != undefined) {
+                    $scope.isCompletedOn = false;
+                    $scope.isStartNew = false;
+                    $scope.totalDuration = false;
+                    $('#showPreview').css('text-align', 'center');
+
+                    if ($scope.AssessTestInfo.NotifyMsg.includes('Expired')) {
+                        $('#showPreview').html('<i class="fa fa-times-circle fa-2x" style="color:red"></i> <span style="font-size:25px"> ' + $scope.AssessTestInfo.NotifyMsg + '</span>');
+                    }
+                    else {
+                        if ($scope.AssessTestInfo.NotifyMsg !== undefined && $scope.AssessTestInfo.NotifyMsg !== null && $scope.AssessTestInfo.NotifyMsg !== "") {
+                            $('#showPreview').html('<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px"> ' + $scope.AssessTestInfo.NotifyMsg + '</span>');
+                        }
+                    }
+
+                    //When Test Passed
+                    if ($scope.model.dsForm.DT[0].IsPassed == 1) {
+                        strMarksMsg = '';
+                        if ($scope.model.dsForm.DT[0].Complete_Show_Score)
+                            strMarksMsg += $scope.model.dsForm.DT[0].MessagePassed + '<br><br> Marks Obtained:  <b>' + $scope.model.dsForm.DT[0].TotalScore + '</b>';
+
+                        $('#showTotalScore').html(strMarksMsg);
+                        $('#marksObtained').html('<b>Total Marks: ' + $scope.model.dsForm.DT[0].TotalWeight + '</b>');
+                        $scope.TotalScore = true;
+                        $scope.isMarksObtained = true;
+                    }
+                    else {
+                        strMarksMsg = '';
+                        if ($scope.model.dsForm.DT[0].Complete_Show_Score)
+                            strMarksMsg += $scope.model.dsForm.DT[0].MessageFailed + '<br><br> Marks Obtained:  <b>' + $scope.model.dsForm.DT[0].TotalScore + '</b>';
+
+                        $('#showTotalScore').html(strMarksMsg);
+                        $('#marksObtained').html('<b>Total Marks: ' + $scope.model.dsForm.DT[0].TotalWeight + '</b>');
+                        $scope.TotalScore = true;
+                        $scope.isMarksObtained = true;
+                    }
+
+                    $scope.isMsg = true;
+                }
+                else {
+                    $scope.totalDuration = true;
+                    $scope.isCompletedOn = true;
+                    //Show Hide Continue Button.
+                    $scope.isContinue = $scope.AssessTestInfo.lastquestionid == undefined ? false : true;
+
+                    if ($scope.AssessTestInfo.NotifyMsg !== undefined && $scope.AssessTestInfo.NotifyMsg !== null && $scope.AssessTestInfo.NotifyMsg !== "") {
+                        $('#showPreview').html('<span style="font-size:25px"> ' + $scope.AssessTestInfo.NotifyMsg + '</span>');
+                    }
+
+                    $scope.isMsg = true;
+                }
+
+                if ($scope.model.dsForm.DT[0].ButtonType == "") {
+                    $scope.isCompletedOn = false;
+                } else {
+                    $scope.isCompletedOn = true;
+                }
+
+                //EnableOn Date and Time
+                var curDate = new Date($scope.model.dsForm.DT[0].currentTime);
+                var enableDT = new Date($scope.model.dsForm.DT[0].EnableOn);
+                //var disableDT = new Date($scope.model.dsForm.DT[0].DisableOn);
+
+                if (curDate < enableDT) {
+                    checkShowTimer(curDate, enableDT);
+                }
+            }
+
+            loadmodel($scope.model);
+
+            $scope.redirectContentUnit = function (btnType) {
+                var url = '/frmAssessTestView/ParamsOutput' + location.search;
+                var payload = { AssessUserID: $scope.AssessTestInfo.AssessUserID, StartType: btnType };
+                var payloaddata = { key: 'testquestion', Params: JSON.stringify(payload), __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                $.post(url, payloaddata, function (result) {
+                    if (result.Data.ID !== 0) {
+                        var base = '/App/Link' + location.search;
+                        var assessTestContent = {};
+                        angular.copy($scope.AssessTestInfo, assessTestContent);
+                        var payload = { fKey: 'frmTestQuestionView', fMode: 'acEditM', IDX: result.Data.ID, rowData: JSON.stringify(assessTestContent) };
+
+                        $.post(base, payload, function (result) {
+                            window.location = result;
+                            if (result.success) {
+                            }
+                            else {
+                                if (result.message === '') { result.message = 'Unknown Error!' };
+                                $scope.message = result.message;
+                            }
+                            $scope.$apply();
+                            return;
+                        });
+                    }
+                    else {
+                        location.href = window.location.href + "&refresh=1";
+                    }
+                });
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+

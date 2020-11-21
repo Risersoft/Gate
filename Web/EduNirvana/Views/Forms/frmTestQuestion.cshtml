@@ -1,0 +1,364 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+@using Syncfusion.EJ2;
+
+@model frmTestQuestionModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<script type="text/javascript">
+    var defaultRTEFN;
+
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+
+        options = { rules: { 'rteForm': { required: true } } };
+        formObject = new ej.inputs.FormValidator('#userform', options);
+        this.element.firstChild.setAttribute("required", "");
+        this.element.firstChild.setAttribute('data-required-message', '* This field is required');
+        this.element.firstChild.setAttribute('data-msg-containerid', 'dateError');
+        this.element.firstChild.setAttribute('name', 'rteForm');
+    };
+
+    $('#btnsave').on('click', function () {
+        getValue();
+    });
+
+    function getValue() {
+        formObject.validate();
+    }
+</script>
+
+<style type="text/css">
+    .e-control {
+        z-index: 9;
+    }
+
+    .minpoint {
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .error {
+        border: 1px solid red !important;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        <input type="hidden" id="saveQuestionStatus" />
+
+        @Html.AntiForgeryToken()
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Question {{QuestionType}}</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <div class="control-section">
+                    <div class="control-wrapper">
+                        <div class="control-section">
+                            @Html.EJS().RichTextEditor("defaultfn").Value("").Created("createdfn").Render()
+                            <div id="dateError"></div>
+                        </div>
+                    </div>
+                </div>
+                @Html.EJS().ScriptManager()
+            </div>
+            <div id="ftgMsg" style="display:none;"></div>
+        </div>
+        <div class="form-row" ng-show="TestAnswer.length > 0">
+            <div class="form-group col-md-12">
+                <div ng-if="QuestionInfo.QuestionType == 'TXT'" style="margin-bottom: 10px;">
+                    Consider correct when accumulated points are greater or equal to
+                    <input type="text" class="minpoint numeric" name="minpoint" ng-model="QuestionInfo.MinPoints" maxlength="2" required ng-class="{true: 'error'}[submitted() && userform.minpoint.$invalid]" />
+                </div>
+                <table id="tblAnswers" class="table table-sm" style="width:100%">
+                    <tbody>
+                        <tr ng-repeat="ques in TestAnswer" ng-if="QuestionInfo.QuestionType == 'MCQ'">
+                            <td style="width: 640px;">
+                                <input type="text" name="answer_{{$index}}" class="form-control" ng-model="ques.AnswerText1" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.answer_{{$index}}.$invalid]" />
+                            </td>
+                            <td style="width: 80px;" ng-show="!model.dsForm.DT[0].IsForSurvey">
+                                <input type="checkbox" class="form-control" ng-model="ques.IsCorrect" ng-if="isCheckBox" style="margin-top: 10px;" />
+                                <input type="checkbox" class="form-control" ng-model="ques.IsCorrect" ng-if="isRadioButton" style="margin-top: 10px;" ng-click="checkToggle(ques.AnswerText1)" />
+                            </td>
+                            <td ng-show="!model.dsForm.DT[0].IsForSurvey">Correct</td>
+                            <td><a href="javascript:void(0)"><i class="fa fa-trash fa-lg" ng-click="deleteRow($index)" style="margin-top: 10px;"></i></a></td>
+                        </tr>
+                        <tr ng-repeat="ques in TestAnswer" ng-if="QuestionInfo.QuestionType == 'ODR'">
+                            <td style="width: 640px;">
+                                <input type="text" name="answer_{{$index}}" class="form-control" ng-model="ques.AnswerText1" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.answer_{{$index}}.$invalid]" />
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)"><i class="fa fa-trash fa-lg" ng-click="deleteRow($index)" style="margin-top: 10px;"></i></a>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="ques in TestAnswer" ng-if="QuestionInfo.QuestionType == 'PAIR'">
+                            <td style="width: 640px;"><input type="text" name="answer_{{$index}}" class="form-control" ng-model="ques.AnswerText1" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.answer_{{$index}}.$invalid]" /></td>
+                            <td style="width: 640px;"><input type="text" name="answer_{{$index}}" class="form-control" ng-model="ques.AnswerText2" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.answer_{{$index}}.$invalid]" /></td>
+                            <td>
+                                <a href="javascript:void(0)"><i class="fa fa-trash fa-lg" ng-click="deleteRow($index)" style="margin-top: 10px;"></i></a>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="ques in TestAnswer" ng-if="QuestionInfo.QuestionType == 'TXT'">
+                            <td style="width: 25px;"><span>When</span></td>
+                            <td style="width: 171px;">
+                                <select name="contains_{{$index}}" ng-options="con.Text for con in Contained track by con.value" ng-model="ques.IsContainedSelected" class="form-control" style="width:200px" required ng-class="{true: 'error'}[submitted() && userform.contains_{{$index}}.$invalid]"></select>
+                            </td>
+                            <td style="width:75px"><span>the word</span></td>
+                            <td><input type="text" name="answer_{{$index}}" class="form-control" ng-model="ques.AnswerText1" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.answer_{{$index}}.$invalid]" /></td>
+                            <td style="width: 10px;"><span>add</span></td>
+                            <td style="width: 80px;"><input type="text" class="form-control" name="numpoints" ng-model="ques.NumPoints" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.numpoints.$invalid]" /></td>
+                            <td><a href="javascript:void(0)"><i class="fa fa-trash fa-lg" ng-click="deleteRow($index)" style="margin-top: 10px;"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-row" ng-show="isAddButton">
+            <div class="form-group col-md-2">
+                <a href="javascript:void(0)" id="aText" ng-click="addNewRow(QuestionInfo.QuestionType)" class="btn btn-default btnf" style="float:left">Add Option</a>
+            </div>
+            <div class="col-md-10" ng-if="QuestionInfo.QuestionType == 'MCQ'">
+                <select class="form-control" ng-model="QuestionInfo.IsRadioSelected" id="ddlAnswerType" name="ddlAnswerType" ng-options="at.Name for at in answerType track by at.value" ng-change="answertypechange(QuestionInfo.IsRadioSelected)"></select>
+            </div>
+        </div>
+
+        <!-- End Page Content-->
+        <hr />
+        @Html.Partial("_SavePanel")
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, $http) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //set values in scope
+                $scope.QuestionInfo = $scope.model.dsForm.DT[0];
+                //Set Show Hide Button
+                $scope.isAddButton = false;
+                $scope.vissaveconti = true;
+
+                //Set Question Type
+                if ($scope.QuestionInfo.QuestionType == "MCQ") {
+                    $scope.QuestionType = " - ( Multiple Choice )";
+                    $scope.isAddButton = true;
+                }
+                if ($scope.QuestionInfo.QuestionType == "FTG") {
+                    $scope.QuestionType = " - ( Fill the Gap )";
+                    var msg = "Note: Compose the question and use [brackets] for the possible answers. For example, The quick [fox] jumps over the lazy [dog]. OR <br/> The [biggest | bigger] planet of our solar system is [jupiter|neptune|earth]. When you use | to offer multiple answers the first should be the correct one."
+                    $('#ftgMsg').html('<span style="color:#949090;">' + msg + '</span>');
+                    $('#ftgMsg').show();
+                }
+                if ($scope.QuestionInfo.QuestionType == "ODR") {
+                    $scope.QuestionType = " - ( Ordering )";
+                    $scope.isAddButton = true;
+                }
+                if ($scope.QuestionInfo.QuestionType == "PAIR") {
+                    $scope.QuestionType = " - ( Pairing )";
+                    $scope.isAddButton = true;
+                    $('#aText').text('Add Couple')
+                }
+                if ($scope.QuestionInfo.QuestionType == "TXT") {
+                    $scope.QuestionType = " - ( Free Text )";
+                    $scope.isAddButton = true;
+                    $('#aText').text('Add Options')
+                }
+                if ($scope.QuestionInfo.QuestionType == "FTB") {
+                    $scope.QuestionType = " - ( Fill the Blank )";
+                    var msg = "Note: Compose the question and [brackets] for the possible answers. <br/>For example, The quick [fox] jumps over the lazy [dog]. OR The [biggest | bigger] planet of our solar system is [jupiter|neptune|earth]. When you use | to provide multiple answers, any of them will be considered correct"
+                    $('#ftgMsg').html('<span style="color:#949090;">' + msg + '</span>');
+                    $('#ftgMsg').show();
+                }
+
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //Set Answers
+                $scope.TestAnswer = $scope.model.GridViews.Answers.MainGrid.myDS.dt;
+                //Set Contained Dropdown Values.
+                $scope.Contained = [{ "value": false, "Text": "Not Contains" }, { "value": true, "Text": "Contains" }];
+                //DataBind in TextArea Field
+                if ($scope.model.frmMode == 1) {
+                    defaultRTEFN.value = $scope.model.dsForm.DT[0].QuestionHTML == undefined ? "" : $scope.model.dsForm.DT[0].QuestionHTML;
+
+                    if ($scope.model.GridViews.Answers.MainGrid.myDS.dt.length > 0) {
+                        for (var i = 0; i < $scope.model.GridViews.Answers.MainGrid.myDS.dt.length; i++) {
+                            $scope.IsContainedSelected = $.grep($scope.Contained, function (b) {
+                                return b.value === $scope.model.GridViews.Answers.MainGrid.myDS.dt[i].IsContained;
+                            })[0];
+
+                            $scope.TestAnswer[i].IsContainedSelected = $scope.IsContainedSelected;
+                        }
+                    }
+                }
+
+                $scope.showbacktoprev = true;
+                $('#btnback').hide();
+
+                //if ($scope.QuestionInfo.CourseID !== undefined) {
+                //    $scope.showbacktoprev = true;
+                //    $('#btnback').hide();
+                //}
+                //else {
+                //    $scope.showbacktoprev = false;
+                //    $('#btnback').show();
+                //}
+
+                //$scope.answerType = [{ "value": false, "Name": "Check Box" }, { "value": true, "Name": "Radio Button" }];
+                $scope.answerType = [{ "value": false, "Name": "Multiple Answers" }, { "value": true, "Name": "Single Answer" }];
+                if ($scope.model.frmMode !== 2) {
+                    if ($scope.model.dsForm.DT[0].IsRadio) {
+                        $scope.QuestionInfo.IsRadioSelected = $.grep($scope.answerType, function (item, index) { return item.value == true })[0];
+                        $scope.isCheckBox = false;
+                        $scope.isRadioButton = true;
+                    }
+                    else {
+                        $scope.QuestionInfo.IsRadioSelected = $.grep($scope.answerType, function (item, index) { return item.value == false })[0];
+                        $scope.isCheckBox = true;
+                        $scope.isRadioButton = false;
+                    }
+                } else {
+                    $scope.QuestionInfo.IsRadioSelected = $.grep($scope.answerType, function (item, index) { return item.value == false })[0];
+                    $scope.isCheckBox = true;
+                    $scope.isRadioButton = false;
+                }
+            }
+
+            loadmodel($scope.model);
+
+            $scope.answertypechange = function (item) {
+                if (item.value == false) {
+                    $scope.isCheckBox = true;
+                    $scope.isRadioButton = false;
+                } else {
+                    $scope.isCheckBox = false;
+                    $scope.isRadioButton = true;
+                }
+            }
+
+            $scope.addNewRow = function (qType) {
+                if (qType == "MCQ") { $scope.TestAnswer.push({}); }
+                if (qType == "FTG") { }
+                if (qType == "ODR") { $scope.TestAnswer.push({}); }
+                if (qType == "PAIR") { $scope.TestAnswer.push({}); }
+                if (qType == "TXT") { $scope.TestAnswer.push({}); }
+            };
+
+            $scope.deleteRow = function (index) {
+                $scope.TestAnswer.splice(index, 1);
+                $scope.model.GridViews.Answers.MainGrid.myDS.dt = $scope.TestAnswer;
+            }
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) { };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.model.dsForm.DT[0].QuestionHTML = base64EncodeUnicode(defaultRTEFN.getHtml());
+                $scope.model.dsForm.DT[0].QuestionText = base64EncodeUnicode(defaultRTEFN.getText());
+                $scope.model.GridViews.Answers.MainGrid.myDS.dt = $scope.TestAnswer;
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'TestQuestion', ID: $scope.model.dsForm.DT[0].TestQuestionID, AcceptWarning: false };
+                return payload;
+            };
+
+            //Back to Previous
+            $scope.backtoprev = function () {
+                var base = '/App/Link' + location.search;
+                var questionContent = {};
+                angular.copy($scope.QuestionInfo, questionContent);
+                questionContent.DescriptionHTML = '';
+                questionContent.DescriptionText = '';
+                questionContent.QuestionHTML = '';
+                questionContent.QuestionText = '';
+
+                var frmKey = $scope.model.vBag.assesstestid != undefined ? "frmAssessTest" : "frmAssessSurvey";
+                var frmID = $scope.model.vBag.assesstestid != undefined ? $scope.model.vBag.assesstestid : $scope.model.vBag.assesssurveyid;
+
+                var payload = { fKey: frmKey, fMode: 'acEditM', IDX: frmID, rowData: JSON.stringify(questionContent) }; // for edit
+
+                $.post(base, payload, function (result) {
+                    $scope.status = 'loaded';
+                    window.location = result;
+                });
+            }
+
+            $scope.btnSaveAndNext = function () {
+                $scope.isSaveContinueDisable = "disabled";
+                $scope.btnsave(true);
+
+                $scope.$watch('saveQuestionStatus', function (saveQuestionStatus) {
+                    if (saveQuestionStatus) {
+                        var valNew = saveQuestionStatus.split("===");
+                        var sSuccessMsg = valNew[0];
+                        var sFileName = valNew[1];
+
+                        if (sFileName == "Data Saved") {
+                            var base = '/App/Link' + location.search;
+                            var questionContent = {};
+                            angular.copy($scope.QuestionInfo, questionContent);
+                            questionContent.DescriptionHTML = '';
+                            questionContent.DescriptionText = '';
+                            questionContent.QuestionHTML = '';
+                            questionContent.QuestionText = '';
+                            questionContent.assesstestid = $scope.model.vBag.assesstestid;
+                            questionContent.assesssurveyid = $scope.model.vBag.assesssurveyid;
+                            var payload = { fKey: 'frmTestQuestion', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(questionContent) }; // for edit
+
+                            $.post(base, payload, function (result) {
+                                $scope.status = 'loaded';
+                                window.location = result;
+                            });
+                        }
+                    }
+                });
+            }
+
+            $scope.checkToggle = function (checkbox) {
+                for (var i = 0; i < $scope.TestAnswer.length; i++) {
+                    if ($scope.TestAnswer[i].AnswerText1 == checkbox) {
+                        $scope.TestAnswer[i].IsCorrect = true;
+                    } else {
+                        $scope.TestAnswer[i].IsCorrect = false;
+                    }
+                }
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+

@@ -1,0 +1,625 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+@using Syncfusion.EJ2
+
+@model frmTestQuestionViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<script type="text/javascript">
+    var defaultRTEFN;
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64",
+        };
+    };
+</script>
+<style type="text/css">
+    .style23199588 {
+        font-size: 16px !important;
+    }
+
+    .ddlClass {
+        width: 100%;
+        padding: .375rem .75rem;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    @@media screen and (min-width: 360px) {
+        .ddlClass {
+            width: 90%;
+            padding: .375rem .75rem;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+
+        ul {
+            margin-left: -43px;
+        }
+    }
+
+    p span {
+        font-size: 15px !important;
+        font-weight: normal !important;
+        color: #212529 !important;
+        font-family: 'Droid Sans', sans-serif !important;
+    }
+
+    #dCountdown p {
+        text-align: center;
+        font-size: 60px;
+        margin-top: 0px;
+    }
+
+    .navbar-brand {
+        margin-right: 4rem;
+    }
+
+    .table-responsive {
+        display: inline-table !important;
+    }
+</style>
+<script src="http://momentjs.com/downloads/moment.js"></script>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        <input type="hidden" id="saveQuestionStatus" />
+
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">View {{headTitile}} - {{assessName}}</h5>
+            </div>
+            <div class="col-md-6" style="margin-top: 5px;color:#1c66a7" ng-show="!model.dsForm.DT[0].IsForSurvey">
+                <div class="col-md-12"><span style="float:right;">Questions Attempted: <b>{{RemainingQuestions}}</b> || Remaining Questions: <b>{{TotalNoOfQuestions-RemainingQuestions}}</b></span></div>
+                <div class="col-md-12"><span style="float:right;">Test Started: <b>{{TimeStarted}}</b> || Answer will not be accepted after: <b>{{TimeEnd}}</b></span></div>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputEmail4"><b>Question {{QuestionNo}}: </b></label>
+                <div ng-bind-html="testQuestion | unsafe" id="ftbtypeQution"></div>
+                <div ng-bind-html="myHTML | unsafe"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12 responsive" ng-show="contentType == 'mcq'">
+                <table id="tblAnswers_mcq" class="table table-sm table-bordered" style="width: 100%;">
+                    <tbody>
+                        <tr ng-repeat="ans in testQuestionAnswer">
+                            <td style="width: 5%;">
+                                <input type="checkbox" ng-model="ans.sysincl" ng-if="!model.dsForm.DT[0].IsRadio" />
+                                <input type="checkbox" name="rdoQType" ng-model="ans.sysincl" ng-value="true" ng-if="model.dsForm.DT[0].IsRadio" ng-click="checkToggle(ans.AnswerText1)" />
+                            </td>
+                            <td>{{ans.AnswerText1}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group col-md-12" ng-show="contentType == 'odr'">
+                <table id="tblAnswers_odr" class="table table-sm table-bordered" style="width: 100%;">
+                    <tbody>
+                        <tr ng-repeat="ans in testQuestionAnswer">
+                            <td>{{ans.AnswerText1}}</td>
+                            <td>
+                                <a href="javascript:void(0)" ng-click="moveUp($index, testQuestionAnswer)" ng-show="!$first"><i class="fa fa-arrow-up"></i></a>
+                                <a href="javascript:void(0)" ng-click="moveDown($index, testQuestionAnswer)" ng-show="!$last"><i class="fa fa-arrow-down"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group col-md-12" ng-show="contentType == 'pair'">
+                <div class="row" style="padding: 10px;">
+                    <div class="col-md-6">
+                        <table id="tblAnswers_pair" class="table table-sm table-bordered" style="width:100%;">
+                            <tbody>
+                                <tr ng-repeat="ans in testQuestionAnswer">
+                                    <td>{{ans.AnswerText1}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table id="tblAnswers_pair_1" class="table table-sm table-bordered" style="width:100%">
+                            <tbody>
+                                <tr ng-repeat="ans in ansArray">
+                                    <td style="width:70%;">{{ans.AnswerText2}}</td>
+                                    <td style="width:30%; vertical-align:middle;">
+                                        <a href="javascript:void(0)" ng-click="moveUp($index, ansArray)" ng-show="!$first"><i class="fa fa-arrow-up"></i></a>
+                                        <a href="javascript:void(0)" ng-click="moveDown($index, ansArray)" ng-show="!$last"><i class="fa fa-arrow-down"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12" ng-show="contentType == 'txt'" id="tblTestQAns_txt">
+                <div class="control-section">
+                    @Html.EJS().RichTextEditor("defaultfn").Value("").Created("createdfn").Render()
+                    @Html.EJS().ScriptManager()
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <a href="javascript:void(0)" ng-class="{ disabled: isNextDisable}" class="btn btn-default btnf" ng-click="btnNextSave()"> Next <i class="fa fa-angle-double-right"></i></a>
+            </div>
+        </div>
+
+        <!-- End Page Content-->
+        <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="wMsg">
+                        <p>Do you want to continue without attempting this question?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="btnYes()">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.filter('unsafe', function ($sce) {
+            return function (val) {
+                return $sce.trustAsHtml(val);
+            };
+        });
+
+        rsApp.controller('FormController', function ($scope, usSpinnerService, $sce) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var arrSelVal = [];
+            var arrSelText = [];
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+
+                //Forsm Heading
+                $scope.headTitile = $scope.model.dsForm.DT[0].IsForSurvey == true ? "Survey" : "Test"
+
+                //set values in scope
+                $scope.QuestionInfo = $scope.model.dsForm.DT[0];
+                //Bind Question Number.
+                if ($scope.model.DatasetCollection.tu.qu.length > 0 && $scope.model.DatasetCollection.tu.qu[0].QuestionNum !== undefined)
+                    $scope.QuestionNo = $scope.model.DatasetCollection.tu.qu[0].QuestionNum;
+
+                //Bind Question Attributes
+                if ($scope.model.DatasetCollection.tu.au.length > 0) {
+                    $scope.TotalNoOfQuestions = $scope.model.DatasetCollection.tu.au[0].TotalCount;
+                    $scope.RemainingQuestions = $scope.model.DatasetCollection.tu.au[0].SubmitCount;
+                    $scope.TimeStarted = new moment($scope.model.DatasetCollection.tu.au[0].StartedOn).format("HH:mm:ss");
+                    $scope.TimeEnd = new moment($scope.model.DatasetCollection.tu.au[0].DeadLineOn).format("HH:mm:ss");
+                }
+
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //Set Question HTML
+                $scope.testQuestion = $scope.QuestionInfo.QuestionHTML;
+                //Set Answers List
+                $scope.testQuestionAnswer = $scope.model.GridViews.Answers.MainGrid.myDS.dt || $scope.model.GridViews.Answers.MainGrid.myDS.List;
+
+                //Get Answer Array at time of loading.
+                if ($scope.model.dsForm.DT[0].QuestionType.toLowerCase() == 'pair' || $scope.model.dsForm.DT[0].QuestionType.toLowerCase() == 'odr') {
+                    $scope.testQuestionCom = [];
+                    for (var i = 0; i < $scope.model.GridViews.Answers.MainGrid.myDS.dt.length; i++) {
+                        $scope.testQuestionCom.push($scope.model.GridViews.Answers.MainGrid.myDS.dt[i].TestAnswerID);
+                    }
+                }
+
+                //Set Content Type
+                $scope.contentType = $scope.QuestionInfo.QuestionType.toLocaleLowerCase();
+                //Set Title AssessName and Course Name
+                if ($scope.model.DatasetCollection.tu.au.length > 0) {
+                    if ($scope.model.DatasetCollection.tu.au[0].CourseName != undefined && $scope.model.DatasetCollection.tu.au[0].CourseName != "")
+                        $scope.assessName = $scope.model.DatasetCollection.tu.au[0].AssessName + " (" + $scope.model.DatasetCollection.tu.au[0].CourseName + ")";
+                    else
+                        $scope.assessName = $scope.model.DatasetCollection.tu.au[0].AssessName;
+                }
+                if ($scope.contentType == 'pair') {
+                    $scope.ansArray = [];
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        $scope.ansArray.push({ AnswerText2: $scope.testQuestionAnswer[i].AnswerText2, TestAnswerID: $scope.testQuestionAnswer[i].TestAnswerID, TestQuestionID: $scope.testQuestionAnswer[i].TestQuestionID })
+                    }
+                }
+                if ($scope.contentType == "ftg") {
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        var ddlOptionalList = $scope.model.GridViews.Answers.MainGrid.myDS.List[i].List.split('|');
+                        var ddl = '<select id="testQuestionAnswer_' + i + '" class="ddlClass"><option value="-1"> Select </option>';
+                        for (var x = 0; x < ddlOptionalList.length; x++) {
+                            ddl += '<option value=' + x + '>' + ddlOptionalList[x] + '</option>';
+                        }
+                        ddl += '</select>';
+
+                        var repVal = "[" + parseInt(i + 1) + "]";
+                        $scope.testQuestion = $scope.testQuestion.toString().replace(repVal, ddl);
+                    }
+                }
+                if ($scope.contentType == "ftb") {
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        var ddl = '<input type="text" id="testQuestionAnswer_' + i + '" style="border: 1px solid #ced4da;border-radius: 5px!important ;padding: 0.375rem 0.75rem;" />';
+                        var repVal = "[" + parseInt(i + 1) + "]";
+                        $scope.testQuestion = $scope.testQuestion.toString().replace(repVal, ddl);
+                    }
+                }
+            }
+
+            loadmodel($scope.model);
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) {
+                datamodel.dsForm.DT[0].QuestionHTML = '';
+                datamodel.dsForm.DT[0].QuestionText = '';
+
+                if ($scope.contentType == "ftg") {
+                    datamodel.GridViews.Answers.MainGrid.myDS.List[0].List = null;
+                }
+            };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                if ($scope.contentType == "mcq") {
+                    var ans_val = []; var ans_txt = [];
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        if ($scope.testQuestionAnswer[i].sysincl == true) {
+                            ans_val.push($scope.testQuestionAnswer[i].TestAnswerID);
+                            ans_txt.push($scope.testQuestionAnswer[i].AnswerText1);
+                        }
+                    }
+
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = ans_val.join();
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = ans_txt.join();
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+                if ($scope.contentType == "txt") {
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerHTML = base64EncodeUnicode(defaultRTEFN.getHtml());
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = base64EncodeUnicode(defaultRTEFN.getText());
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+                if ($scope.contentType == "odr") {
+                    var ans_val = []; var ans_txt = [];
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        $scope.testQuestionAnswer[i].sortindex = i + 1;
+                        ans_val.push($scope.testQuestionAnswer[i].TestAnswerID);
+                        ans_txt.push($scope.testQuestionAnswer[i].AnswerText1);
+                    }
+
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = ans_val.join();
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = ans_txt.join();
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+                if ($scope.contentType == "pair") {
+                    var ans_val = []; var ans_txt = [];
+                    for (var i = 0; i < $scope.ansArray.length; i++) {
+                        ans_val.push($scope.ansArray[i].TestAnswerID);
+                        ans_txt.push($scope.ansArray[i].AnswerText2);
+                    }
+
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = ans_val.join();
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = ans_txt.join();
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+                if ($scope.contentType == "ftg") {
+                    debugger
+                    var ans_val = []; var ans_txt = [];
+                    $("select").each(function (e, i) {
+                        var ddlSelectId = $(i).attr("id");
+                        var count = $("select[id$='" + ddlSelectId + "'] option").length;
+                        for (var x = 0; x < count; x++) {
+                            if (x != 0) {
+                                var selVal = $("select[id$='" + ddlSelectId + "'] option:selected");
+                                if (selVal.text().trim() != "Select") {
+                                    if ($("select[id$='" + ddlSelectId + "'] option:selected")) {
+                                        if (ans_val.length == 0) {
+                                            ans_val.push($("select[id$='" + ddlSelectId + "'] option:selected").val());
+                                            ans_txt.push($("select[id$='" + ddlSelectId + "'] option:selected").text().trim() + '~');
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                if (x == 0) {
+                                    var selVal = $("select[id$='" + ddlSelectId + "'] option:selected");
+                                    ans_val.push(selVal.val());
+                                    ans_txt.push(selVal.text().trim() + '~');
+                                }
+                            }
+                        }
+                    });//it will get each
+
+                    //Assign a Answers with comma seprated.
+                    if (ans_txt.length > 1) {
+                        var mulAns = '';
+                        for (var i = 0; i < ans_txt.length; i++) {
+                            if (ans_txt[i] !== undefined)
+                                mulAns += ans_txt[i].trim();
+                        }
+                        $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = mulAns;
+                        $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = mulAns;
+
+                    } else {
+                        $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = ans_txt.join().split('~')[0].trim();
+                        $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = ans_txt.join().split('~')[0].trim();
+                    }
+
+                    ////replace , to ~
+                    //var replace = $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV.replace(',', '~');
+                    //$scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = replace;
+                    //$scope.model.DatasetCollection.tu.qu[0].TestAnswerText = replace;
+
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+                if ($scope.contentType == "ftb") {
+                    var ans_txt = [];
+                    var inputlength = $('#ftbtypeQution').find('input');
+
+                    if (inputlength.length > 0) {
+                        $('#ftbtypeQution').find('input').each(function (e, i) {
+                            var ftgTextAns = "#" + $(i).attr("id");
+                            ans_txt.push($(ftgTextAns).val());
+                        });
+                    }
+
+                    //Assign a Answers with comma seprated.
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = ans_txt.join();
+                    $scope.model.DatasetCollection.tu.qu[0].TestAnswerText = ans_txt.join();
+
+                    ////replace , to ~
+                    //var replace = $scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV.replaceAll(',', '~');
+                    //$scope.model.DatasetCollection.tu.qu[0].TestAnswerIDCSV = replace;
+                    //$scope.model.DatasetCollection.tu.qu[0].TestAnswerText = replace;
+
+                    $scope.model.DatasetCollection.tu.qu[0].CourseID = $scope.model.DatasetCollection.tu.au[0].courseid;
+                }
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                var payload = { EntityKey: 'TestQuestion', ID: $scope.model.dsForm.DT[0].TestQuestionID, AcceptWarning: false };
+                return payload;
+            };
+
+            $scope.btnNextSave = function () {
+                if ($scope.model.dsForm.DT[0].QuestionType == "TXT") {
+                    if (defaultRTEFN.getText().trim() == "") {
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    } else {
+                        $scope.btnYes();
+                    }
+                }
+                if ($scope.model.dsForm.DT[0].QuestionType == "MCQ") {
+                    var isCorrect;
+                    var lstAns = $scope.model.GridViews.Answers.MainGrid.myDS.dt;
+                    for (var i = 0; i < lstAns.length; i++) {
+                        if (lstAns[i].sysincl == true) {
+                            isCorrect = lstAns[i].sysincl;
+                            break;
+                        }
+                        else {
+                            isCorrect = lstAns[i].sysincl;
+                        }
+                    }
+
+                    if (!isCorrect) {
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    }
+                    else {
+                        $scope.btnYes();
+                    }
+                }
+                if ($scope.model.dsForm.DT[0].QuestionType == "PAIR") {
+                    var ans_val = [];
+                    for (var i = 0; i < $scope.ansArray.length; i++) {
+                        ans_val.push($scope.ansArray[i].TestAnswerID);
+                    }
+                    if (JSON.stringify($scope.testQuestionCom) == JSON.stringify(ans_val)) {
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    }
+                    else {
+                        $scope.btnYes();
+                    }
+                }
+                if ($scope.model.dsForm.DT[0].QuestionType == "ODR") {
+                    var ans_val = [];
+                    for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                        $scope.testQuestionAnswer[i].sortindex = i + 1;
+                        ans_val.push($scope.testQuestionAnswer[i].TestAnswerID);
+                    }
+                    if (JSON.stringify($scope.testQuestionCom) == JSON.stringify(ans_val)) {
+                        $('#wMsg').html('<p>Do you want to continue without any changes to this question ?</p>')
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    }
+                    else {
+                        $scope.btnYes();
+                    }
+                }
+                if ($scope.model.dsForm.DT[0].QuestionType == "FTG") {
+                    var isCorrect = false;
+                    var arrIsCorrect = [];
+                    if ($("select").length > 1) {
+                        $("select").each(function (e, i) {
+                            var ddlSelectId = $(i).attr("id");
+                            var selVal = $("select[id$='" + ddlSelectId + "'] option:selected");
+
+                            if (selVal.text().trim() != "Select") {
+                                arrIsCorrect.push(true);
+                            } else {
+                                arrIsCorrect.push(false);
+                            }
+                        });
+                        var all_correct = arrIsCorrect.find(a => a == false);
+                        if (all_correct == undefined) {
+                            isCorrect = true;
+                        } else {
+                            isCorrect = false;
+                        }
+                    } else {
+                        $("select").each(function (e, i) {
+                            var ddlSelectId = $(i).attr("id");
+                            var selVal = $("select[id$='" + ddlSelectId + "'] option:selected");
+                            if (selVal.text().trim() != "Select") {
+                                isCorrect = true;
+                            } else {
+                                isCorrect = false;
+                            }
+                        });
+                    }
+
+                    if (!isCorrect) {
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    }
+                    else {
+                        $scope.btnYes();
+                    }
+                }
+                if ($scope.model.dsForm.DT[0].QuestionType == "FTB") {
+                    var isCorrect = false;
+                    var arrIsCorrect = [];
+                    var inputlength = $('#ftbtypeQution').find('input');
+
+                    if (inputlength.length > 0) {
+                        $('#ftbtypeQution').find('input').each(function (e, i) {
+                            var abc = "#" + $(i).attr("id");
+                            if ($(abc).val() !== undefined && $(abc).val() !== null && $(abc).val() !== "") {
+                                arrIsCorrect.push($(abc).val());
+                                arrIsCorrect.join(',');
+                            }
+                        });
+
+                        if (arrIsCorrect.length > 0) {
+                            isCorrect = true;
+                        }
+                    }
+
+                    if (!isCorrect) {
+                        $('#warningModal').modal("toggle");
+                        return false;
+                    }
+                    else {
+                        $scope.btnYes();
+                    }
+                }
+            }
+
+            $scope.btnYes = function () {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                $scope.isNextDisable = "disabled";
+                $scope.btnsave(true);
+
+                $scope.$watch('saveQuestionStatus', function (saveQuestionStatus) {
+                    if (saveQuestionStatus) {
+                        var valNew = saveQuestionStatus.split("===");
+                        var sSuccessMsg = valNew[0];
+                        var sFileName = valNew[1];
+
+                        if (sFileName == "Data Saved") {
+                            var url = '/frmTestQuestionView/ParamsOutput' + location.search;
+                            var payload = '';
+                            if ($scope.model.DatasetCollection.tu.au[0].AssessTestID != undefined)
+                                payload = { TestID: $scope.model.DatasetCollection.tu.au[0].AssessTestID, AssessUserID: $scope.model.DatasetCollection.tu.au[0].AssessUserID, TestQuestionID: $scope.QuestionInfo.TestQuestionID };
+                            else
+                                payload = { SurveyID: $scope.model.DatasetCollection.tu.au[0].AssessSurveyID, AssessUserID: $scope.model.DatasetCollection.tu.au[0].AssessUserID, TestQuestionID: $scope.QuestionInfo.TestQuestionID };
+
+                            payload = JSON.stringify(payload);
+                            var payloaddata = { key: 'testquestion', Params: payload, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                            $.post(url, payloaddata, function (result) {
+                                var base = '/App/Link' + location.search;
+                                var questionInfoContent = {};
+                                angular.copy($scope.QuestionInfo, questionInfoContent);
+                                questionInfoContent.DescriptionHTML = '';
+                                questionInfoContent.DescriptionText = '';
+                                questionInfoContent.QuestionHTML = '';
+                                questionInfoContent.QuestionText = '';
+
+                                questionInfoContent.AssessUserID = $scope.model.vBag.assessuserid;
+                                var payload = '';
+                                if (result.Data.ID == 0) {
+                                    if ($scope.model.DatasetCollection.tu.au[0].ContentUnitID > 0) {
+                                        payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: $scope.model.DatasetCollection.tu.au[0].ContentUnitID, rowData: JSON.stringify(questionInfoContent) };
+                                    }
+                                    else if ($scope.model.DatasetCollection.tu.au[0].AssessSurveyID > 0) {
+                                        payload = { fKey: 'frmAssessSurveyView', fMode: 'acEditM', IDX: $scope.model.DatasetCollection.tu.au[0].AssessUserID, rowData: JSON.stringify(questionInfoContent) };
+                                    }
+                                    else {
+                                        payload = { fKey: 'frmAssessTestView', fMode: 'acEditM', IDX: $scope.model.DatasetCollection.tu.au[0].AssessUserID, rowData: JSON.stringify(questionInfoContent) };
+                                    }
+                                }
+                                else {
+                                    payload = { fKey: 'frmTestQuestionView', fMode: 'acEditM', IDX: result.Data.ID, rowData: JSON.stringify(questionInfoContent) };
+                                }
+
+                                $.post(base, payload, function (result) {
+                                    $scope.status = 'loaded';
+                                    window.location = result;
+                                });
+                            });
+                        }
+
+                    }
+                });
+            }
+
+            $scope.checkToggle = function (checkbox) {
+                for (var i = 0; i < $scope.testQuestionAnswer.length; i++) {
+                    if ($scope.testQuestionAnswer[i].AnswerText1 == checkbox) {
+                        $scope.testQuestionAnswer[i].sysincl = true;
+                    } else {
+                        $scope.testQuestionAnswer[i].sysincl = false;
+                    }
+                }
+            }
+
+            $(document).on('change', '.ddlClass', function () {
+                var selValue = $(this).children("option:selected").val();
+                var selectedText = $(this).children("option:selected").html();
+
+                arrSelVal.push(selValue);
+                arrSelText.push(selectedText);
+            });
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}

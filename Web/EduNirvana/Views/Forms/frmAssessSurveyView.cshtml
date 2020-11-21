@@ -1,0 +1,135 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+
+@model frmAssessSurveyViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">Assess Survey {{AssessSurveyName}}</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-md-12" id="showPreview" ng-show="isMsg" style="margin-top:15px; margin-bottom:15px;"></div>
+        </div>
+
+        <div class="form-row" ng-show="isCompletedOn">
+            <div class="form-group col-md-12">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" id="btnStart" class="btn btn-default btnf" ng-click="redirectContentUnit('start', AssessTestInfo.AssessUserID)" value="Start" style="padding: 10px;font-size: 20px;">Start</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" id="btnContinue" class="btn btn-default btnf" ng-show="isContinue" ng-click="redirectContentUnit('continue', AssessTestInfo.lastquestionid)" value="Continue" style="padding: 10px;font-size: 20px;float: left;margin-left: 15px;">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="errorModel" role="dialog" style="z-index: 99999;">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                        <h4 class="modal-title">Message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 16px;">
+                            There are no questions defined in this survey. Please contact Admin.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-default" ng-click="closeErrorDialog()">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, usSpinnerService) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+
+                $scope.AssessSurveyInfo = $scope.model.dsForm.DT[0];
+                //SET Assess Test Name
+                $scope.AssessSurveyName = " - ( " + $scope.model.dsForm.DT[0].AssessName + " ) ";
+                //Shwo Message IF CompletedOn is NOT NULL
+                if ($scope.AssessSurveyInfo.CompletedOn != undefined) {
+                    $scope.isCompletedOn = false;
+
+                    $('#showPreview').css('text-align', 'center');
+                    $('#showPreview').html('<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px"> Thank You for taking the survey.</span>');
+                    $scope.isMsg = true;
+                }
+                else {
+                    $scope.isCompletedOn = true;
+                    //Show Hide Continue Button.
+                    $scope.isContinue = $scope.AssessSurveyInfo.lastquestionid == undefined ? false : true;
+                }
+            }
+
+            loadmodel($scope.model);
+
+            $scope.redirectContentUnit = function (btnType) {
+                var url = '/frmAssessSurveyView/ParamsOutput' + location.search;
+                var payload = { AssessUserID: $scope.AssessSurveyInfo.AssessUserID, StartType: btnType };
+                var payloaddata = { key: 'testquestion', Params: JSON.stringify(payload), __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                $.post(url, payloaddata, function (result) {
+                    var base = '/App/Link' + location.search;
+                    var assessSurveyContent = {};
+                    angular.copy($scope.AssessSurveyInfo, assessSurveyContent);
+                    var payload = '';
+                    if (result.Data.ID == 0) {
+                        $('#errorModel').modal('toggle');
+                    }
+                    else {
+                        payload = { fKey: 'frmTestQuestionView', fMode: 'acEditM', IDX: result.Data.ID, rowData: JSON.stringify(assessSurveyContent) };
+
+                        $.post(base, payload, function (result) {
+                            window.location = result;
+                            if (result.success) {
+                            }
+                            else {
+                                if (result.message === '') { result.message = 'Unknown Error!' };
+                                $scope.message = result.message;
+                            }
+                            $scope.$apply();
+                            return;
+                        });
+                    }
+                });
+            }
+
+            @Html.RenderFile("~/scripts/attchment.js");
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+
+
+

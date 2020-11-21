@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<framework:BasePage  xmlns:framework="clr-namespace:Risersoft.Framework.Pages.Framework;assembly=Risersoft.Framework" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:framework1="clr-namespace:Risersoft.Framework.Pages.Framework;assembly=Risersoft.Framework.UI"
+                     mc:Ignorable="d"
+             x:Class="EduNirvana.XF.Pages.FrmForumpost">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="activity_indicator" IsVisible="false" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Padding="10">
+                <ProgressBar BackgroundColor="LightGray"  HorizontalOptions="FillAndExpand"  ProgressColor="DodgerBlue" HeightRequest="100" WidthRequest="350" x:Name="progressBar"/>
+                <Label Text="Please Wait" HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <StackLayout x:Name="stackShowData" Padding="10" VerticalOptions="FillAndExpand"  >
+                <framework1:CookieWebView x:Name="vw1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="false"
+                                          HeightRequest="1000"
+                         Navigated="vw1_Navigated" Navigating="vw1_Navigating"></framework1:CookieWebView>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</framework:BasePage>

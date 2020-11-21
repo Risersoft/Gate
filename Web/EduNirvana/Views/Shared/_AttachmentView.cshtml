@@ -1,0 +1,31 @@
+﻿<style type="text/css">
+    @@media screen and (min-width: 360px) {
+        .ddl-menu {
+            margin-top: 40px;
+        }
+    }
+
+    @@media screen and (min-width: 780px) {
+        .ddl-menu {
+            margin-top: 0px;
+        }
+    }
+</style>
+
+<nav class="navbar navbar-expand-md navbar-light bg-light" style="float:right;" ng-show="UploadAttachAssignJson.length > 0">
+    <div id="navbarCollapse">
+        <ul class="nav navbar-nav">
+            <li class="nav-item dropdown">
+                <button type="button" id="btnAddNew" Class="btn btn-default btnf dropdown-toggle" data-toggle="dropdown" title="Download References"><i class="fa fa-download"></i></button>
+                <div class="dropdown-menu ddl-menu" style="margin-left:-50px;">
+                    <table>
+                        <tr ng-repeat="fls in UploadAttachAssignJson">
+                            <td><a href="javascript:void(0)" class="dropdown-item" ng-click="downloadFile(fls.blobname)" title="{{fls.bloborgname}}">{{fls.tFlName}}</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <a href="javascript:void(0)" data-toggle="tooltip" title="Download references for this Content Unit"><i class="fa fa-info-circle" style="font-size: 20px;color: #027fbd;"></i></a>
+</nav>

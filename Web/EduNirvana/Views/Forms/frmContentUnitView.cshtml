@@ -1,0 +1,629 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+
+@model frmContentUnitViewModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css" media="screen">
+    #stage {
+        background: #eee;
+        width: 800px;
+        height: 460px;
+        overflow: hidden;
+        position: relative;
+        margin: 2em 0;
+        border: 1px solid
+    }
+
+        #stage span {
+            font-size: 20px;
+            color: #666;
+            display: block;
+            padding: 2em;
+        }
+
+    video {
+        width: 800px;
+        height: 460px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #controls {
+        position: relative;
+        width: 400px;
+    }
+
+    #change {
+        position: absolute;
+        right: -520px;
+        top: -490px;
+        width: 100px;
+    }
+
+    button {
+        font-size: 150%;
+        text-align: center;
+        display: block;
+    }
+
+    #change button {
+        width: 60px;
+        border: none;
+        background: #fff;
+    }
+
+    #clock-container {
+        color: #333;
+        margin: 0 auto;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+        #clock-container h1 {
+            font-weight: normal;
+        }
+
+        #clock-container li {
+            display: inline-block;
+            font-size: 1.5em;
+            list-style-type: none;
+            padding: 1em;
+            text-transform: uppercase;
+        }
+
+            #clock-container li span {
+                display: block;
+                font-size: 4.5rem;
+                margin-bottom: 30px;
+            }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">View Course - {{CourseDetails.CourseName}} ({{CourseDetails.CourseCode}})</h5>
+            </div>
+            <div class="col-md-6">
+                <h5 style="float:right;margin-top: 25px;" id="marksObtained" ng-show="isMarksObtained"></h5>
+                <div class="form-group col-md-12" ng-show="totalDuration">
+                    <div class="row vertical-divider" style="margin-top: 25px;float: right;font-size: 18px;color: #1c66a7;">
+                        <div class="col-xs-4">No. of Questions: {{numberofQuestion}}</div>
+                        <span style="font-size: 16px;color: #1c66a7;margin-left: 5px;margin-right: 5px;font-size: 25px;"> | </span>
+                        <div class="col-xs-4">Total Marks: {{totalMarks}}</div>
+                        <span style="font-size: 16px;color: #1c66a7;margin-left: 5px;margin-right: 5px;font-size: 25px;"> | </span>
+                        <div class="col-xs-4">Time Limit: {{duration}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row" ng-show="!isEnableOn">
+            <div class="form-group col-md-12">
+                <div class="form-row" id="dTitile">
+                    <div class="form-group col-md-9">
+                        <label for="inputEmail4"><b>Title : </b></label> <span style="font-size:14px">{{CourseInfo.Title}}</span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.Partial("_AttachmentView")
+                    </div>
+                </div>
+
+                <div class="form-row" id="sectionTitle" style="text-align: center;font-size: 40px;margin-top: 40px; display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="inputEmail4"><b>Title : </b></label> <span>{{CourseInfo.Title}}</span>
+                    </div>
+                </div>
+
+                <div class="form-row" ng-show="TotalScore" style="margin-bottom:25px;margin-top:25px;">
+                    <div class="form-group col-md-12">
+                        <div id="showTotalScore" style="text-align: center;font-size: 20px;"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div id="stage" style="display:none;"></div>
+                        <div id="controls" style="display:none;"></div>
+
+                        <div id="showPreview"></div>
+                        <p id="htmlContent" ng-bind-html="contentDescription" style="display:none;"></p>
+                        <iframe id="myframe" src="" frameborder="0" style="width:100%; height:350px; padding:0px 20px 0px 20px; display:none;"></iframe>
+                    </div>
+                </div>
+
+                <div class="form-row" ng-style="!isNotes && {'float':'right'}">
+                    <div class="form-group" ng-class="{'col-md-7': (isNotes == true)}">
+                        <label for="inputEmail4" ng-if="notes.length > 0"><b>Notes: </b></label> <span style="color: #888888;">{{notes}}</span>
+                    </div>
+                    <div class="form-group" id="btn_nextPrev" ng-class="{'col-md-5': (isNotes == true) , 'col-md-12': (showCourse == false)}">
+                        <a href="javascript:void(0)" class="btn btn-default btnf" ng-click="NextSlide(CourseInfo.CourseID, contentUnitId)">Next <i class="fa fa-angle-double-right"></i></a>
+                        @*<a href="javascript:void(0)" class="btn btn-default btnf" ng-click="PreviousSlide()"><i class="fa fa-angle-double-left"></i> Previous</a>*@
+                        <button type="button" Class="btn btn-default btnf" onclick="window.history.back()" id="btnPrevious" ng-if="isBtnPrevious"><i class="fa fa-angle-double-left"></i> Previous</button>
+                        <button type="button" ng-click="start(url, payload, CourseInfo.ContentType.toLocaleLowerCase())" id="btnStartNew" class="btn btn-default btnf" ng-if="isbtnBlank"> {{model.DatasetCollection.info.uu[0].ButtonType}}</button>
+                        @*<button type="button" ng-click="start(url,payload,CourseInfo.ContentType.toLocaleLowerCase())" id="btnStart" class="btn btn-default btnf" ng-if="isStart"> Start </button>
+                            <button type="button" ng-click="start(url,payload,CourseInfo.ContentType.toLocaleLowerCase())" class="btn btn-default btnf" ng-if="isContinue"> Continue </button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="isEnableOn" style="min-height:300px">
+            <!-- Display the countdown timer in an element -->
+            <div class="form-row">
+                <div class="col-md-12" id="dCountdown">
+                    <p id="demo"></p>
+                    <div id="clock-container">
+                        <h1>Your Assessment Will Start In:</h1>
+                        <ul>
+                            <li><span id="days"></span>days</li>
+                            <li><span id="hours"></span>Hours</li>
+                            <li><span id="minutes"></span>Minutes</li>
+                            <li><span id="seconds"></span>Seconds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        rsApp.controller('FormController', function ($scope, usSpinnerService, $window) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Set Course Details
+                $scope.CourseDetails = $scope.model.DatasetCollection.info.Course[0];
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //disabled in edit mode
+                $scope.isDisabled = $scope.model.frmMode == 2 ? "" : "disabled";
+                //set Content Unit ID
+                $scope.contentUnitId = $scope.model.frmIDX;
+                //Set Document Type
+                $scope.doctype = $scope.CourseInfo.DocType;
+                //Total Duration
+
+                if ($scope.CourseInfo.ContentType == "Test") {
+                    $scope.totalDuration = true;
+                    $scope.numberofQuestion = $scope.model.DatasetCollection.info.uu[0].TotalCount;
+                    $scope.totalMarks = $scope.model.DatasetCollection.info.uu[0].TotalWeight;
+                    $scope.duration = $scope.model.DatasetCollection.info.uu[0].Duration + " Mins";
+                }
+
+                //Set Contnet
+                //Set File Name basis of DocType
+                if ($scope.CourseInfo.DocType == "video" || $scope.CourseInfo.DocType == "audio") {
+                    $scope.flName = $scope.CourseInfo.ContentFilePath;
+                }
+                else {
+                    $scope.flName = $scope.CourseInfo.ContentPDFPath;
+                }
+
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "upload") {
+                    if ($scope.doctype == "video" || $scope.doctype == "audio" || $scope.doctype == "pdf" || $scope.doctype == "presentation" || $scope.doctype == "document") {
+                        $scope.url = '/frmContentUnitView/ParamsOutput' + location.search;
+                        $scope.payload = { serverPath: window.btoa($scope.flName), CourseID: $scope.CourseInfo.CourseID };
+                        payload = JSON.stringify($scope.payload);
+                        var payloaddata = { key: 'download', Params: payload, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                        setTimeout(function () {
+                            $.post($scope.url, payloaddata, function (result) {
+                                if (result.success) {
+                                    if ($scope.CourseInfo.DocType.toLocaleLowerCase() == "document" || $scope.CourseInfo.DocType.toLocaleLowerCase() == "presentation" || $scope.CourseInfo.DocType.toLocaleLowerCase() == "pdf") {
+                                        $('#showPreview').addClass('embed-responsive embed-responsive-16by9');
+                                        $('#showPreview').css("height", "450px")
+                                        $('#showPreview').css("border", "1px solid")
+                                        $('#showPreview').append('<iframe frameborder="0" class="embed-responsive-item" style="padding:0px 20px;" src="/Content/web/viewer.html?file=' + encodeURIComponent(result.Data) + '"></iframe>');
+                                    }
+                                    if ($scope.CourseInfo.DocType.toLocaleLowerCase() == "video") {
+                                        $scope.videoUrl = result.Data;
+                                        var videoHtml = '<video controls><source src="' + result.Data + '" type="video/mp4"></video>';
+                                        $('#stage').html(videoHtml);
+                                        let myCoolCode = document.createElement("script");
+                                        myCoolCode.setAttribute("src", "/Scripts/transformvideo.js");
+                                        document.body.appendChild(myCoolCode);
+
+                                        $('#stage').show();
+                                        $('#controls').show();
+                                    }
+                                    if ($scope.CourseInfo.DocType.toLocaleLowerCase() == "audio") {
+                                        var audioView = "<audio controls>";
+                                        audioView += "<source src='" + result.Data + "' type='audio/mpeg'>";
+                                        audioView += "Your browser does not support the audio element.";
+                                        audioView += "</audio>";
+
+                                        $('#showPreview').html(audioView);
+                                    }
+                                }
+                            });
+                        }, 100);
+
+                        $scope.isBtnPrevious = true;
+                    }
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "assignment") {
+                    $scope.url = '/frmContentUnitView/ParamsOutput' + location.search;
+                    $scope.payload = '';
+                    if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "test") {
+                        payload = { CourseID: $scope.CourseInfo.CourseID, TestID: $scope.CourseInfo.AssessTestID, StartType: $scope.model.DatasetCollection.info.uu[0].ButtonType };
+                    }
+                    if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "survey") {
+                        payload = { CourseID: $scope.CourseInfo.CourseID, SurveyID: $scope.CourseInfo.AssessSurveyID, StartType: $scope.model.DatasetCollection.info.uu[0].ButtonType };
+                    }
+                    if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "assignment") {
+                        payload = { CourseID: $scope.CourseInfo.CourseID, AssignmentID: $scope.CourseInfo.AssessAssignmentID, StartType: $scope.model.DatasetCollection.info.uu[0].ButtonType };
+                    }
+
+                    $scope.payload = JSON.stringify(payload);
+                }
+
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "test" || $scope.CourseInfo.ContentType.toLocaleLowerCase() == "survey") {
+                    $scope.url = '/frmContentUnitView/ParamsOutput' + location.search;
+                    var payload = '';
+                    if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "test") {
+                        payload = { CourseID: $scope.CourseInfo.CourseID, TestID: $scope.CourseInfo.AssessTestID, StartType: $scope.model.DatasetCollection.info.uu[0].ButtonType };
+                    }
+                    if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "survey") {
+                        payload = { CourseID: $scope.CourseInfo.CourseID, SurveyID: $scope.CourseInfo.AssessSurveyID, StartType: $scope.model.DatasetCollection.info.uu[0].ButtonType };
+                    }
+
+                    $scope.payload = JSON.stringify(payload);
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "web") {
+                    if ($scope.doctype == "video") {
+                        $('#myframe').attr("src", $scope.CourseInfo.ContentURL != undefined ? $scope.CourseInfo.ContentURL.replace('watch?v=', 'embed/') : "");
+                        $('#myframe').show();
+                    }
+                    if ($scope.doctype == "iframe") {
+                        $('#myframe').attr("src", $scope.CourseInfo.ContentURL);
+                        $('#myframe').show();
+                    }
+                    if ($scope.doctype == "content") {
+                        $('#myframe').attr("src", $scope.CourseInfo.ContentURL);
+                        $('#myframe').show();
+                    }
+
+                    $scope.isBtnPrevious = true;
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "link") {
+                    $scope.contentDescription = $scope.CourseInfo.ContentHTML;
+                    $('#htmlContent').show();
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "html") {
+                    $scope.contentDescription = $scope.CourseInfo.ContentHTML;
+                    $('#htmlContent').show();
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "iframe") {
+                    $scope.contentDescription = $scope.CourseInfo.ContentHTML;
+                    $('#htmlContent').show();
+                }
+                if ($scope.CourseInfo.ContentType.toLocaleLowerCase() == "section") {
+                    $('#dTitile').hide();
+                    $('#sectionTitle').show();
+                }
+
+                //Bind Attachment
+                $scope.UploadAttachAssignJson = $scope.model.dsForm.DT[0].AttachmentJson !== undefined ? JSON.parse($scope.model.dsForm.DT[0].AttachmentJson) : [];
+                if ($scope.UploadAttachAssignJson.length > 0) {
+                    for (var i = 0; i < $scope.UploadAttachAssignJson.length; i++) {
+                        var trnFlName = truncate($scope.UploadAttachAssignJson[i].bloborgname, 25);
+                        $scope.UploadAttachAssignJson[i].tFlName = trnFlName;
+                    }
+                }
+
+                $scope.UploadFiles = [];
+                //Check Assignment
+                if ($scope.model.dsForm.DT[0].ContentType.toLowerCase() == "assignment") {
+                    if ($scope.model.DatasetCollection.info.uu[0] !== undefined || $scope.model.DatasetCollection.info.uu[0].CompletedOn !== undefined) {
+                        //if ($scope.model.DatasetCollection.info.uu[0].RoleCode == 'INS') { }
+                        //else {
+                        var curDate = new Date($scope.model.DatasetCollection.info.uu[0].currentTime);
+                        var enableDT = new Date($scope.model.DatasetCollection.info.uu[0].EnableOn);
+                        var disableDT = new Date($scope.model.DatasetCollection.info.uu[0].DisableOn);
+
+                        if (curDate < enableDT) {
+                            checkShowTimer(curDate, enableDT, disableDT);
+                        }
+                        else if ($scope.model.DatasetCollection.info.uu[0].LastSubmitOn !== undefined) {
+                            var strMsg = '<span style="font-size:25px">' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span><br/><br/>';
+
+                            $scope.TotalScore = true;
+                            $scope.isbtnBlank = false;
+                            if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                $scope.isbtnBlank = false;
+                            }
+
+                            if ($scope.model.DatasetCollection.info.uu[0].Complete_Show_Score) {
+                                if ($scope.model.DatasetCollection.info.uu[0].TotalScore !== undefined) {
+                                    strMsg += "<span style='font-size: 25px'>Marks Obtained: " + $scope.model.DatasetCollection.info.uu[0].TotalScore + "</span><br/><br/>";
+                                }
+                            }
+
+                            $('#showTotalScore').html(strMsg);
+                        }
+                        else {
+                            if ($scope.model.DatasetCollection.info.uu[0].RoleCode === 'INS') { }
+                            else {
+                                if ($scope.model.DatasetCollection.info.uu[0].NotifyMsg !== undefined) {
+                                    $('#showTotalScore').html('<span style="font-size:25px">' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span>');
+                                }
+
+                                $scope.TotalScore = true;
+                                if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                    $scope.isbtnBlank = false;
+                                } else {
+                                    $scope.isbtnBlank = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                //Check Test
+                if ($scope.model.dsForm.DT[0].ContentType.toLowerCase() == "test") {
+                    if (Array.isArray($scope.model.DatasetCollection.info.uu) && $scope.model.DatasetCollection.info.uu.length > 0) {
+                        var curDate = new Date($scope.model.DatasetCollection.info.uu[0].currentTime);
+                        var enableDT = new Date($scope.model.DatasetCollection.info.uu[0].EnableOn);
+                        var disableDT = new Date($scope.model.DatasetCollection.info.uu[0].DisableOn);
+
+                        if (curDate < enableDT) {
+                            checkShowTimer(curDate, enableDT, disableDT);
+                            $scope.totalDuration = false;
+                        }
+                        else if (curDate >= enableDT && curDate <= disableDT) {
+                            if ($scope.model.DatasetCollection.info.uu[0].AssessCompletedOn !== undefined) {
+                                var strMsg1 = '';
+                                if ($scope.model.DatasetCollection.info.uu[0].IsPassed == 1) {
+                                    strMsg1 = '<i class="fa fa-check-circle" style="color:green;font-size:25px"></i> <span style="font-size:25px"> ' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span><br/><br/>';
+                                    if ($scope.model.DatasetCollection.info.uu[0].Complete_Show_Score) {
+                                        strMsg1 += $scope.model.DatasetCollection.info.uu[0].MessagePassed + '<br><br> Marks Obtained:  <b>' + $scope.model.DatasetCollection.info.uu[0].TotalScore + '</b>';
+                                        //$('#marksObtained').html('<b>Total Marks: ' + $scope.model.DatasetCollection.info.uu[0].TotalWeight + '</b>');
+                                    }
+                                    $scope.TotalScore = true;
+                                    $scope.isBtnPrevious = false;
+                                    $scope.isMarksObtained = true;
+                                }
+                                else {//if ($scope.model.DatasetCollection.info.uu[0].IsPassed == 0) {
+                                    if ($scope.model.DatasetCollection.info.uu[0].Complete_Show_Score) {
+                                        strMsg1 += $scope.model.DatasetCollection.info.uu[0].MessageFailed + '<br><br> Marks Obtained:  <b>' + $scope.model.DatasetCollection.info.uu[0].TotalScore + '</b>';
+                                        //$('#marksObtained').html('<b>Total Marks: ' + $scope.model.DatasetCollection.info.uu[0].TotalWeight + '</b>');
+                                    }
+                                    $scope.TotalScore = true;
+                                    $scope.isBtnPrevious = false;
+                                    $scope.isMarksObtained = true;
+                                }
+
+                                if ($scope.model.DatasetCollection.info.uu[0].Repeat_Allow) {
+                                    if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                        $scope.isbtnBlank = false;
+                                    } else {
+                                        $scope.isbtnBlank = true;
+                                    }
+                                }
+
+                                $scope.totalDuration = false;
+                                //$scope.isbtnBlank = false;
+                                $('#showTotalScore').html(strMsg1);
+                            }
+                            else {
+                                if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                    $scope.isbtnBlank = false;
+                                } else {
+                                    var strMsg1 = '<span style="font-size:25px"> ' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + ' </span><br/><br/>';
+                                    $('#showTotalScore').html(strMsg1);
+
+                                    $scope.TotalScore = true;
+                                    $scope.isbtnBlank = true;
+                                }
+
+                                $scope.totalDuration = true;
+                            }
+                        }
+                        else if ($scope.model.DatasetCollection.info.uu[0].AssessCompletedOn !== undefined) {
+                            var strMsg1 = '<i class="fa fa-check-circle" style="color:green;font-size:25px"></i> <span style="font-size:25px"> ' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span><br/><br/>';
+
+                            if ($scope.model.DatasetCollection.info.uu[0].IsPassed == 1) {
+                                if ($scope.model.DatasetCollection.info.uu[0].Complete_Show_Score) {
+                                    strMsg1 += $scope.model.DatasetCollection.info.uu[0].MessagePassed + '<br><br> Marks Obtained:  <b>' + $scope.model.DatasetCollection.info.uu[0].TotalScore + '</b>';
+                                }
+
+                                $scope.TotalScore = true;
+                                $scope.totalDuration = false;
+
+                                if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                    $scope.isbtnBlank = false;
+                                } else {
+                                    $scope.isbtnBlank = true;
+                                }
+
+                            } else {
+                                if ($scope.model.DatasetCollection.info.uu[0].AssessCompletedOn !== undefined) {
+                                    var strMsg1 = '<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px"> ' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span><br/><br/>';
+
+                                    if ($scope.model.DatasetCollection.info.uu[0].Complete_Show_Score) {
+                                        strMsg1 += $scope.model.DatasetCollection.info.uu[0].MessageFailed + '<br><br> Marks Obtained:  <b>' + $scope.model.DatasetCollection.info.uu[0].TotalScore + '</b>';
+                                    }
+
+                                    $('#marksObtained').html('<b>Total Marks: ' + $scope.model.DatasetCollection.info.uu[0].TotalWeight + '</b>');
+
+                                    if ($scope.model.DatasetCollection.info.uu[0].ButtonType == "") {
+                                        $scope.isbtnBlank = false;
+                                    } else {
+                                        $scope.isbtnBlank = true;
+                                    }
+
+                                    $scope.isMarksObtained = true;
+                                    $scope.isBtnPrevious = false;
+                                }
+                            }
+
+                            $('#showTotalScore').html(strMsg1);
+                            $scope.TotalScore = true;
+                            $scope.totalDuration = false;
+                        }
+                        else {
+                            var strMsg1 = '';
+                            if ($scope.model.DatasetCollection.info.uu[0].NotifyMsg !== "" && $scope.model.DatasetCollection.info.uu[0].NotifyMsg !== undefined) {
+                                strMsg1 = '<span style="font-size:25px"> ' + $scope.model.DatasetCollection.info.uu[0].NotifyMsg + '</span><br/><br/>';
+                                $('#showTotalScore').html(strMsg1);
+                                if (curDate > disableDT) {
+                                    $scope.isbtnBlank = false;
+                                }
+                                else {
+                                    $scope.isbtnBlank = true;
+                                }
+                            } else {
+                                $scope.isbtnBlank = true;
+                            }
+
+                            $scope.TotalScore = true;
+                            $scope.totalDuration = false;
+                        }
+                    }
+                }
+                //Check Survey
+                if ($scope.model.dsForm.DT[0].ContentType.toLowerCase() == "survey") {
+                    if ($scope.model.DatasetCollection.info.uu[0] !== undefined && $scope.model.DatasetCollection.info.uu[0].CompletedOn !== undefined) {
+                        $('#showTotalScore').html('<i class="fa fa-check-circle fa-2x" style="color:green"></i> <span style="font-size:25px"> Thank you for taking the Survey.</span>');
+                        $scope.TotalScore = true;
+                        $scope.isbtnBlank = false;
+                    } else {
+                        $scope.isbtnBlank = true;
+                    }
+                }
+
+                $scope.isNotes = false;
+                if ($scope.model.dsForm.DT[0].NotesText != null && $scope.model.dsForm.DT[0].NotesText != undefined) {
+                    $scope.notes = $scope.model.dsForm.DT[0].NotesText;
+                    $scope.isNotes = true;
+                }
+            };
+
+            loadmodel($scope.model);
+
+            function truncate(str, n) {
+                return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
+            };
+
+            $scope.NextSlide = function (courseId, contentUnitId) {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                var url = '/frmContentUnitView/ParamsOutput' + location.search;
+                var payload = { CourseID: courseId, ContentUnitID: contentUnitId };
+                payload = JSON.stringify(payload);
+                var payloaddata = { key: 'contentunit', Params: payload, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                $.post(url, payloaddata, function (result) {
+                    var base = '/App/Link' + location.search;
+                    var courseContent = {};
+                    angular.copy($scope.CourseInfo, courseContent);
+                    courseContent.DescriptionHTML = '';
+                    courseContent.DescriptionText = '';
+                    courseContent.ContentHTML = '';
+                    courseContent.ContentText = '';
+                    courseContent.NotesHTML = '';
+                    courseContent.NotesText = '';
+
+                    if (result.Data.ID != "0") {
+                        var payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: result.Data.ID, rowData: JSON.stringify(courseContent) }; // for edit
+                        $.post(base, payload, function (result) {
+                            $scope.status = 'loaded';
+                            window.location = result;
+                        });
+                    }
+                    else {
+                        if ($scope.model.DatasetCollection.info.cu[0] !== undefined) {
+                            var payload = { fKey: 'frmCourseView', fMode: 'acEditM', IDX: $scope.model.DatasetCollection.info.cu[0].CourseUserID, rowData: JSON.stringify(courseContent) }; // for edit
+                            $.post(base, payload, function (result) {
+                                $scope.status = 'loaded';
+                                window.location = result;
+                            });
+                        }
+                    }
+                });
+            }
+
+            $scope.PreviousSlide = function () {
+                window.location.href = window.history.back();
+            }
+
+            $scope.start = function (url, payloaddata, contenttype) {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                //NEED TO IMPLEMENT IF TestQuestionID == 0
+                if (contenttype.toLowerCase() == "test" || contenttype.toLowerCase() == "survey")
+                    var payloaddata = { key: 'testquestion', Params: payloaddata, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+                else
+                    var payloaddata = { key: 'assessuser', Params: payloaddata, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() };
+
+                $.post(url, payloaddata, function (result) {
+                    debugger;
+                    console.log(result);
+                    $scope.model.DatasetCollection.info.uu[0].ButtonType
+                    var base = '/App/Link' + location.search;
+                    var courseContent = {};
+                    angular.copy($scope.CourseInfo, courseContent);
+                    var viewName = '';
+
+                    if (result.Data.ID == 0) {
+                        courseContent.AssessUserID = result.Data.IDList[0];
+                        var payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: courseContent.ContentUnitID, rowData: JSON.stringify(courseContent) }; // for edit
+                        $.post(base, payload, function (result) {
+                            $scope.status = 'loaded';
+                            window.location = result;
+                        });
+                    }
+                    else {
+                        if (contenttype.toLocaleLowerCase() == "test" || contenttype.toLocaleLowerCase() == "survey") {
+                            viewName = "frmTestQuestionView";
+                            courseContent.AssessUserID = result.Data.IDList[0];
+                        }
+                        else {
+                            viewName = "frmAssessAssignView";
+                        }
+
+                        var payload = { fKey: viewName, fMode: 'acEditM', IDX: result.Data.ID, rowData: JSON.stringify(courseContent) }; // for edit
+                        $.post(base, payload, function (result) {
+                            $scope.status = 'loaded';
+                            window.location = result;
+                        });
+                    }
+                });
+            }
+
+            $scope.downloadFile = function (filename) {
+                $scope.download('frmAssessAssignView', filename);
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+

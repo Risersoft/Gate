@@ -1,0 +1,273 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+@using Syncfusion.EJ2
+
+@model frmCourseModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .clsearch {
+        margin-top: 0px;
+    }
+</style>
+<script type="text/javascript">
+    var defaultRTE; var defaultRTEFN;
+    function created() {
+        defaultRTE = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+</script>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Course</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputEmail4">Course Name <span class="red">*</span></label>
+                <input type="text" class="form-control" name="coursename" ng-model="CourseInfo.CourseName" style="max-width:94%" required ng-class="{true: 'error'}[submitted() && userform.coursename.$invalid]" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4"> Course Category </label>
+                <select class="form-control" ng-model="CourseInfo.CourseCatIDSelected" name="category" style="max-width:100%" ng-options="cat.CategoryName for cat in Category track by cat.CourseCatID"></select>
+            </div>
+            <div class="form-group col-md-6" style="margin-top:20px;">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="chkActive" ng-model="CourseInfo.IsActive" />
+                    <label class="form-check-label" for="exampleCheck1">Active</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="chkHide" ng-model="CourseInfo.IsHidden" />
+                    <label class="form-check-label" for="exampleCheck1">Hide from Catalog</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">Course Code </label>
+                <input type="text" class="form-control" name="coursecde" ng-model="CourseInfo.CourseCode" style="max-width:100%" required ng-class="{true: 'error'}[submitted() && userform.coursecde.$invalid]" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">Level </label>
+                <input type="text" class="form-control" name="courselvl" ng-model="CourseInfo.Level" style="max-width:100%" />
+            </div>
+            <div class="col-md-4">
+                <label>Estimated Time</label>
+                <div class="col-sm-8" style="max-width:100%">
+                    <span style="position: absolute;background-color: #988d8d;padding: 6px;color: #fff;margin-left: -15px;border-radius: 5px;">Hrs</span>
+                    <input type="text" class="form-control numeric" maxlength="3" style="text-align:right;margin-left: -15px;" ng-model="CourseInfo.TimeLimit" />
+                </div>
+            </div>
+        </div>
+        <!-- End Page Content-->
+
+        <div class="clearfix" style="margin-top:20px;"></div>
+        <div class="row" style="margin-left:2px; margin-bottom:10px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="content-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+                </li>
+                @*<li class="nav-item" ng-show="showAssignmentTabs">
+                        <a class="nav-link" id="file-tab" data-toggle="tab" href="#assignment" role="tab" aria-controls="assignment" aria-selected="false">Assignment</a>
+                    </li>*@
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="control-section">
+                        <div class="control-wrapper">
+                            <div class="control-section">
+                                @Html.EJS().RichTextEditor("defaultfn").Value("").Created("createdfn").Render()
+                            </div>
+                        </div>
+                    </div>
+                    @Html.EJS().ScriptManager()
+                </div>
+                @*<div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
+                        <div class="clearfix" style="margin-top:20px;"></div>
+                        <div class="form-row">
+                            <div class="form-group col-md-11">
+                                <table id="tblAssignment" class="table table-sm" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>User Name</th>
+                                            <th>Role</th>
+                                            <th>Per. Progress</th>
+                                            <th>Total Time Spend</th>
+                                            <th>Started On</th>
+                                            <th>Completed On</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="usr in Users">
+                                            <td>{{usr.UserName}}</td>
+                                            <td>{{usr.Role}}</td>
+                                            <td>{{usr.PerProgress}}</td>
+                                            <td>{{usr.TotalTimeSpend}}</td>
+                                            <td>{{usr.StartedOn}}</td>
+                                            <td>{{usr.CompletedOn}}</td>
+                                        </tr>
+                                        <tr ng-show="!Users.length">
+                                            <td colspan="6" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <div style="float:right; margin-bottom:5px;">
+                                    <button type="button" id="btnAddNew" Class="btn btn-default btnf" ng-click="commonDialog(Users.UserID,'dialogAssignment', 'Select Users', 'user')"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+
+        <div class="row" style="margin-left:2px; margin-bottom:10px;">
+            <ul class="nav nav-tabs" id="mySkillsTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="content-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="true">Skills</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-11">
+                            <table id="tblSkills" class="table table-sm" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="skls in Skills">
+                                        <td>{{skls.SkillCode}}</td>
+                                        <td>{{skls.SkillName}}</td>
+                                    </tr>
+                                    <tr ng-show="!Skills.length">
+                                        <td colspan="2" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <div style="float:right; margin-bottom:5px;">
+                                <button type="button" id="btnAddNewRow" Class="btn btn-default btnf" ng-click="commonDialog(Skills.SkillID,'dialogSkills','Select Skills', 'skill')"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_SavePanel")
+
+        <div id="dialogAssignment"></div>
+        <div id="dialogSkills"></div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, $http) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var loadmodel = function (result) {
+                //Set Result Data in scope
+                $scope.model = result;
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Category DropDown List
+                $scope.Category = $scope.model.dsCombo.Category;
+                //Set USERS AND SKILLS Data
+                $scope.Users = $scope.model.GridViews.Users.MainGrid.myDS.dt;
+                $scope.Skills = $scope.model.GridViews.Skill.MainGrid.myDS.dt;
+                //DataBind in TextArea Field
+                defaultRTEFN.value = $scope.CourseInfo.DescriptionHTML == undefined ? "" : $scope.CourseInfo.DescriptionHTML;
+                //Bind Dropdown Selected Value
+                $scope.CourseInfo.CourseCatIDSelected = $.grep($scope.Category, function (item, index) { return item.CourseCatID == $scope.model.dsForm.DT[0].CourseCatID })[0];
+                //Show Hide Tabs
+                $scope.showAssignmentTabs = ($scope.model.frmMode == 1 ? false : true);
+            }
+
+            loadmodel($scope.model);
+
+            //OPEN DIALOG COMMON CODE
+            $scope.commonDialog = function (val, dialogName, dialogTitle, keyValue) {
+                var payload;
+                $scope.IsInitializing = true;
+                $scope.result = '';
+                payload = { skillcsv: '0' }; // not required here
+
+                var url = '/frmCourse/ParamsModel' + location.search;
+                payload = JSON.stringify(payload);
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                var payloaddata = { key: keyValue, Params: payload, __RequestVerificationToken: token };
+
+                igGridDataPostData(url, payloaddata, dialogName, dialogTitle, keyValue);
+            };
+
+            //Bind Grid Data
+            $scope.gridfxn = function (rowData, allData, keyValue) {
+                for (var i = 0; i < rowData.length; i++) {
+                    if (keyValue == "skill") {
+                        //$scope.Skills.push($.grep(allData, function (item, index) { return item.ig_pk == rowData[i].id })[0]);
+                        $scope.Skills.push(allData[rowData[i].index]);
+                    }
+                }
+            }
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) { };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.CourseInfo.DescriptionHTML = base64EncodeUnicode(defaultRTEFN.getHtml());
+                $scope.CourseInfo.DescriptionText = base64EncodeUnicode(defaultRTEFN.getText());
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'Course', ID: $scope.model.dsForm.DT[0].CourseID, AcceptWarning: false };
+                return payload;
+            };
+
+            //Render Common Functions
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}

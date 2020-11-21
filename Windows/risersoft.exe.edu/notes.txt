@@ -1,0 +1,19 @@
+TODO SHORT TERM:
+
+DocType: Picture Zip, which is converted into PDF by ProcessTaskprovider
+Security: TestQuestionView QuestionID validation of prepform, save and getnextquestionid through assessuser
+		frmCourse/frmCourseContent/Assessments etc to check role of user (tenant admin / instructor)
+Video streaming
+
+TODO LONG TERM:
+
+frmCourseDashboard for Instructor
+Mobile App for Instructor
+Bot for QnA ?
+Transcript field in ContentUnit with auto OCR/Speech/Video content detection
+Search Content (across course / within course)
+Public Courses and Tests for SEO and Getting Started
+EMail to content unit: use cloud db to save tokens in datastore
+
+NOTES:
+Icons: https://www.google.com/imgres?imgurl=https%3A%2F%2Fflat-icons.com%2Fwp-content%2Fuploads%2Fedd%2F2019%2F07%2FOnline-Education-Icons.png&imgrefurl=https%3A%2F%2Fflat-icons.com%2Fdownloads%2Fonline-education-icon-set%2F&tbnid=mF_rAMVNSfL-4M&vet=12ahUKEwjTuo_NpJzpAhUxh0sFHeHSBrMQMygCegUIARCSAg..i&docid=Apf2X0kGwcN9DM&w=1000&h=750&q=icons%20education&ved=2ahUKEwjTuo_NpJzpAhUxh0sFHeHSBrMQMygCegUIARCSAg

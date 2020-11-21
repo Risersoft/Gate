@@ -1,0 +1,21 @@
+﻿
+Enteries to be Done from Backend for Getting started with New Tenant.
+
+1- CourseCat Entries, for CategoryName.
+2- Skill Entries, for SkillName to be selected in Course Form.
+
+Enteries to be Done from UI.
+
+1- Course
+2- CourseFile
+3- CourseUser
+4- ContentUnit
+5- AssessAssignment
+6- AssessSurvey
+7- AssessTest
+8- AssessUser
+9- TestQuestion
+10- TestQuestionItem
+11- TestAnswer
+12- ContentUnitUser
+13- TestQuestionUser

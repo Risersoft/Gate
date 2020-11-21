@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.risersoft.ednirvana" android:versionName="1.0.4" android:versionCode="4">
+	<uses-sdk android:minSdkVersion="22" android:targetSdkVersion="29" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="com.risersoft.EduNirvana.permission.C2D_MESSAGE" />
+	<permission android:protectionLevel="signature" android:name="com.risersoft.EduNirvana.permission.C2D_MESSAGE" />
+	<application android:label="EdNirvana" android:icon="@drawable/icon" android:theme="@style/MyTheme.Splash" android:usesCleartextTraffic="true" android:allowBackup="false">
+		<provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@drawable/provider_paths" />
+		</provider>
+	</application>
+</manifest>

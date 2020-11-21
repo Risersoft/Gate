@@ -1,0 +1,235 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+@using Syncfusion.EJ2;
+
+@model frmForumPostModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .e-richtexteditor .e-rte-toolbar, .e-richtexteditor .e-rte-toolbar.e-toolbar.e-extended-toolbar {
+        z-index: 9 !important;
+    }
+
+    .choices__list--dropdown {
+        z-index: 9999 !important;
+    }
+</style>
+
+<script type="text/javascript">
+    var defaultRTE; var defaultRTEFN;
+    function created() {
+        defaultRTE = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+</script>
+
+<div class="container cbackground">
+    <form action="" method="post" name="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+        <div Class="form-horizontal">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <Label Class="control-label labeltext"></Label>
+                    <h5>{{title}} Forum Post</h5>
+                </div>
+            </div>
+            <hr />
+            <div id="dForumAddMode" ng-show="isAddHide">
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
+                        <label for="inputEmail4">Title <span class="red">*</span></label>
+                        <input type="text" name="title" class="form-control" ng-model="WorkPost.Title" style="max-width: 91%;" required ng-class="{true: 'error'}[submitted() && userform.title.$invalid]" />
+                    </div>
+                </div>
+                <div Class="row" style="margin-top:10px;">
+                    <div Class="col-md-1"></div>
+                    <div Class="col-md-10">
+                        <label for="inputEmail4">Content</label>
+                        @Html.EJS().RichTextEditor("default").Value("").Created("created").Render()
+                        @Html.EJS().ScriptManager()
+                    </div>
+                </div>
+                <hr />
+
+                @Html.Partial("_SavePanel")
+            </div>
+
+            <div id="dForumEditable" ng-show="isEditHide">
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-9">
+                        <label for="inputEmail4"><b>Title</b></label><br />
+                        {{WorkPost.Title}}
+                    </div>
+                    <div class="col-sm-2" ng-show="WorkPost.CreatedByID == model.ClientParams[0].ParamValue">
+                        <button type="button" id="btnEditForum" Class="btn btn-primary" ng-click="editForum()" style="float:right;">Edit</button>
+                    </div>
+                </div>
+                <div Class="row" style="margin-top:10px;">
+                    <div Class="col-md-1"></div>
+                    <div Class="col-md-10">
+                        <label for="inputEmail4"><b>Content</b></label>
+                        <p ng-bind-html="e_htmlContent"></p>
+                    </div>
+                </div>
+            </div>
+
+            @*<div id="dialogFilterfile">
+                    <input type="checkbox" ng-click="toggleAll(mult_dsCombo)" ng-model="isAllSelected"> Select all
+                    <hr style="margin-top: 0rem;margin-bottom: 0rem;" />
+                    <div ng-repeat="row in mult_dsCombo">
+                        <input type="checkbox" ng-model="row.Entityname" ng-change="optionToggled(mult_dsCombo)"> {{row.UserName}}
+                    </div>
+                </div>
+                <div id="dialogFilterfilen">
+                    <div ng-repeat="row in dsCombo.User">
+                        {{row.UserName}}<input type="checkbox" ng-model="row.Entityname" />
+                    </div>
+                </div>*@
+            <div id="comments" ng-show="isShowComment">
+                @Html.Partial("_Comment")
+                <div Class="row marb">
+                    <button type="button" id="btnCommentSave" Class="btn btn-primary btnf" ng-click="btncomment(WorkPost.ForumPostID)">Save</button>
+                </div>
+            </div>
+        </div>
+        <script type="text/ng-template" id="myModalSuccessContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Success</h3>
+            </div>
+            <div class="modal-body" id="modal-body">
+                Done <i class="fa fa-2x fa-check"></i>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" type="button" ng-click="cancel()">OK</button>
+            </div>
+        </script>
+    </form>
+</div>
+
+@section BotScripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, usSpinnerService) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                $scope.WorkPost = $scope.model.dsForm.DT[0];
+                //$scope.dsCombo = $scope.model.dsCombo;
+                defaultRTE.value = $scope.WorkPost.ContentHTML == undefined ? "" : $scope.WorkPost.ContentHTML;
+                $scope.ValueLists = $scope.model.ValueLists;
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+
+                if ($scope.model.frmMode == 1) {
+                    $scope.title = "View";
+                    $scope.isAddHide = false;
+                    $scope.isEditHide = true;
+                    $scope.e_htmlContent = $scope.WorkPost.ContentHTML;
+                } else {
+                    $scope.isAddHide = true;
+                    $scope.isEditHide = false;
+                }
+
+                $scope.errorMsg = "";
+                $scope.isShowErrMsg = false;
+                $scope.deleteId = '';
+
+                if ($scope.model.frmMode == 1) {
+                    $scope.isShowComment = true;
+                    if ($scope.model.DatasetCollection.comment != undefined) {
+                        if (Array.isArray($scope.model.DatasetCollection.comment.dt) && $scope.model.DatasetCollection.comment.dt.length) {
+                            $scope.comment = $scope.model.DatasetCollection.comment.dt;
+
+                            for (var i = 0; i < $scope.comment.length; i++) {
+                                if ($scope.model.DatasetCollection.comment.dt[i].CreatedByID == $scope.model.ClientParams[0].ParamValue) {
+                                    $scope.comment[i].showIcon = true
+                                } else {
+                                    $scope.comment[i].showIcon = false;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        $scope.comment = $scope.model.DatasetCollection.comment;
+                    }
+                }
+
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                $scope.visdelete = false;
+
+                $scope.item = function () {
+                };
+
+                $scope.delete = function (index) {
+                };
+
+                $scope.typchange = function (typch) {
+                };
+
+                $scope.partyfn = function (code) {
+                };
+
+                window.document.title = ($scope.model.frmMode == 2 ? "Add Forum Post" : $scope.model.frmMode == 1 ? "Edit Forum Post" : "");
+            };
+
+            loadmodel($scope.model);
+
+            $scope.calculate = function (row) {
+            }
+
+            $scope.hsnfc = function (row) {
+            }
+
+            $scope.GenerateDelPayload = function () {
+                var payload = { EntityKey: 'ForumPost', ID: $scope.model.dsForm.DT[0].ForumPostID, AcceptWarning: false };
+                return payload;
+            };
+
+            $scope.calculateAll = function () {
+                $scope.WorkPost.ContentHTML = base64EncodeUnicode(defaultRTE.getHtml());
+                $scope.WorkPost.ContentText = base64EncodeUnicode(defaultRTE.getText());
+            };
+
+            $scope.calculateAll();
+            $scope.cleanupmodel = function (datamodel) {
+                //empty function
+            };
+
+            $scope.calculatemodel = function () {
+                $scope.calculateAll();
+            };
+
+            $scope.editForum = function () {
+                $scope.isAddHide = true;
+                $scope.isEditHide = false;
+                $scope.title = "Edit";
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js")
+        });
+    </script>
+}
+

@@ -1,0 +1,260 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+@using Syncfusion.EJ2
+
+@model frmContentUnitLinkModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<script type="text/javascript">
+    var defaultRTE; var defaultRTEFN;
+    function created() {
+        defaultRTE = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+</script>
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        <input type="hidden" id="fileStatus" />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Content Unit Link</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputEmail4">Title <span class="red">*</span></label> <span style="float:right;margin-right: 45px;"><input type="checkbox" name="IsVisibleLearner" ng-model="ContentUnitInfo.IsVisibleLearners"> Visible for Learner</span>
+                <input type="text" class="form-control" name="coursetitle" style="max-width:96%" ng-model="ContentUnitInfo.Title" required ng-class="{true: 'error'}[submitted() && userform.coursetitle.$invalid]" />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">Course Code</label>
+                <input type="text" class="form-control" name="coursecode" ng-model="CourseInfo.CourseCode" ng-disabled="isDisabled" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPassword4">Course Name</label>
+                <input type="text" class="form-control" name="coursename" ng-model="CourseInfo.CourseName" ng-disabled="isDisabled" />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputPassword4">Document Type</label>
+                <select class="form-control" ng-model="ContentUnitInfo.docTypeSelected" name="docType" style="min-width: 88%;" ng-disabled="isDisabled">
+                    <option value="iframe">IFrame</option>
+                    <option value="video">Video</option>
+                    <option value="content">Content</option>
+                </select>
+            </div>
+        </div>
+        <!-- End Page Content-->
+
+        <div class="clearfix" style="margin-top:20px;"></div>
+        <div class="row" style="padding: 0px 20px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="url-tab" data-toggle="tab" href="#url" role="tab" aria-controls="url" aria-selected="true">URL</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="url" role="tabpanel" aria-labelledby="url-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="control-section">
+                        <div class="control-wrapper">
+                            <div class="control-section">
+                                <div class="form-group col-md-12">
+                                    <label for="inputPassword4">Website URL</label>
+                                    <input type="text" class="form-control" name="websiteUrl" ng-model="ContentUnitInfo.ContentURL" style="max-width: 100%;" ng-change="itemDetail(ContentUnitInfo.ContentURL)" />
+                                </div>
+                                <iframe id="myframe" frameborder="0" style="width:100%; height:350px; padding:0px 20px 0px 20px; display:none;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearBoth" style="margin-top:10px;"></div>
+        <a class="btn btn-default" data-toggle="collapse" href="#collapseNotes" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;margin-bottom: 10px;">
+            Notes
+        </a>
+        <a class="btn btn-default" data-toggle="collapse" href="#collapseUpload" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px;margin-bottom: 10px;">
+            References
+        </a>
+
+        <div class="collapse" id="collapseNotes">
+            <div class="form-group col-md-12">
+                <div class="control-section">
+                    <div class="control-wrapper">
+                        <div class="control-section">
+                            @Html.EJS().RichTextEditor("defaultRTE").Value("").Created("created").Render()
+                        </div>
+                    </div>
+                </div>
+                @Html.EJS().ScriptManager()
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseUpload">
+            <div style="margin-top:10px;"></div>
+            @Html.Partial("_Attachment")
+        </div>
+        <hr />
+
+        @Html.Partial("_SavePanel")
+        <div id="dialogUsers"></div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="errorModel" role="dialog" style="z-index: 99999;">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                        <h4 class="modal-title">Error</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 16px;">Please upload valid file like (doc, docx, pdf, ppt and pptx). </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-default" ng-click="closeErrorDialog()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, $http, $sce, usSpinnerService) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //Content Info Details
+                $scope.ContentUnitInfo = $scope.model.dsForm.DT[0];
+                //set values in scope
+                $scope.CourseInfo = $scope.model.DatasetCollection.Course.Course[0];
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //disabled in edit mode
+                $scope.isDisabled = "disabled"; //$scope.model.frmMode == 2 ? "" : "disabled";
+                //Set Dropdown Seleted Value
+                $scope.ContentUnitInfo.docTypeSelected = $scope.model.vBag.doctype.toLocaleLowerCase();
+                $scope.showIframe = false;
+                //$scope.showbacktoprev = true;
+                //show hide back button
+                if ($scope.ContentUnitInfo.CourseID !== undefined) {
+                    $scope.showbacktoprev = true;
+                    $('#btnback').hide();
+                }
+                else {
+                    $scope.showbacktoprev = false;
+                    $('#btnback').show();
+                }
+
+                if ($scope.model.frmMode == 1) {
+                    if ($scope.ContentUnitInfo.DocType.toLowerCase() == "iframe" || $scope.ContentUnitInfo.DocType.toLowerCase() == "content" || $scope.ContentUnitInfo.DocType.toLowerCase() == "video") {
+                        if ($scope.ContentUnitInfo.ContentURL != undefined) {
+                            if ($scope.ContentUnitInfo.ContentURL.includes("watch"))
+                                $('#myframe').attr("src", $scope.ContentUnitInfo.ContentURL.replace('watch?v=', 'embed/'));
+                            else
+                                $('#myframe').attr("src", $scope.ContentUnitInfo.ContentURL);
+
+                            $('#myframe').show();
+                        }
+                    }
+
+                    //NOtes
+                    defaultRTE.value = $scope.ContentUnitInfo.NotesHTML == undefined ? "" : $scope.ContentUnitInfo.NotesHTML;
+                }
+
+                //List of Files
+                $scope.UploadFiles = $scope.ContentUnitInfo.AttachmentJson !== undefined ? JSON.parse($scope.ContentUnitInfo.AttachmentJson) : [];
+            }
+
+            loadmodel($scope.model);
+
+            $scope.itemDetail = function (link) {
+                $('#myframe').show();
+                if (link.includes("watch"))
+                    $('#myframe').attr("src", link.replace('watch?v=', 'embed/'));
+                else
+                    $('#myframe').attr("src", link);
+            };
+
+            $scope.backtoprev = function () {
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                var payload = { fKey: 'frmCourseContent', fMode: 'acEditM', IDX: $scope.CourseInfo.CourseID, rowData: JSON.stringify(courseContent) }; // for edit
+
+                $.post(base, payload, function (result) {
+                    $scope.status = 'loaded';
+                    window.location = result;
+                });
+            }
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) {
+                datamodel.DatasetCollection.Course.Course[0].DescriptionHTML = '';
+                datamodel.DatasetCollection.Course.Course[0].DescriptionText = '';
+            };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.model.dsForm.DT[0].Title = $scope.ContentUnitInfo.Title;
+                $scope.model.dsForm.DT[0].ContentURL = $scope.ContentUnitInfo.ContentURL;
+
+                //NOTES
+                $scope.model.dsForm.DT[0].NotesHTML = base64EncodeUnicode(defaultRTE.getHtml());
+                $scope.model.dsForm.DT[0].NotesText = base64EncodeUnicode(defaultRTE.getText());
+                //Save Attachment
+                $scope.ContentUnitInfo.AttachmentJson = JSON.stringify($scope.UploadFiles);
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'ContentUnitLink', ID: $scope.model.dsForm.DT[0].ContentUnitID, AcceptWarning: false };
+                return payload;
+            };
+
+            $scope.downloadFile = function (filename) {
+                $scope.download('frmContentUnitLink', filename);
+            }
+
+            //Attachment
+            @Html.RenderFile("~/Scripts/attchment.js");
+            //Render Common Functions
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+

@@ -1,0 +1,293 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+
+@model frmCourseUserModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .errorSelect {
+        border: 1px solid red;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-10">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Assigned Users</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Course Code <span class="red">*</span></label>
+                <input type="text" class="form-control" name="coursecode" ng-model="CourseInfo.CourseCode" ng-disabled="isDisabled" style="max-width:100%" />
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Level</label>
+                <input type="text" class="form-control" name="courselevel" ng-model="CourseInfo.Level" ng-disabled="isDisabled" style="max-width:100%" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Course Name <span class="red">*</span></label>
+                <input type="text" class="form-control" name="coursename" ng-model="CourseInfo.CourseName" ng-disabled="isDisabled" style="max-width:100%" />
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Time Limit</label>
+                <input type="text" class="form-control" name="timelimit" ng-model="CourseInfo.TimeLimit" ng-disabled="isDisabled" style="max-width:100%" />
+            </div>
+        </div>
+        <!-- End Page Content-->
+
+        <div class="clearfix" style="margin-top:20px;"></div>
+        <div class="row" style="padding: 0px 10px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="true">User</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="user-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="button" id="btnAddInstructor" Class="btn btn-default" ng-click="commonDialog(Users.UserID,'dialogUsers', 'Select Users','user', 'INS')">Add Instructor</button>
+                            <button type="button" id="btnAddLearner" Class="btn btn-default" ng-click="commonDialog(Users.UserID,'dialogUsers', 'Select Users','user', 'LNR')">Add Learner</button>
+                            <div class="clearBoth clearfix" style="margin-bottom: 15px;"></div>
+
+                            <table id="tblCourseUser" class="table table-sm" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>User Name</th>
+                                        <th style="text-align:center">Role</th>
+                                        <th style="text-align:center">Per. Progress</th>
+                                        <th style="text-align:center">Total Time Spent</th>
+                                        <th style="text-align:center">Started On</th>
+                                        <th style="text-align:center">Completed On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="usr in Users">
+                                        <td>{{$index+1}}.</td>
+                                        <td>{{usr.UserName}}</td>
+                                        <td style="text-align:center">
+                                            <select id="ddlSelectedRole" name="rloe_{{$index}}" class="form-control">
+                                                <option value="">Select</option>
+                                                <option value="INS">Instructor</option>
+                                                <option value="LNR">Learner</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align:center">{{usr.PerProgress}}</td>
+                                        <td style="text-align:center">{{usr.TotalTimeSpend }}</td>
+                                        <td style="text-align:center">{{usr.StartedOn | date:'dd MMM yyyy, HH:mm:ss' }}</td>
+                                        <td style="text-align:center">{{usr.CompletedOn | date:'dd MMM yyyy, HH:mm:ss' }}</td>
+                                        <td style="text-align:center">
+                                            <a href="javascript:void(0)" ng-click="deleteRow($index)"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="!Users.length">
+                                        <td colspan="8" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*<div class="form-group col-md-1">
+                                <div style="float:right; margin-bottom:5px;">
+                                    <button type="button" id="btnAddNew" Class="btn btn-default btnf" ng-click="commonDialog(Users.UserID,'dialogUsers', 'Select Users','user')"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        @Html.Partial("_SavePanel")
+        <div id="dialogUsers"></div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, $http) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                ////Show Hide Delete Buttons
+                //$scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //Bind User Table
+                $scope.Users = $scope.model.GridViews.Users.MainGrid.myDS.dt;
+                //disabled in edit mode
+                $scope.isDisabled = $scope.model.frmMode == 2 ? "" : "disabled";
+                //Role
+                if ($scope.model.frmMode == 1) {
+                    for (var i = 0; i < $scope.Users.length; i++) {
+                        if ($scope.Users[i].TotalTimeSpend != undefined)
+                            $scope.Users[i].TotalTimeSpend = $scope.Users[i].TotalTimeSpend + ' Mins';
+                    }
+
+                    setTimeout(function () {
+                        $('[id*=tblCourseUser] tr:not(:has(th))').each(function (index, item) {
+                            for (var i = 0; i < $scope.Users.length; i++) {
+                                if (i == index)
+                                    $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                            }
+                        });
+                    }, 1000);
+                }
+            }
+
+            loadmodel($scope.model);
+
+            //OPEN DIALOG COMMON CODE
+            $scope.commonDialog = function (val, dialogName, dialogTitle, keyValue, usertype) {
+                var payload;
+                $scope.IsInitializing = true;
+                $scope.result = '';
+
+                if (keyValue == "user") {
+                    if ($scope.Users.length > 0) {
+                        arr_usr = [];
+                        for (var i = 0; i < $scope.Users.length; i++) {
+                            if ($scope.Users[i].UserID != undefined) {
+                                arr_usr.push($scope.Users[i].UserID);
+                            }
+                            else {
+                                arr_usr.push($scope.Users[i].Userid);
+                            }
+                        }
+                        var strData = arr_usr.join(',');
+                        payload = { userIDcsv: strData };
+                    } else {
+                        payload = { userIDcsv: '00000000-0000-0000-0000-000000000000' }; // not required here
+                    }
+                }
+
+                var url = '/frmCourseUser/ParamsModel' + location.search;
+                payload = JSON.stringify(payload);
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                var payloaddata = { key: keyValue, Params: payload, __RequestVerificationToken: token };
+                igGridDataPostData(url, payloaddata, dialogName, dialogTitle, keyValue, usertype);
+            };
+
+            //Bind Grid Data
+            $scope.gridfxn = function (rowData, allData, keyValue, usertype) {
+                if (keyValue == "user") {
+                    for (var i = 0; i < rowData.length; i++) {
+                        //$scope.Users.push($.grep(allData, function (item, index) { return item.ig_pk == rowData[i].id })[0]);
+                        $scope.Users.push(allData[rowData[i].index]);
+                        if (usertype == "INS") {
+                            if ($scope.Users[i].RoleCode != "INS") {
+                                $scope.Users[i].RoleCode = $scope.Users[i].RoleCode;
+                            } else {
+                                $scope.Users[i].RoleCode = usertype;
+                            }
+                        }
+                        if (usertype == "LNR") {
+                            if ($scope.Users[i].RoleCode != "LNR") {
+                                $scope.Users[i].RoleCode = $scope.Users[i].RoleCode;
+                            } else {
+                                $scope.Users[i].RoleCode = usertype;
+                            }
+                        }
+
+                        setTimeout(function () {
+                            $('[id*=tblCourseUser] tr:not(:has(th))').each(function (index, item) {
+                                for (var i = 0; i < $scope.Users.length; i++) {
+                                    if (i == index) {
+                                        if ($scope.Users[i].RoleCode == "INS") {
+                                            $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                                        }
+                                        else {
+                                            if ($scope.Users[i].RoleCode == "LNR") {
+                                                $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                                            }
+                                            else {
+                                                $(item).find('[id*=ddlSelectedRole]').val(usertype);
+                                                $scope.Users[i].RoleCode = usertype;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
+                    }
+                }
+            }
+
+            //Delete Users Row
+            $scope.deleteRow = function (index) {
+                $scope.Users.splice(index, 1);
+                $scope.model.GridViews.Users.MainGrid.myDS.dt = $scope.Users;
+            };
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) {
+                datamodel.dsForm.DT[0].DescriptionHTML = '';
+                datamodel.dsForm.DT[0].DescriptionText = '';
+            };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $('[id*=tblCourseUser] tr:not(:has(th))').each(function (index, item) {
+                    var selected = $(item).find('[id*=ddlSelectedRole] option:selected').val();
+                    for (var i = 0; i < $scope.Users.length; i++) {
+                        if (i == index) {
+                            if (selected != "") {
+                                $scope.Users[i].RoleCode = selected;
+                                $(item).find('[id*=ddlSelectedRole]').removeClass('errorSelect');
+                            }
+                            else {
+                                $(item).find('[id*=ddlSelectedRole]').addClass('errorSelect');
+                            }
+                        }
+                    }
+                });
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'CourseUser', ID: $scope.model.dsForm.DT[0].CourseID, AcceptWarning: false };
+                return payload;
+            };
+
+            function getUniqueValuesV2(array, prop) {
+                return array.map(function (item) {
+                    return item[prop];
+                }).filter(function (item, i, ar) {
+                    return ar.indexOf(item) === i;
+                });
+            }
+
+            function optionsMapper(id) {
+                return {
+                    id: id,
+                    name: id
+                }
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}

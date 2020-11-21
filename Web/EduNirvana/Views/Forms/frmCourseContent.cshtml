@@ -1,0 +1,589 @@
+﻿@using risersoft.app.mxform.talent;
+@using risersoft.shared.web.Extensions;
+
+@model frmCourseContentModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .trColor {
+        background-color: #c2c8d4;
+    }
+
+    #div1 {
+        display: inline-block;
+    }
+
+    #div2 {
+        display: inline-block;
+    }
+
+    .item_content {
+        display: inline-block;
+        width: calc(100% / 1);
+        height: 38px;
+        border: 1px solid #007ACC;
+        box-sizing: border-box;
+    }
+
+    .cls_cursor:hover {
+        background-color: #a4d4ff;
+    }
+
+    .item {
+        height: 100%;
+        width: 100%;
+    }
+
+    .cls_cursor {
+        cursor: all-scroll;
+    }
+
+    .clsGreen {
+        background-color: green;
+    }
+
+    #hover-content {
+        display: none;
+    }
+
+    #parent:hover #hover-content {
+        display: block;
+        z-index: 999999;
+        position: absolute;
+        width: 485px;
+        background-color: #808080;
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+    }
+</style>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Course Content</h5>
+            </div>
+            <div class="col-md-6">
+                <nav class="navbar navbar-expand-md navbar-light bg-light" style="margin-top: 20px;float:right;">
+                    <div id="navbarCollapse" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav" style="margin-top: 4px;">
+                            <li class="nav-item dropdown">
+                                <button type="button" id="btnAddNew" Class="btn btn-default btnf dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i></button>
+                                <div class="dropdown-menu">
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="openSectionDialog()"><i class="fa fa-quote-left"></i> Section</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'content', 'HTML')"><i class="fa fa-file-text-o"></i> Content</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'document', 'Upload')"><i class="fa fa-file-word-o"></i> Document</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'video', 'Upload')"><i class="fa fa-file-video-o"></i> Video</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'audio', 'Upload')"><i class="fa fa-file-audio-o"></i> Audio</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'pdf', 'Upload')"><i class="fa fa-file-pdf-o"></i> PDF</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'presentation', 'Upload')"><i class="fa fa-file-powerpoint-o"></i> Presentation</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'content' ,'Web')"><i class="fa fa-cloud"></i> Web Content</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'video', 'Web')"><i class="fa fa-play-circle"></i> Web Video</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, 'iframe', 'Web')"><i class="fa fa-code"></i> iFrame</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, '', 'test')"><i class="fa fa-file-text"></i> Test</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, '', 'survey')"><i class="fa fa-check-square"></i> Survey</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" ng-click="addCourseContent(0, '', 'assignment')"><i class="fa fa-pencil-square"></i> Assignment</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="javascript:void(0)" id="btnEditCourse" Class="btn btn-default btnf" ng-click="editCourse(CourseId)" style="margin-top:3px;" title="Edit Course Info"><i class="fa fa-pencil"></i></a>
+                    <a href="javascript:void(0)" ng-class="{ disabled: isDisabledViewAsLearner }" id="btnPreview" Class="btn btn-default btnf" ng-click="ViewCourseLearner(CourseUserID)" style="margin-top:3px;" title="View as Learner"><i class="fa fa-eye"></i></a>
+                </nav>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Course Code </label>
+                <input type="text" class="form-control" name="coursecode" ng-model="CourseInfo.CourseCode" ng-disabled="isDisabled" />
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Course Name <span class="red">*</span></label>
+                <input type="text" class="form-control" name="dname" ng-model="CourseInfo.CourseName" ng-disabled="isDisabled" />
+            </div>
+        </div>
+        <!-- End Page Content-->
+
+        <div class="clearfix" style="margin-top:20px;"></div>
+        <div class="row" style="padding: 0px 20px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="content-tab" data-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">Content</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="file-tab" data-toggle="tab" href="#file" role="tab" aria-controls="file" aria-selected="false">File</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="content" role="tabpanel" aria-labelledby="desdocgrp-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="row" margin-top:10px; margin-bottom:10px">
+                                <div class="col-md-12">
+                                    <a class="btn btn-default btnf" style="color: #fff;float: left;margin-bottom: 10px;" id="btnAddReorder"><i class="fa fa-arrows-v"></i> Reorder</a>
+                                    <table id="tblContent" class="table table-sm" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%">#</th>
+                                                <th style="width:40%;">Title</th>
+                                                <th style="width:15%;">Content Type</th>
+                                                <th style="width:15%;">Doc Type</th>
+                                                <th style="width:10%;">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="item_content" ng-repeat="item in list track by $index" draggable-container>
+                                        <div class="item" draggable-item>
+                                            <table id="tblContent" class="table table-sm" style="width:100%">
+                                                <tbody>
+                                                    <tr ng-class="{'trColor': item.ContentType == 'section'}">
+                                                        <td style="width:5%;"> {{$index+1}}.</td>
+                                                        <td style="width:40%;" id="parent">
+                                                            {{item.Title.length > 60 ? item.Title.slice(0, 60) + '...' : item.Title }}
+                                                            <div id="hover-content">{{item.Title}}</div>
+                                                        </td>
+                                                        <td style="width:15%;">{{item.ContentType}}</td>
+                                                        <td style="width:15%;">{{item.DocType}}</td>
+                                                        <td style="width:10%;">
+                                                            <div id="wrapper">
+                                                                <div id="div1"><input type="checkbox" ng-model="item.IsVisibleLearners" /></div>
+                                                                <div id="div2" style="width: 16px;"><a href="javascript:void(0)" ng-click="ViewCourseLearner(item.ContentUnitID, 'content')" ng-show="item.showPrevIcon" title="Show Preview"><i class="fa fa-eye"></i></a></div>
+                                                                <div id="div1" ng-show="item.ContentType != 'section'"><a href="javascript:void(0)" ng-click="addCourseContent(item.ContentUnitID, item.DocType, item.ContentType, item)" title="Edit Record" ng-show="item.ed_del"><i class="fa fa-pencil"></i></a></div>
+                                                                <div id="div1" ng-show="item.ContentType == 'section'"><a href="javascript:void(0)" title="Edit Section" ng-click="editSection(item.Title, item.ContentUnitID)" ng-show="item.ed_del"><i class="fa fa-pencil"></i></a></div>
+                                                                <div id="div2"><a href="javascript:void(0)" title="Delete Record" ng-show="item.ed_del"><i class="fa fa-trash" ng-click="deleteContentRow($index)"></i></a></div>
+                                                                @*<div id="div1"><a href="javascript:void(0)" ng-show="!$first" ng-click="moveUp($index, Contents)" title="Move Up"><i class="fa fa-arrow-up"></i></a></div>
+                                                                    <div id="div2"><a href="javascript:void(0)" ng-show="!$last" ng-click="moveDown($index, Contents)" title="Move Down"><i class="fa fa-arrow-down"></i></a></div>*@
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="file" role="tabpanel" aria-labelledby="stddocgrp-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group" ng-class="{'col-md-11': isINS == true , 'col-md-12': isINS == undefined}">
+                            <table id="tblFiles" class="table table-sm tblMove" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:60%">File Name</th>
+                                        <th style="width:15%">File Size in KB</th>
+                                        <th style="width:15%">File Type</th>
+                                        <th style="width:10%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="fl in Files">
+                                        <td>{{fl.FileName}}</td>
+                                        <td>{{fl.FileSizeKB | number : 2}}</td>
+                                        <td>{{fl.FileType}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)"><i class="fa fa-download" ng-click="downloadFile(fl.FileURL)" target="_blank"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-trash" ng-click="deleteFileRow($index)"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="!Files.length">
+                                        <td colspan="5" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-md-1" ng-show="isINS">
+                            <div style="float:right; margin-bottom:5px;">
+                                <button type="button" id="btnAddNew" Class="btn btn-default btnf" ng-click="addCourseFile()"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_SavePanel")
+
+        <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Section</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div id="section_error_message"></div>
+                            <input type="hidden" id="hdnEdit" />
+                            <label for="recipient-name" class="col-form-label">Title:<span class="red">*</span></label>
+                            <input type="text" class="form-control" id="sectionTitle" style="max-width:100%" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="addSection()">OK</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section botscripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '#btnAddReorder', function () {
+                $('.item_content').addClass('cls_cursor');
+                $('#tblContent tbody tr').addClass('cls_cursor');
+                $('.item').attr('draggable', true);
+                $('#btnAddReorder').attr("id", "btnRemoveReorder");
+                $('#btnRemoveReorder').addClass('clsGreen');
+            })
+
+            $(document).on('click', '#btnRemoveReorder', function () {
+                $('.item_content').removeClass('cls_cursor');
+                $('#tblContent tbody tr').removeClass('cls_cursor');
+                $('.item').attr('draggable', false);
+                $('#btnRemoveReorder').attr("id", "btnAddReorder");
+                $('#btnAddReorder').removeClass('clsGreen');
+            })
+        });
+
+        rsApp.controller('FormController', function ($scope, $http, $filter, usSpinnerService, $window) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+            var loadmodel = function (result) {
+                $scope.model = result;
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Set Course ID
+                $scope.CourseId = $scope.model.dsForm.DT[0].CourseID;
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                ////Show Hide Delete Buttons
+                //$scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                //disabled in edit mode
+                $scope.isDisabled = $scope.model.frmMode == 2 ? "" : "disabled";
+
+                if ($scope.model.DatasetCollection.info.cu.length > 0) {
+                    if ($scope.model.DatasetCollection.info.cu[0].RoleCode = 'INS') {
+                        $scope.isINS = true;
+                    }
+                }
+
+                if ($scope.model.DatasetCollection.info.cu.length == 0) {
+                    $scope.isDisabledViewAsLearner = "disabled";
+                } else { $scope.CourseUserID = $scope.model.DatasetCollection.info.cu[0].CourseUserID; }
+
+                //Bind Content and Files in table
+                $scope.Contents = $scope.model.GridViews.Content.MainGrid.myDS.dt;
+
+                if ($scope.model.GridViews.Content.MainGrid.myDS.dt.length > 1) {
+                    $scope.Contents = $filter('orderBy')($scope.Contents, 'SortIndex');
+                }
+
+                for (var i = 0; i < $scope.Contents.length; i++) {
+                    if ($scope.Contents[i].ContentType == 'Assignment' || $scope.Contents[i].ContentType == 'Test' || $scope.Contents[i].ContentType == 'Survey') {
+                        $scope.Contents[i].showPrevIcon = false;
+                        if ($scope.model.DatasetCollection.info.cu.length > 0) {
+                            if ($scope.model.DatasetCollection.info.cu[0].RoleCode == "INS") {
+                                $scope.Contents[i].showPrevIcon = true;
+                            }
+                        }
+                    }
+                    else {
+                        if ($scope.Contents[i].ContentType == 'section') {
+                            $scope.Contents[i].showPrevIcon = false;
+                        } else { $scope.Contents[i].showPrevIcon = true; }
+                    }
+
+                }
+
+                $scope.Files = $scope.model.GridViews.File.MainGrid.myDS.dt;
+                if ($scope.model.GridViews.File.MainGrid.myDS.dt.length > 1) {
+                    $scope.Files = $filter('orderBy')($scope.Files, 'SortIndex');
+                }
+
+                // To set two dates to two variables
+                var toDay = new Date();
+                for (var i = 0; i < $scope.Contents.length; i++) {
+                    var createdOnDate = new Date($scope.Contents[i].CreatedOn);
+                    // To calculate the time difference of two dates
+                    var Difference_In_Time = toDay.getTime() - createdOnDate.getTime();
+                    // To calculate the no. of days between two dates
+                    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+                    if ($scope.isINS) {
+                        if (Difference_In_Days > 30)
+                            $scope.Contents[i].ed_del = false;
+                        else
+                            $scope.Contents[i].ed_del = true;
+                    }
+                    else
+                        $scope.Contents[i].ed_del = true;
+
+                    if ($scope.model.ModelParams[0].ParamValue == "True") {
+                        $scope.Contents[i].ed_del = true;
+                    }
+                }
+
+                //For DRAG AND DROP
+                $scope.list = $scope.Contents;
+                //console.log($scope.list);
+            }
+
+            loadmodel($scope.model);
+
+            $scope.deleteContentRow = function (index) {
+                $scope.Contents.splice(index, 1);
+                $scope.model.GridViews.Content.MainGrid.myDS.dt = $scope.Contents;
+            }
+
+            $scope.deleteFileRow = function (index) {
+                $scope.Files.splice(index, 1);
+                $scope.model.GridViews.File.MainGrid.myDS.dt = $scope.Files;
+            }
+
+            //Redirect to Edit
+            $scope.editCourse = function (id) {
+                window.location.href = "/frmCourse/Edit/" + id + location.search;
+            }
+
+            $scope.addCourseContent = function (id, docType, contentType, row) {
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                courseContent.ContentType = contentType;
+                courseContent.DocType = docType;
+
+                if (row) {
+                    if (row.ContentType == "Survey") { id = row.AssessSurveyID }
+                    if (row.ContentType == "Test") { id = row.AssessTestID }
+                    if (row.ContentType == "Assignment") { id = row.AssessAssignmentID }
+                }
+
+                var payload = '';
+                if (contentType.toLowerCase() == 'html') {
+                    if (id == 0) {
+                        payload = { fKey: 'frmContentUnitHTML', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmContentUnitHTML', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+                if (contentType.toLowerCase() == "upload") {
+                    if (id == 0) {
+                        payload = { fKey: 'frmContentUnitUpload', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmContentUnitUpload', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+                if (contentType.toLowerCase() == "web" || contentType.toLowerCase() == "link") {
+                    if (id == 0) {
+                        payload = { fKey: 'frmContentUnitLink', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmContentUnitLink', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+                if (contentType.toLowerCase() == "test") {
+                    if (id == 0) {
+                        payload = { fKey: 'frmAssessTest', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmAssessTest', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+                if (contentType.toLowerCase() == "survey") {
+                    if (id == 0) {
+                        payload = { fKey: 'frmAssessSurvey', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmAssessSurvey', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+                if (contentType.toLowerCase() == "assignment") {
+                    if (id == 0) {
+                        payload = { fKey: 'frmAssessAssign', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+                    }
+                    else {
+                        payload = { fKey: 'frmAssessAssign', fMode: 'acEditM', IDX: id, rowData: JSON.stringify(courseContent) };
+                    }
+                }
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            }
+
+            //Add Course File
+            $scope.addCourseFile = function () {
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+
+                payload = { fKey: 'frmCourseFile', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(courseContent) };
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            }
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) {
+                datamodel.dsForm.DT[0].DescriptionHTML = '';
+                datamodel.dsForm.DT[0].DescriptionText = '';
+                console.log(datamodel.GridViews.Content.MainGrid.myDS.dt);
+            };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                for (var i = 0; i < $scope.Contents.length; i++) {
+                    $scope.Contents[i].SortIndex = i + 1;
+                }
+
+                $scope.model.GridViews.Content.MainGrid.myDS.dt = $scope.Contents;
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'CourseContent', ID: $scope.model.dsForm.DT[0].CourseContentID, AcceptWarning: false };
+                return payload;
+            };
+
+            //View as Learner
+            $scope.ViewCourseLearner = function (cId, type) {
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                var payload = "";
+
+                if (type != undefined) {
+                    if (type.toLowerCase() == "content")
+                        payload = { fKey: 'frmContentUnitView', fMode: 'acEditM', IDX: cId, rowData: JSON.stringify(courseContent) };
+                    else if (type.toLowerCase() == "test")
+                        payload = { fKey: 'frmtestquestionview', fMode: 'acEditM', IDX: cId, rowData: JSON.stringify(courseContent) };
+                }
+                else
+                    payload = { fKey: 'frmCourseView', fMode: 'acEditM', IDX: cId, rowData: JSON.stringify(courseContent) };
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            }
+
+            $scope.downloadFile = function (filename) {
+                $scope.download('frmCourseContent', filename);
+            }
+
+            $scope.addSection = function () {
+                if ($('#sectionTitle').val() == "") {
+                    $('#sectionTitle').css('border-color','red');
+                    return false;
+                }
+                else {
+                    if ($('#hdnEdit').val() !== "") {
+                        for (var i = 0; i < $scope.Contents.length; i++) {
+                            if ($scope.Contents[i].ContentType == 'section') {
+                                if ($scope.Contents[i].ContentUnitID == $('#hdnEdit').val()) {
+                                    for (var x = 0; x < $scope.Contents.length; x++) {
+                                        if ($scope.Contents[x].Title == $('#sectionTitle').val()) {
+                                            $('#section_error_message').html("Section Title already exists, Please choose another title name.");
+                                            $('#section_error_message').addClass('alert alert-danger');
+                                            return false;
+                                        }
+                                    }
+
+                                    $scope.Contents[i].Title = $('#sectionTitle').val();
+                                }
+                            }
+                        }
+                    } else {
+                        if ($scope.Contents.length > 0) {
+                            for (var i = 0; i < $scope.Contents.length; i++) {
+                                if ($scope.Contents[i].Title == $('#sectionTitle').val()) {
+                                    $('#section_error_message').html("Section Title already exists, Please choose another title name.");
+                                    $('#section_error_message').addClass('alert alert-danger');
+                                    return false;
+                                }
+                            }
+                        }
+
+                        $scope.Contents.push({ Title: $('#sectionTitle').val(), ContentType: 'section', CourseID: $scope.CourseId });
+                    }
+
+                    $('#sectionModal').modal("toggle");
+                }
+            }
+
+            $scope.editSection = function (title, editId) {
+                $('#hdnEdit').val(editId);
+                $('#sectionTitle').val(title);
+                $('#section_error_message').html('');
+                $('#section_error_message').removeClass('alert alert-danger');
+                $('#sectionModal').modal("toggle");
+            }
+
+            $scope.openSectionDialog = function () {
+                $('#hdnEdit').val('');
+                $('#sectionTitle').val('');
+                $('#section_error_message').html('');
+                $('#section_error_message').removeClass('alert alert-danger');
+                $('#sectionModal').modal("toggle");
+            }
+
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}

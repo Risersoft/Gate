@@ -1,0 +1,496 @@
+﻿@using risersoft.app.mxform.talent
+@using risersoft.shared.web.Extensions
+@using Syncfusion.EJ2
+
+@model frmAssessSurveyModel
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_FrameworkLayout.vbhtml";
+    var modeljson = Model.SerializeJson();
+}
+
+<style type="text/css">
+    .e-rte-content {
+        min-height: 170px;
+    }
+
+    #defaultfn_rte-edit-view p {
+        margin-top: 20px;
+    }
+
+    .errorSelect {
+        border: 1px solid red;
+    }
+</style>
+
+<script type="text/javascript">
+    var defaultRTE; var defaultRTEFN;
+    function created() {
+        defaultRTE = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+
+    function createdfn() {
+        defaultRTEFN = this;
+        this.insertImageSettings = {
+            saveFormat: "Base64"
+        };
+    };
+</script>
+
+<div Class="container cbackground">
+    <form action="" method="post" name="userform" id="userform" ng-controller="FormController">
+        <input type="hidden" id="model_json" value='@Html.Raw(modeljson)' />
+        @Html.AntiForgeryToken()
+
+        <!-- Start Page Heading Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label"></label>
+                <h5 style="color:#1c66a7">{{title}} Assess Survey</h5>
+            </div>
+            <div class="col-md-6">
+                <nav class="navbar navbar-expand-md navbar-light bg-light" style="margin-top: 20px;float:right;">
+                    <div id="navbarCollapse" class="collapse navbar-collapse">
+                        <button type="button" Class="btn btn-default btnf" id="btnSurvey" ng-class="{ disabled: model.frmMode == 2 }" title="Multiple Choice Question" ng-click="addQuestion('MCQ')">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <hr />
+        <!-- End Page Heading Section -->
+        <!-- Start Page Content -->
+        <div class="form-row">
+            <div class="form-group" ng-class="{'col-md-8': (showCourse == true) , 'col-md-12': (showCourse == false)}">
+                <label for="inputEmail4">Survey Name <span class="red">*</span></label>
+                <input type="text" class="form-control" style="max-width:100%" name="surveyname" ng-model="CourseInfo.SurveyName" required ng-class="{true: 'error'}[submitted() && userform.surveyname.$invalid]" />
+            </div>
+            <div class="form-group col-md-4" ng-show="showCourse">
+                <label for="inputEmail4">Course</label>
+                <select class="form-control" ng-model="CourseInfo.CourseIDSelected" name="course" ng-options="course.CourseName for course in Course track by course.CourseID" disabled style="max-width:100%"></select>
+            </div>
+        </div>
+        <!-- End Page Content-->
+
+        <div class="clearfix" style="margin-top:20px;"></div>
+        <div class="row" style="margin-left:2px;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="width:100%">
+                <li class="nav-item">
+                    <a class="nav-link active" id="content-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Questions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="file-tab" data-toggle="tab" href="#config" role="tab" aria-controls="config" aria-selected="false">Config</a>
+                </li>
+                <li class="nav-item" ng-hide="CourseInfo.CourseID > 0">
+                    <a class="nav-link" id="file-tab" data-toggle="tab" href="#assignment" role="tab" aria-controls="assignment" aria-selected="false">Assignment</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:99%;">
+                <div class="tab-pane fade show active" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-11">
+                            <table id="tblAssignment" class="table table-sm tblMove" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Question Type</th>
+                                        <th>Question Text</th>
+                                        <th>Used</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="ques in Questions">
+                                        <td>{{$index+1}}.</td>
+                                        <td>{{ques.QuestionType}}</td>
+                                        <td>{{ques.QuestionText}}</td>
+                                        <td>{{ques.Used}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" ng-click="editQuestion(ques.TestQuestionID, ques.QuestionType)"><i class="fa fa-pencil"></i></a>
+                                            <a href="javascript:void(0)" ng-show="!$first" ng-click="moveUp($index, Questions)"><i class="fa fa-arrow-up"></i></a>
+                                            <a href="javascript:void(0)" ng-show="!$last" ng-click="moveDown($index, Questions)"><i class="fa fa-arrow-down"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-trash" ng-click="deleteQuestionRow($index)"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="!Questions.length">
+                                        <td colspan="5" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" id="btnAddNew" Class="btn btn-default btnf" ng-click="commonDialog(Users.UserID,'dialogQuestion', 'Select Test Question','question')"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="chkCompletionShowAnswers" ng-model="CourseInfo.Completion_Show_Answer" />
+                                <label class="form-check-label" for="exampleCheck1">Completion Show Answers</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="chkCompletionRequireAnswers" ng-model="CourseInfo.Completion_Require_Answer" />
+                                <label class="form-check-label" for="exampleCheck1">Completion Require Answers</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-bottom:20px;"></div>
+                    <ul class="nav nav-tabs" id="myConfigTab" role="tablist" style="width:100%">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="content-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myConfigTab" style="width:99%;">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                            <div class="clearfix" style="margin-top:20px;"></div>
+                            <div class="control-section">
+                                <div class="control-wrapper">
+                                    <div class="control-section">
+                                        @Html.EJS().RichTextEditor("defaultfn").Value("").Created("createdfn").Render()
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.EJS().ScriptManager()
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
+                    <div class="clearfix" style="margin-top:20px;"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="button" id="btnAddInstructor" Class="btn btn-default" ng-click="commonDialog(Users.UserID,'dialogUsers', 'Select Users','user', 'INS')">Add Instructor</button>
+                            <button type="button" id="btnAddLearner" Class="btn btn-default" ng-click="commonDialog(Users.UserID,'dialogUsers', 'Select Users','user', 'LNR')">Add Learner</button>
+                            <div class="clearBoth clearfix" style="margin-bottom: 15px;"></div>
+
+                            <table id="tblAssignmentUserRole" class="table table-sm" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>User Name</th>
+                                        <th>Role</th>
+                                        <th>Started On</th>
+                                        <th>Completed On</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="usr in Users">
+                                        <td>{{$index+1}}.</td>
+                                        <td>{{usr.UserName}}</td>
+                                        <td>
+                                            <select id="ddlSelectedRole" class="form-control">
+                                                <option value="">Select</option>
+                                                <option value="INS">Instructor</option>
+                                                <option value="LNR">Learner</option>
+                                            </select>
+                                        </td>
+                                        <td>{{usr.StartedOn}}</td>
+                                        <td>{{usr.CompletedOn}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" ng-click="deleteAssignmentRow($index)"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="!Users.length">
+                                        <td colspan="5" style="text-align:center;font-size: 20px;">No Records Found...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_SavePanel")
+    </form>
+</div>
+
+<div id="dialogQuestion"></div>
+<div id="dialogUsers"></div>
+
+@section botscripts{
+    <script type="text/javascript">
+        rsApp.controller('FormController', function ($scope, $http, $filter, usSpinnerService) {
+            $scope.model = JSON.parse($("#model_json").val());
+            $scope.status = 'loaded';
+
+            var loadmodel = function (result) {
+                $scope.model = result;
+
+                //set values in scope
+                $scope.CourseInfo = $scope.model.dsForm.DT[0];
+                //Set Page Heading
+                $scope.title = ($scope.model.frmMode == 2 ? "Add" : $scope.model.frmMode == 1 ? "Edit" : "");
+                //Show Hide Delete Buttons
+                $scope.visdel = ($scope.model.frmMode == 2 ? false : true);
+                ////disabled button
+                //$scope.disablebutton = ($scope.model.frmMode == 2 ? true ? false);
+                //Set USERS AND SKILLS Data
+                $scope.Users = $scope.model.GridViews.Users.MainGrid.myDS.dt;
+                $scope.Questions = $scope.model.GridViews.Question.MainGrid.myDS.dt;
+                if ($scope.model.GridViews.Question.MainGrid.myDS.dt.length > 1) {
+                    $scope.Questions = $filter('orderBy')($scope.Questions, 'sortindex');
+                }
+
+                //Bind Course if vBag have a object
+                //Hide Course Section
+                $scope.showCourse = false;
+
+                //DataBind in TextArea Field
+                console.log($scope.CourseInfo);
+                if ($scope.CourseInfo !== undefined) {
+                    defaultRTEFN.value = $scope.CourseInfo.DescriptionHTML == undefined ? "" : $scope.CourseInfo.DescriptionHTML;
+
+                    if (!angular.equals({}, $scope.model.vBag)) {
+                        $scope.showCourse = true;
+                        $scope.Course = $scope.model.dsCombo.Course;
+                        $scope.CourseInfo.CourseIDSelected = $.grep($scope.Course, function (item, index) { return item.CourseID == parseInt($scope.model.vBag.courseid) })[0];
+                    }
+                }
+                if ($scope.model.frmMode == 1) {
+                    setTimeout(function () {
+                        $('[id*=tblAssignmentUserRole] tr:not(:has(th))').each(function (index, item) {
+                            for (var i = 0; i < $scope.Users.length; i++) {
+                                if (i == index)
+                                    $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                            }
+                        });
+                    }, 1000);
+                }
+
+                //Show Hide Back to Previous Button
+                if ($scope.CourseInfo.CourseID !== undefined && $scope.CourseInfo.CourseID !== null) {
+                    $scope.showbacktoprev = true;
+                    $('#btnback').hide();
+                }
+                else {
+                    $scope.showbacktoprev = false;
+                    $('#btnback').show();
+                }
+            }
+
+            loadmodel($scope.model);
+
+            //OPEN DIALOG COMMON CODE
+            $scope.commonDialog = function (val, dialogName, dialogTitle, keyValue, usertype) {
+                var payload;
+                $scope.IsInitializing = true;
+                $scope.result = '';
+
+                if (keyValue == "user") {
+                    if ($scope.Users.length > 0) {
+                        arr_usr = [];
+                        for (var i = 0; i < $scope.Users.length; i++) {
+                            if ($scope.Users[i].UserID != undefined) {
+                                arr_usr.push($scope.Users[i].UserID);
+                            }
+                            else {
+                                arr_usr.push($scope.Users[i].Userid);
+                            }
+                        }
+                        var strData = arr_usr.join(',');
+                        payload = { userIDcsv: strData };
+                    } else {
+                        payload = { userIDcsv: '00000000-0000-0000-0000-000000000000' }; // not required here
+                    }
+                }
+                else {
+                    payload = { QuestionIDCSV: '0', CourseID: $scope.CourseInfo.CourseID }; // not required here
+                }
+
+                var url = '/frmAssessSurvey/ParamsModel' + location.search;
+                payload = JSON.stringify(payload);
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                var payloaddata = { key: keyValue, Params: payload, __RequestVerificationToken: token };
+
+                igGridDataPostData(url, payloaddata, dialogName, dialogTitle, keyValue, usertype);
+            };
+
+            //Bind Grid Data
+            $scope.gridfxn = function (rowData, allData, keyValue, usertype) {
+                for (var i = 0; i < rowData.length; i++) {
+                    if (keyValue == "user") {
+                        //$scope.Users.push($.grep(allData, function (item, index) { return item.ig_pk == rowData[i].id })[0]);
+                        $scope.Users.push(allData[rowData[i].index]);
+
+                        if (usertype == "INS") {
+                            if ($scope.Users[i].RoleCode != "INS") {
+                                $scope.Users[i].RoleCode = $scope.Users[i].RoleCode;
+                            } else {
+                                $scope.Users[i].RoleCode = usertype;
+                            }
+                        }
+                        if (usertype == "LNR") {
+                            if ($scope.Users[i].RoleCode != "LNR") {
+                                $scope.Users[i].RoleCode = $scope.Users[i].RoleCode;
+                            } else {
+                                $scope.Users[i].RoleCode = usertype;
+                            }
+                        }
+                    }
+
+                    if (keyValue == "question") {
+                        $scope.Questions.push($.grep(allData, function (item, index) { return item.ig_pk == rowData[i].id })[0]);
+                    }
+
+                    setTimeout(function () {
+                        $('[id*=tblAssignmentUserRole] tr:not(:has(th))').each(function (index, item) {
+                            for (var i = 0; i < $scope.Users.length; i++) {
+                                if (i == index) {
+                                    if ($scope.Users[i].RoleCode == "INS") {
+                                        $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                                    }
+                                    else {
+                                        if ($scope.Users[i].RoleCode == "LNR") {
+                                            $(item).find('[id*=ddlSelectedRole]').val($scope.Users[i].RoleCode);
+                                        }
+                                        else {
+                                            $(item).find('[id*=ddlSelectedRole]').val(usertype);
+                                            $scope.Users[i].RoleCode = usertype;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }, 100);
+                }
+            }
+
+             //Delete Question Row
+            $scope.deleteQuestionRow = function (index) {
+                $scope.Questions.splice(index, 1);
+                $scope.model.GridViews.Question.MainGrid.myDS.dt = $scope.Users;
+            };
+
+            //Delete Assignment Row
+            $scope.deleteAssignmentRow = function (index) {
+                $scope.Users.splice(index, 1);
+                $scope.model.GridViews.Users.MainGrid.myDS.dt = $scope.Users;
+            };
+
+            //Edit Question Row
+            $scope.editQuestion = function (questionID, questionType) {
+                var base = '/App/Link' + location.search;
+                var contentInfo = {};
+                angular.copy($scope.CourseInfo, contentInfo);
+                contentInfo.DescriptionHTML = '';
+                contentInfo.DescriptionText = '';
+                contentInfo.QuestionType = questionType;
+
+                payload = { fKey: 'frmTestQuestion', fMode: 'acEditM', IDX: questionID, rowData: JSON.stringify(contentInfo) };
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            };
+
+            //CleanUp Model
+            $scope.cleanupmodel = function (datamodel) { };
+
+            //Calculate Model
+            $scope.calculatemodel = function () {
+                $scope.CourseInfo.DescriptionHTML = base64EncodeUnicode(defaultRTEFN.getHtml());
+                $scope.CourseInfo.DescriptionText = base64EncodeUnicode(defaultRTEFN.getText());
+
+                for (var i = 0; i < $scope.Questions.length; i++) {
+                    $scope.Questions[i].SortIndex = i + 1;
+                }
+
+                if ($scope.model.frmMode == 1) {
+                    $scope.model.GridViews.Question.MainGrid.myDS.dt = [];
+                    $scope.model.GridViews.Question.MainGrid.myDS.dt = $scope.Questions;
+                }
+
+                $('[id*=tblAssignmentUserRole] tr:not(:has(th))').each(function (index, item) {
+                    var selected = $(item).find('[id*=ddlSelectedRole] option:selected').val();
+                    for (var i = 0; i < $scope.Users.length; i++) {
+                        if (i == index) {
+                            if (selected != "") {
+                                $scope.Users[i].RoleCode = selected;
+                                $(item).find('[id*=ddlSelectedRole]').removeClass('errorSelect');
+                            }
+                            else {
+                                $(item).find('[id*=ddlSelectedRole]').addClass('errorSelect');
+                            }
+                        }
+                    }
+                });
+            };
+
+            //Delete Records
+            $scope.GenerateDelPayload = function () {
+                //Pass the EntityKey in lowercase
+                var payload = { EntityKey: 'AssessSurvey', ID: $scope.model.dsForm.DT[0].AssessSurveyID, AcceptWarning: false };
+                return payload;
+            };
+
+            $scope.addQuestion = function (qType) {
+                if ($('#btnSurvey').hasClass('disabled')) {
+                    return false;
+                }
+
+                var base = '/App/Link' + location.search;
+                var assessTest = {};
+                angular.copy($scope.CourseInfo, assessTest);
+                assessTest.DescriptionHTML = '';
+                assessTest.DescriptionText = '';
+                assessTest.questiontype = qType;
+                var payload = { fKey: 'frmTestQuestion', fMode: 'acAddM', IDX: 0, rowData: JSON.stringify(assessTest) };
+
+                $.post(base, payload, function (result) {
+                    window.location = result;
+                    if (result.success) {
+                    }
+                    else {
+                        if (result.message === '') { result.message = 'Unknown Error!' };
+                        $scope.message = result.message;
+                    }
+                    $scope.$apply();
+                    return;
+                });
+            }
+
+            //Back to Previous
+            $scope.backtoprev = function () {
+                $("div.spinnerTarget").addClass("backdrop");
+                $("body").css("overflow", "hidden");
+                usSpinnerService.spin('spinner-1');
+
+                var base = '/App/Link' + location.search;
+                var courseContent = {};
+                angular.copy($scope.CourseInfo, courseContent);
+                courseContent.DescriptionHTML = '';
+                courseContent.DescriptionText = '';
+                var payload = { fKey: 'frmCourseContent', fMode: 'acEditM', IDX: $scope.CourseInfo.CourseID, rowData: JSON.stringify(courseContent) }; // for edit
+
+                $.post(base, payload, function (result) {
+                    $scope.status = 'loaded';
+                    window.location = result;
+                });
+            }
+
+            //Render Common Functions
+            @Html.RenderFile("~/scripts/rsforms.js");
+        });
+    </script>
+}
+
+
