@@ -4,7 +4,7 @@ topnav:
 - title: Topnav
   items:
     - title: GitHub
-      external_url: https://github.com/Risersoft/Ed
+      external_url: https://github.com/Risersoft/Gate
     - title: Blog
       url: /blog
 
@@ -14,8 +14,9 @@ topnav_dropdowns:
   folders:
     - title: Help
       folderitems:
-        - title: EdNirvana Web 
-          external_url: http://www.ednirvana.com/
+        - title: GateNirvana Web 
+          external_url: http://www.gatenirvana.com/
+          
         
         - title: Publisher
           external_url: http://www.risersoft.com/
@@ -23,9 +24,9 @@ topnav_dropdowns:
     - title: Modules
       folderitems:
         - title: EdNirvana Web
-          url: /ed-web/introduction.html
-        - title: Learner Mobile
-          url: /learner-mobile/introduction.html
+          url: /gate-nirvana-web/introduction.html
+        - title: EdNirvana Windows
+          url: /gate-nirvana-win/introduction.html
         
         
           

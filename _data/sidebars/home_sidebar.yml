@@ -8,10 +8,10 @@ entries:
   - title: Modules
     output: web,pdf
     folderitems:
-    - title: EdNirvana Web
-      url: /ed-web/introduction.html
+    - title: GateNirvana Web
+      url: /gate-nirvana-web/introduction.html
       output: web
-    - title: Learner Mobile
-      url: /learner-mobile/introduction.html
+    - title: GateNirvana Win
+      url: /gate-nirvana-win/introduction.html
       output: web
     

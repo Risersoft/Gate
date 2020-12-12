@@ -1,0 +1,165 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+
+entries:
+- title: Sidebar
+  product: GateNirvana Web
+  
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage.html
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage.html
+      output: pdf
+      type: frontmatter
+
+  - title: Introduction
+    output: single
+    url: /gate-nirvana-web/introduction.html
+    folderitems:
+    -
+
+  - title: Admin Menu
+    url: /gate-nirvana-web/Admin-menu.html    
+    output: web, pdf
+
+    folderitems:
+    - title: Society
+      url: /gate-nirvana-web/society.html
+      output: web, pdf
+
+    - title: Property Details
+      url: /gate-nirvana-web/property-details.html
+      output: web, pdf
+      
+    - title: Occupant
+      url: /gate-nirvana-web/occupant.html
+      output: web, pdf
+      
+    - title: Domestic Help
+      url: /gate-nirvana-web/domestic-help.html
+      output: web, pdf   
+     
+    - title: Punch Attend
+      url: /gate-nirvana-web/punch-attend.html
+      output: web, pdf
+      
+    - title: Guest Details
+      url: /gate-nirvana-web/guest-details.html
+      output: web, pdf
+      
+    - title: Delivery
+      url: /gate-nirvana-web/delivery.html
+      output: web, pdf
+      
+       
+    - title: Cab Details
+      url: /gate-nirvana-web/cab-details.html
+      output: web, pdf
+      
+    - title: Complaint Management 
+      url: /gate-nirvana-web/complaint-management.html
+      output: web, pdf
+      
+    - title: Resident's Request
+      url: /gate-nirvana-web/resident-request.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-web/notice-board.html
+      output: web, pdf
+      
+      
+  - title: Guard Menu
+    url: /gate-nirvana-web/guard-menu.html
+    output: web, pdf
+
+    folderitems:
+    - title: Domestic Help
+      url: /gate-nirvana-web/guard-domestic-helps.html
+      output: web, pdf  
+
+    - title: Punch Attend
+      url: /gate-nirvana-web/punch-attend.html
+      output: web, pdf
+
+    - title: Guest
+      url: /gate-nirvana-web/guard-guest.html
+      output: web, pdf
+      
+    - title: Visitor
+      url: /gate-nirvana-web/guard-visitor.html
+      output: web, pdf
+      
+    - title: Service
+      url: /gate-nirvana-web/guard-service.html
+      output: web, pdf
+      
+    - title: Delivery
+      url: /gate-nirvana-web/guard-delivery.html
+      output: web, pdf
+      
+    - title: Cab Details
+      url: /gate-nirvana-web/guard-cab-details.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-web/guard-notice-board.html
+      output: web, pdf
+      
+    
+  - title: Resident Menu
+    url: /gate-nirvana-web/resident-menu.html
+    output: web, pdf
+
+    folderitems:
+    
+    - title: My Property
+      url: /gate-nirvana-web/my-property.html
+      output: web, pdf
+      
+    - title: My Occupants
+      url: /gate-nirvana-web/my-occupants.html
+      output: web, pdf
+      
+    - title: My Domestic Staff
+      url: /gate-nirvana-web/my-domestic-staff.html
+      output: web, pdf
+      
+    - title: Punch Attend
+      url: /gate-nirvana-web/punch-attend.html
+      output: web, pdf
+      
+    - title: My Guest
+      url: /gate-nirvana-web/my-guest.html
+      output: web, pdf
+      
+    - title: My Cab Details
+      url: /gate-nirvana-web/my-cab-details.html
+      output: web, pdf
+      
+    - title: My Delivery
+      url: /gate-nirvana-web/my-delivery.html
+      output: web, pdf
+      
+    - title: My Request
+      url: /gate-nirvana-web/my-request.html
+      output: web, pdf
+      
+    - title: My Complaint
+      url: /gate-nirvana-web/my-complaint.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-web/resident-noticeboard.html
+      output: web, pdf
+    
+      
+    
