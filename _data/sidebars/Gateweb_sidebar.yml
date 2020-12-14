@@ -27,7 +27,7 @@ entries:
     -
 
   - title: Admin Menu
-    url: /gate-nirvana-web/Admin-menu.html    
+    url: /gate-nirvana-web/admin-menu.html    
     output: web, pdf
 
     folderitems:
