@@ -27,6 +27,8 @@ topnav_dropdowns:
           url: /gate-nirvana-web/introduction.html
         - title: EdNirvana Windows
           url: /gate-nirvana-win/introduction.html
+        - title: EdNirvana Android App
+          url: /gate-nirvana-app/introduction.html
         
         
           

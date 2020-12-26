@@ -1,0 +1,152 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+
+entries:
+- title: Sidebar
+  product: GateNirvana Android App
+  
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage.html
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage.html
+      output: pdf
+      type: frontmatter
+
+  - title: Introduction
+    output: single
+    url: /gate-nirvana-app/introduction.html
+    folderitems:
+    -
+
+  - title: Admin Menu
+    url: /gate-nirvana-app/admin-menu.html  
+    output: web, pdf
+
+    folderitems:
+    - title: Society
+      url: /gate-nirvana-app/admin-society.html
+      output: web, pdf
+
+    - title: Property Details
+      url: /gate-nirvana-app/admin-property-details.html
+      output: web, pdf
+      
+    - title: Occupant
+      url: /gate-nirvana-app/admin-occupant.html
+      output: web, pdf
+      
+    - title: Domestic Helps
+      url: /gate-nirvana-app/admin-domestic-help.html
+      output: web, pdf   
+     
+     
+    - title: Guest Details
+      url: /gate-nirvana-app/admin-guest-details.html
+      output: web, pdf
+      
+    - title: Delivery
+      url: /gate-nirvana-app/admin-delivery.html
+      output: web, pdf
+      
+       
+    - title: Cab Details
+      url: /gate-nirvana-app/admin-cab-details.html
+      output: web, pdf
+      
+    - title: Complaint
+      url: /gate-nirvana-app/admin-complaint-management.html
+      output: web, pdf
+      
+    - title: Resident's Request
+      url: /gate-nirvana-app/admin-residents-request.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-app/admin-notice-board.html
+      output: web, pdf
+      
+      
+  - title: Guard Menu
+    url: /gate-nirvana-app/guard-menu.html
+    output: web, pdf
+
+    folderitems:
+    - title: Domestic Helps
+      url: /gate-nirvana-app/guard-domestic-help.html
+      output: web, pdf  
+
+    - title: Guest/Visitor
+      url: /gate-nirvana-app/guard-guest-visitor.html
+      output: web, pdf
+      
+       
+    - title: Service
+      url: /gate-nirvana-app/guard-service.html
+      output: web, pdf
+      
+    - title: Delivery
+      url: /gate-nirvana-app/guard-delivery.html
+      output: web, pdf
+      
+    - title: Cab Details
+      url: /gate-nirvana-app/guard-cab-details.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-app/guard-notice-board.html
+      output: web, pdf
+      
+    
+  - title: Resident Menu
+    url: /gate-nirvana-app/resident-menu.html
+    output: web, pdf
+
+    folderitems:
+    
+    - title: My Property
+      url: /gate-nirvana-app/resident-my-property.html
+      output: web, pdf
+      
+    - title: My Occupants
+      url: /gate-nirvana-app/resident-my-occupants.html
+      output: web, pdf
+      
+    - title: My Domestic Helps
+      url: /gate-nirvana-app/resident-my-domestic-helps.html
+      output: web, pdf
+      
+      
+    - title: My Guest
+      url: /gate-nirvana-app/resident-my-guest.html
+      output: web, pdf
+      
+    - title: My Cab Details
+      url: /gate-nirvana-app/resident-my-cab-details.html
+      output: web, pdf
+      
+    - title: My Delivery
+      url: /gate-nirvana-app/resident-my-delivery.html
+      output: web, pdf
+      
+    - title: My Request
+      url: /gate-nirvana-app/resident-my-request.html
+      output: web, pdf
+      
+    - title: My Complaint
+      url: /gate-nirvana-app/resident-my-complaint.html
+      output: web, pdf
+      
+    - title: Notice Board
+      url: /gate-nirvana-app/resident-notice-board.html
+      output: web, pdf
+    
+      
+    
