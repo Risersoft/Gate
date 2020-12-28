@@ -11,7 +11,10 @@ entries:
     - title: GateNirvana Web
       url: /gate-nirvana-web/introduction.html
       output: web
-    - title: GateNirvana Win
+    - title: GateNirvana Windows 
       url: /gate-nirvana-win/introduction.html
+      output: web
+    - title: GateNirvana Mobile App 
+      url: /gate-nirvana-app/introduction.html
       output: web
     
