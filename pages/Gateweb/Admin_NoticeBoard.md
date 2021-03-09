@@ -16,7 +16,7 @@ comments: false
 
 ![](/images/ANoticeBoardCreateSelectMenuweb.png)
 
-**Step-2**: Fill this Details.
+**Step-2**: Fill the Details.
 
 ![](/images/ANoticeBoardCreateSelectFormweb.png)
 
@@ -37,10 +37,9 @@ You can edit the notice board by following the given steps:
 
 **STEP-1**: Select the Date that you want to edit from notice board list.
 
-**STEP-2**: Right click on it and select **Edit Notice Board** option.                             
+**STEP-2**: Right click on it and select **Edit Notice Board** option.                           
                                                   
-
-**STEP-3**: Edit the details
+**STEP-3**: Edit the details.
 
 ![](/images/ANoticeBoardEditweb.png)
 

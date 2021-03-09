@@ -24,7 +24,7 @@ comments: false
 ## List
 
 
-**Step-1**:   Click on **Resident-> My Request-> List of Request**.Request list will appear.
+**Step-1**: Click on **Resident-> My Request-> List of Request**.Request list will appear.
 
 ![](/images/RReuestListweb.png)
 
@@ -33,8 +33,7 @@ comments: false
 ## Edit
 
 
-**Step-1**: Right click on List of Request-> Click on **Edit Request** option. Request details will open.
-                                   
+**Step-1**: Right click on List of Request-> Click on **Edit Request** option. Request details will open.                                   
 
 
 ![](/images/RRequestEditweb.png)

@@ -34,23 +34,27 @@ entries:
     - title: Society
       url: /gate-nirvana-web/society.html
       output: web, pdf
+      
+    - title: Party
+      url: /gate-nirvana-web/party.html
+      output: web, pdf
+      
+    - title: Person
+      url: /gate-nirvana-web/person.html
+      output: web, pdf
 
     - title: Property Details
       url: /gate-nirvana-web/property-details.html
       output: web, pdf
       
-    - title: Occupant
+    - title: Occupant Details
       url: /gate-nirvana-web/occupant.html
       output: web, pdf
       
     - title: Domestic Help
       url: /gate-nirvana-web/domestic-help.html
-      output: web, pdf   
-     
-    - title: Punch Attend
-      url: /gate-nirvana-web/punch-attend.html
       output: web, pdf
-      
+     
     - title: Guest Details
       url: /gate-nirvana-web/guest-details.html
       output: web, pdf
@@ -64,7 +68,7 @@ entries:
       url: /gate-nirvana-web/cab-details.html
       output: web, pdf
       
-    - title: Complaint Management 
+    - title: Resident’s Complaints
       url: /gate-nirvana-web/complaint-management.html
       output: web, pdf
       
@@ -86,16 +90,8 @@ entries:
       url: /gate-nirvana-web/guard-domestic-helps.html
       output: web, pdf  
 
-    - title: Punch Attend
-      url: /gate-nirvana-web/punch-attend.html
-      output: web, pdf
-
-    - title: Guest
+    - title: Guest/Visitor
       url: /gate-nirvana-web/guard-guest.html
-      output: web, pdf
-      
-    - title: Visitor
-      url: /gate-nirvana-web/guard-visitor.html
       output: web, pdf
       
     - title: Service
@@ -133,10 +129,7 @@ entries:
       url: /gate-nirvana-web/my-domestic-staff.html
       output: web, pdf
       
-    - title: Punch Attend
-      url: /gate-nirvana-web/punch-attend.html
-      output: web, pdf
-      
+  
     - title: My Guest
       url: /gate-nirvana-web/my-guest.html
       output: web, pdf

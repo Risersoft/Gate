@@ -1,6 +1,6 @@
 ---
-title: Notice Board
-keywords: Notice Board
+title: My Notice Board
+keywords: My Notice Board
 sidebar: Gatewin_sidebar
 permalink: gate-nirvana-win/resident-noticeboard.html
 folder: Gatewin
@@ -8,11 +8,11 @@ hide_sidebar: false
 comments: false
 ---
 
-# Notice Board
+# My Notice Board
 
 ## List
 
 
-**Step-1**:  Click on **Resident->Notice Board**. Notice Board List form will appear
+**Step-1**:  Click on **Resident->My Notice Board**. Notice Board List form will appear
 
 ![](/images/ResidentNoticeBoardListwin.png)

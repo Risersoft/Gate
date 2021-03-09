@@ -12,9 +12,12 @@ comments: false
 
 ## Create
 
-**Step-1**:   click on **Resident-> My Guest->New Guest**. **Guest** form will appear. Fill the details.
+**Step-1**: Click on **Resident-> My Guest->Invite Guest**. **Guest** form will appear. Fill the details.
+
 ![](/images/MyGuest-SelectMenuweb.png)
+
 ![](/images/MyGuest-NewGuestweb.png)
+
 **Step-2**: Click on Save button.
 
 
@@ -22,13 +25,12 @@ comments: false
 ## List
 
 
-**Step-1**:   Click on **Resident-> My Guest-> List of Guest**. **Guest** list will appear.
+**Step-1**: Click on **Resident-> My Guest-> List of Guests**. **Guest** list will appear.
+
 ![](/images/MyGuest-ListofGuestweb.png)
 
 
 ## Edit
-
-
 
 You can edit the Guest by following the given steps:
 
@@ -37,6 +39,5 @@ You can edit the Guest by following the given steps:
 **Step-2**: Right click and select **Edit Guest** option. **Guest** details will open.
                                
 ![](/images/ListofMyGuest-SelectMenuweb.png)
-![](/images/ListofMyGuest-EditGuestweb.png)
 
 **Step-3**: Edit the details and click on **Save**.

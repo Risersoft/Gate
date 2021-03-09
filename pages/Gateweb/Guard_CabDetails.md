@@ -14,9 +14,9 @@ comments: false
 ## List
 
 
-**Step-1**:   Click on **Guard-> Cab Details-> List of Cab**. **Cab** list will appear.
-![](/images/ListofCabDetailsweb.png)
+**Step-1**: Click on **Guard-> Cab Details**. **Cab** list will appear.
 
+![](/images/ListofCabDetailsweb.png)
 
 
 ## Edit
@@ -29,6 +29,5 @@ You can edit the Cab by following the given steps:
 **Step-2**: Right click and select **Edit Cab** option. **Cab** details will open.
                                
 ![](/images/ListofCab-SelectMenuweb.png)
-![](/images/ListofCab-EditCabweb.png)
 
 **Step-3**: Edit the details and click on **Save**.

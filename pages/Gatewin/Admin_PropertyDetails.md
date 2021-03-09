@@ -22,13 +22,22 @@ comments: false
 
 ![](/images/PropertyCreateSelectFormwin.png)
 
-**Step-3**: Click on **Save** button.
+**Step-3**: To add Occupant for property , click on **Add Persons** Button.Select Person form will appear. Select the person then click on **Save** button.
+
+![](/images/Admin-SelectPersonForm.png)
+
+**Step-4**: Click on **Save** button.
+
+>Note:
+
+ **1.Occupant number should be same for one family/group.**
+ **2.Only those persons are showing which is resident in Select Persons form.**
 
 
 ## List
 
 
-**Step-1**:  Click on **Admin->Property Details->List Of Property**.**Property** List will appear
+**Step-1**:  Click on **Admin->Property Details.**Property** List will appear
 
 ![](/images/APropertyListwin.png)
 
@@ -41,14 +50,11 @@ You can edit the Property by following the given steps:
 
 **STEP-1**: Select the society name that you want to edit from property list.
 
-**STEP-2**: Right click on it and select **Edit Property** option                             
-                                   **Or**
-       Click on **Alter** Menu and select **Edit Property**. **Property** details will appear.
-
+**STEP-2**: Right click on it and select **Edit Property** option.                            
+                                   
 **STEP-3**: Edit the details.
 
 
 ![](/images/PropertyEditwin.png)
-![](/images/PropertyEdit1win.png)
 
 **STEP-4**: Click on **Save** button.

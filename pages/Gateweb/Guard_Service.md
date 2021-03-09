@@ -14,9 +14,9 @@ comments: false
 ## List
 
 
-**Step-1**:   Click on **Guard-> Service-> List of Service**. **Service** list will appear.
-![](/images/ListofServiceweb.png)
+**Step-1**: Click on **Guard-> Service-> List of Service**. **Service** list will appear.
 
+![](/images/ListofServiceweb.png)
 
 
 ## Edit
@@ -26,9 +26,9 @@ You can edit the Service by following the given steps:
 
 **Step-1**: Select the Service that you want to edit from Service list.
 
-**Step-2**: Right click and select **Edit Service** option . **Service** details will open.
+**Step-2**: Right click and select **Edit Guest** option . **Service** details will open.
                            
 ![](/images/ListofService-SelectMenuweb.png)
-![](/images/ListofService-EditServiceweb.png)
+
 
 **Step-3**: Edit the details and click on **Save**.

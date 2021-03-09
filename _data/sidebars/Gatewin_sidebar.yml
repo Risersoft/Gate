@@ -34,22 +34,27 @@ entries:
     - title: Society
       url: /gate-nirvana-win/society.html
       output: web, pdf
+      
+    - title: Party
+      url: /gate-nirvana-win/party.html
+      output: web, pdf
+      
+    - title: Person
+      url: /gate-nirvana-win/person.html
+      output: web, pdf
 
     - title: Property Details
       url: /gate-nirvana-win/property-details.html
       output: web, pdf
       
-    - title: Occupant
+    - title: Occupant Details
       url: /gate-nirvana-win/occupant.html
       output: web, pdf
       
-    - title: Domestic Help
+    - title: Domestic Helps
       url: /gate-nirvana-win/domestic-help.html
       output: web, pdf   
      
-    - title: Punch Attend
-      url: /gate-nirvana-win/punch-attend.html
-      output: web, pdf
       
     - title: Guest Details
       url: /gate-nirvana-win/guest-details.html
@@ -64,11 +69,11 @@ entries:
       url: /gate-nirvana-win/cab-details.html
       output: web, pdf
       
-    - title: Complaint Management 
-      url: /gate-nirvana-win/complaint-management.html
+    - title: Resident's Complaint  
+      url: /gate-nirvana-win/resident-complaint.html
       output: web, pdf
       
-    - title: Resident's Request
+    - title: Resident's Requests
       url: /gate-nirvana-win/resident-request.html
       output: web, pdf
       
@@ -82,22 +87,14 @@ entries:
     output: web, pdf
 
     folderitems:
-    - title: Domestic Help
+    - title: Domestic Helps
       url: /gate-nirvana-win/guard-domestic-helps.html
-      output: web, pdf  
+      output: web, pdf 
 
-    - title: Punch Attend
-      url: /gate-nirvana-win/punch-attend.html
-      output: web, pdf
-
-    - title: Guest
+    - title: Guest / Visitor
       url: /gate-nirvana-win/guard-guest.html
       output: web, pdf
-      
-    - title: Visitor
-      url: /gate-nirvana-win/guard-visitor.html
-      output: web, pdf
-      
+            
     - title: Service
       url: /gate-nirvana-win/guard-service.html
       output: web, pdf
@@ -129,13 +126,9 @@ entries:
       url: /gate-nirvana-win/resident-my-occupants.html
       output: web, pdf
       
-    - title: My Domestic Staff
+    - title: My Domestic Helps
       url: /gate-nirvana-win/resident-my-domesticStaff.html
-      output: web, pdf
-      
-    - title: Punch Attend
-      url: /gate-nirvana-win/punch-attend.html
-      output: web, pdf
+      output: web, pdf      
       
     - title: My Guest
       url: /gate-nirvana-win/my-guest.html
@@ -157,7 +150,7 @@ entries:
       url: /gate-nirvana-win/my-complaint.html
       output: web, pdf
       
-    - title: Notice Board
+    - title: My Notice Board
       url: /gate-nirvana-win/resident-noticeboard.html
       output: web, pdf
     

@@ -16,20 +16,14 @@ comments: false
 
 ![](/images/Resident'sRequest-SelectMenuwin.png)
 
-![](/images/ARequestListwin.png)
-
 
 ## Edit
 
 
 **Step-1**: Right click on List of Resident Request -> Click on **Edit Resident Request** option.**Complaint** details will open.
-                                **Or**
-Click on **Alter Menu->Edit Resident Request option**.**Resident** Request details will open.
+                                
 
 ![](/images/ListofResidentRequest-SelectMenuwin.png)
 
-![](/images/Resident'sRequest-AlterRequestDetailsMenuwin.png)
-
-![](/images/ListofResidentRequest-EditResidentRequestwin.png)
 
 **Step-2**: Edit the details and click on **Save**.

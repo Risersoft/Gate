@@ -26,7 +26,7 @@ comments: false
 ## List
 
 
-**Step-1**:  Click on **Admin->Notice Board->List Of Notice Board**.**Notice Board** List form will appear.
+**Step-1**: Click on **Admin->Notice Board->List Of Notice Board**.**Notice Board** List form will appear.
 
 ![](/images/ANoticeBoardListwin.png)
 
@@ -38,10 +38,8 @@ You can edit the notice board by following the given steps:
 **STEP-1**: Select the Date that you want to edit from notice board list.
 
 **STEP-2**: Right click on it and select **Edit Notice Board** option.                             
-                                                  **Or**
-       Click on **Alter** Menu and select **Edit Notice Board**. **Notice Board** details will appear.
-
+                                                  
 **STEP-3**: Edit the details
 
 ![](/images/NoticeBoardEditwin.png)
-![](/images/NoticeBoardEdit1win.png)
+

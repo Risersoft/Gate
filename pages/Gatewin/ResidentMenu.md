@@ -10,7 +10,7 @@ comments: false
 
 # Resident Menu
 
-**When click on Resident menu , it will show following options :**
+**When click on Resident menu, it will show following options :**
 
 
 ![](/images/ResidentMenuwin.png)

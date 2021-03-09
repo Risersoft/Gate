@@ -13,6 +13,6 @@ comments: false
 ## List
 
 
-**Step-1**:  Click on **Resident->My Property**. Property List form will appear.
+**Step-1**: Click on **Resident->My Property**. Property List form will appear.
 
 ![](/images/ResidentPropertyListwin.png)
