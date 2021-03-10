@@ -28,18 +28,18 @@ comments: false
 
 ![](/images/APropertyCreateSelectForm2.png)
 
->Note: 1. Occupant number should be same for one family/group.
+>Note: 
+
+>1.Occupant number should be same for one family/group.
 
 >2.Only those persons are showing which is resident in Select Person form.
 
 
 ## List
 
-
-**Step-1**:  Click on **Admin->Property Details.**Property** List will appear
+**Step-1**: Click on **Admin->Property Details.**Property** List will appear
 
 ![](/images/APropertyListweb.png)
-
 
 
 ## Edit
@@ -52,7 +52,6 @@ You can edit the Property by following the given steps:
 **STEP-2**: Right click on it and select **Edit Property** option.                      
                                    
 **STEP-3**: Edit the details.
-
 
 ![](/images/APropertyEditweb.png)
 

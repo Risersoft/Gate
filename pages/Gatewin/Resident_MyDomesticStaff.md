@@ -1,6 +1,6 @@
 ---
-title: My Domestic Staff
-keywords: My Domestic Staff
+title: My Domestic Helps
+keywords: My Domestic Helps
 sidebar: Gatewin_sidebar
 permalink: gate-nirvana-win/resident-my-domesticStaff.html
 folder: Gatewin
@@ -8,19 +8,22 @@ hide_sidebar: false
 comments: false
 ---
 
-# My Domestic Staff
+# My Domestic Helps
 
 ## List
 
-**Step-1**: Click on **Resident->My Domestic Staff->List Of All**. **Domestic Staff** List form will appear.
+**Step-1**: Click on **Resident->My Domestic Helps->List Of All**. **Domestic Help** List form will appear.
 
 ![](/images/ResidentDomesticStaffListwin.png)
 
-**Step-2**:  Click on **Resident->Domestic Helps->Move In /Out Report** . **Move In /Out Report** List will appear.
+**Step-2**: Click on **Resident->Domestic Helps->Move In /Out Report** . **Move In /Out Report** List will appear.
+
 
 ![](/images/ResidentMoveInOutReport.png)
 
-**Step-3**:  Click on **Resident->Domestic Helps->List Of Attendance Report** . **Attendance Report** List will appear.
+
+**Step-3**: Click on **Resident->Domestic Helps->List Of Attendance Report** . **Attendance Report** List will appear.
+
 
 ![](/images/ResidentAttendanceReport.png)
 
@@ -31,9 +34,13 @@ comments: false
 ## Create
 
 **Step-1**: Select the name that you want to add punch from domestic help list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.                     
-                         Or
-Select the name that you want to add punch from Move In/Out Report list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.  
-                         Or
+                         
+**Or**
+						 
+Select the name that you want to add punch from Move In/Out Report list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear. 
+			
+**Or**
+						 
 Select the name that you want to add punch from attendance reports list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.
 
 
@@ -43,7 +50,7 @@ Select the name that you want to add punch from attendance reports list. Right c
 
 ![](/images/AdminPunchCreateSelectMenu3.png)
 
-**Step-2**: Fill this details.
+**Step-2**: Fill the details.
 
 ![](/images/AddPunchAttendancewin.png)
 
@@ -51,10 +58,9 @@ Select the name that you want to add punch from attendance reports list. Right c
 
 ## List
 
-**Step-1**:  Right click on **Domestic Help list>View Punch History** . **Punch Attend** List will appear.
+**Step-1**:  Right click on **Domestic Help list -> View Punch History** . **Punch Attend** List will appear.
 
 ![](/images/AdminPunchList.png)
-
 
 
 ## Edit

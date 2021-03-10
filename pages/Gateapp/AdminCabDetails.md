@@ -14,7 +14,6 @@ comments: false
 Step-1:  Click on **Admin-> Cab Details->New Cab**. **Cab** form will appear. Fill the details.
 
 ![](/images/New-Cab.png)
-
 ![](/images/New-Cab-frm.png)
 
 **Step-2:** Click on **Save** button.
@@ -34,7 +33,5 @@ You can **Edit** the **Cab** by following the given steps:
 **Step-2:** **Double Click** and Select **Edit Cab** option.
 
 ![](/images/EditCab.png)
-
-![](/images/Edit-Cab-frm.png)
 
 **Step-3:** **Edit** the Details and Click on **Save**.

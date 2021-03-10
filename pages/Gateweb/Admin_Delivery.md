@@ -18,8 +18,7 @@ comments: false
 
 ![](/images/Delivery-NewDeliveryweb.png)
 
-**Step-2**: Click on Save button.
-
+**Step-2**: Click on **Save** button.
 
 
 ## List
@@ -28,7 +27,6 @@ comments: false
 **Step-1**: Click on **Admin-> Delivery-> List of Delivery**. **Delivery** list will appear.
 
 ![](/images/Delivery-ListofDeliveryweb.png)
-
 
 
 ## Edit

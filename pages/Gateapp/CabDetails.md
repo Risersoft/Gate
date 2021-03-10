@@ -12,7 +12,7 @@ comments: false
 
 ## List
 
-**Step-1:**   Click on **Guard-> Cab Details. Cab list** will appear.
+**Step-1:**  Click on **Guard-> Cab Details. Cab list** will appear.
 
 ![](/images/Guard-Cab-List.png)
 

@@ -18,7 +18,7 @@ comments: false
 
 ![](/images/MyCabDetails-NewCabweb.png)
 
-**Step-2**: Click on Save button.
+**Step-2**: Click on **Save** button.
 
 
 ## List

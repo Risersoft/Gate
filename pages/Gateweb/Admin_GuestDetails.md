@@ -18,7 +18,7 @@ comments: false
 
 ![](/images/GuestDetails-NewGuestweb.png)
 
-**Step-2**: Click on Save button.
+**Step-2**: Click on **Save** button.
 
 
 
@@ -26,20 +26,20 @@ comments: false
 
 ### Guest
 
-**Step-1**:   Click on **Admin-> Guest Details-> List of Guest**. **Guest** list will appear.
+**Step-1**: Click on **Admin-> Guest Details-> List of Guest**. **Guest** list will appear.
 
 ![](/images/GuestDetails-ListofGuestweb.png)
 
 
 ### Visitor
 
-**Step-1**:   Click on **Admin-> Guest Details-> List of Visitor**. **Visitor** list will appear.
+**Step-1**: Click on **Admin-> Guest Details-> List of Visitor**. **Visitor** list will appear.
 
 ![](/images/GuestDetails-ListofVisitorweb.png)
 
 ### Service
 
-**Step-1**:   click on **Admin-> Guest Details-> List of Service**. **Service** list will appear.
+**Step-1**: Click on **Admin-> Guest Details-> List of Service**. **Service** list will appear.
 
 ![](/images/GuestDetails-ListofServiceweb.png)
 

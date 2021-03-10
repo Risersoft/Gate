@@ -12,7 +12,9 @@ comments: false
 ## Create
 
 **Step-1:** Select the name that you want to **Add Punch** from **Domestic Help** list. **Double Click** on it and Select **Add Punch Attendance** option. **Punch Attend** form will appear.
-                                        **OR**
+
+ **OR**
+ 
 Select the name that you want to **Add Punch** from **Attendance Reports List**. **Double Click** on it and Select **Add Punch Attendance** option. **Punch Attend** form will appear.
 
 ![](/images/Add-Punch-Attend.png)
@@ -25,9 +27,11 @@ Select the name that you want to **Add Punch** from **Attendance Reports List**.
 
 ## List
 
-**Step-1:**  Click on **Admin->Domestic Helps->Move In/Out Report** .**Punched Attendance List** will appear.                           
-                                      **OR**          
-  **Step-2:**  Click on **Admin->Domestic Helps->Attendance Reports** . **Punched Attendance List** will appear.
+**Step-1:**  Click on **Admin->Domestic Helps->Move In/Out Report** .**Punched Attendance List** will appear.
+                           
+ **OR**          
+ 
+ Click on **Admin->Domestic Helps->Attendance Reports** . **Punched Attendance List** will appear.
 
   ![](/images/Punch-Attend-List.png)
 

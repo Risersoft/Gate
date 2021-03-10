@@ -12,5 +12,7 @@ comments: false
 
 **When click on Resident menu , it will show following options :**
 
+>Note : In this menu , data related to login person will display only. 
+
 
 ![](/images/ResidentMenuweb.png)

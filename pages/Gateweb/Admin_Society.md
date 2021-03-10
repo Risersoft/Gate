@@ -16,7 +16,7 @@ comments: false
 
 ![](/images/ASocietyCreateSelectMenuweb.png)
 
-**Step-2**: Fill this Details
+**Step-2**: Fill the Details.
 
 ![](/images/ASocietyCreateSelectFormweb.png)
 

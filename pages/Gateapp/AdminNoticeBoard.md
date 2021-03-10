@@ -14,7 +14,6 @@ comments: false
 **Step-1:** Click on **Admin->Notice Board->New Notice Board** . **Notice Board** form will appear.
 
 ![](/images/New-Notice-Board.png)
-
 ![](/images/Notice-Board-frm.png)
 
 **Step-2:** Fill this details.

@@ -15,7 +15,6 @@ comments: false
 **Step-1:** Click on **Resident-> My Delivery ->New Delivery. Delivery form** will appear. Fill the details.
 
 ![](/images/Resident-My-Delivery-Options.png)
-
 ![](/images/Resident-Delivery-Form.png)
 
 **Step-2:** Click on **Save** button.

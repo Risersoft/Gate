@@ -15,7 +15,6 @@ comments: false
 **Step-1:**  Click on **Resident-> My Request ->New Request. Request form** will appear. Fill the details.
 
 ![](/images/Resident-My-Request-Options.png)
-
 ![](/images/Resident-Request-Form.png)
 
 **Step-2:** Click on **Save** button.

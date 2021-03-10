@@ -14,7 +14,6 @@ comments: false
 **Step-1:** Select the **Flat No** from property list and **Double Click** on it. Select **Add Occupant** option. **Occupant form** will appear.
 
 ![](/images/Add-Occupant.png)
-
 ![](/images/Add-Occupnat-frm.png)
 
 **Step-3:** Click on **Save** button.
@@ -24,7 +23,6 @@ comments: false
 **Step-1:**  Click on **Admin->Occupant->List of Occupant** .**Occupant list** form will appear.
 
 ![](/images/Occupant-List-Option.png)
-
 ![](/images/Occupant-List-Show.png)
 
 **Step-2:**  Click on **Admin->Occupant->List of Occupant Members**. **Occupant Member list** form will appear.

@@ -30,12 +30,13 @@ comments: false
 
 ![](/images/ANoticeBoardListweb.png)
 
+
 ## Edit
 
 
 You can edit the notice board by following the given steps:
 
-**STEP-1**: Select the Date that you want to edit from notice board list.
+**STEP-1**: Select the row that you want to edit from notice board list.
 
 **STEP-2**: Right click on it and select **Edit Notice Board** option.                           
                                                   

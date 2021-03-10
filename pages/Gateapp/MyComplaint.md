@@ -15,7 +15,6 @@ comments: false
 **Step-1:** Click on **Resident-> My Complaint->New Complaint. Complaint form** will appear and Fill the details.
 
 ![](/images/Resident-My-Complaint-Options.png)
-
 ![](/images/Resident-Complaint-Form.png)
 
 **Step-2:** Click on **Save** button.

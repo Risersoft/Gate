@@ -32,13 +32,13 @@ comments: false
 You can edit the domestic help by following the given steps:
 
 **Step-1:** **Double Click** on the name that you want to edit .Select **Edit Domestic Help** option.
-                      **OR**
+
+ **OR**
+ 
 Select the name that you want to **Edit** from **attendance reports list**. **Double Click** on it and Select **Edit Domestic Help** option.
 
 ![](/images/Domestic-Help-Edit.png)
 
-![](/images/Edit-Domestic-Help-frm.png)
-
-**Step-3:** **Edit the Details.
+**Step-3:** Edit the Details.
 
 **Step-4:** Click on **Save** Button.

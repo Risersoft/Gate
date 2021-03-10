@@ -15,7 +15,6 @@ comments: false
 **Step-1:**   Click on **Guard->Guest/Visitor->List Of Guests. Guest list** will appear.
 
 ![](/images/Guard-Guest-Visitor-Options.png)
-
 ![](/images/Guard-Guests-List.png)
 
 ## Edit
@@ -35,7 +34,6 @@ You can edit the Guest by following the given steps:
 **Step-1:**   Click on **Guard->Guest/Visitor->List Of Visitors. Visitor list** will appear.
 
 ![](/images/Guard-Guest-Visitor-Options.png)
-
 ![](/images/Guard-Visitors-List.png)
 
 ## Edit

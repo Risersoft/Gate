@@ -23,6 +23,4 @@ comments: false
 
 ![](/images/Edit-Complaint.png)
 
-![](/images/Edit-Complaint_frm.png)
-
 **Step-3:** **Edit** the Details and Click on **Save**.

@@ -26,7 +26,9 @@ comments: false
 ## Create
 
 **Step-1**: Select the name that you want to add punch from **domestic ** list. Right click on it and select **Add Punch Attendance** option. **Punch Attend** form will appear.                     
-                         Or
+                       
+**Or**
+						 
 Select the name that you want to add punch from **Move In/Out Report** list. Right click on it and select Add Punch Attendance option. **Punch Attend** form will appear.  
 
 ![](/images/GuardPunchCreateSelectMenu1.png)
@@ -34,7 +36,7 @@ Select the name that you want to add punch from **Move In/Out Report** list. Rig
 ![](/images/GuardPunchCreateSelectMenu2.png)
 
 
-**Step-2**: Fill this details.
+**Step-2**: Fill the details.
 
 ![](/images/GuardPunchCreateSelectForm.png)
 
@@ -45,7 +47,6 @@ Select the name that you want to add punch from **Move In/Out Report** list. Rig
 **Step-1**:  Right click on **Domestic Help list -> View Punch History** . **Punch Attend** List will appear.
 
 ![](/images/GuardPunchList.png)
-
 
 
 ## Edit

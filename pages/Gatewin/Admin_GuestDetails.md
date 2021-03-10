@@ -14,13 +14,11 @@ comments: false
 
 **Step-1**: Click on **Admin-> Guest Details->New Guest**. **Guest** form will appear. Fill the details.
 
-
 ![](/images/GuestDetails-SelectMenuwin.png)
 
 ![](/images/GuestDetails-NewGuestwin.png)
 
 **Step-2**: Click on **Save** button.
-
 
 
 ## List
@@ -30,7 +28,6 @@ comments: false
 **Step-1**: Click on **Admin-> Guest Details-> List of Guest**. **Guest** list will appear.
 
 ![](/images/GuestDetails-ListofGuestwin.png)
-
 
 
 ### Visitor

@@ -37,6 +37,4 @@ You can edit the **Society** by following the given steps:
 
 ![](/images/Society-Edit.png)
 
-![](/images/Society-Edit-Form.png)
-
 **Step-4:** Click on **Save** button.

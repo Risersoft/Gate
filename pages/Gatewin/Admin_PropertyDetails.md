@@ -17,8 +17,7 @@ comments: false
 ![](/images/APropertyCreateSelectMenuwin.png)
 
 
-
-**Step-2**: Fill this Details.
+**Step-2**: Fill the Details.
 
 ![](/images/PropertyCreateSelectFormwin.png)
 
@@ -31,6 +30,7 @@ comments: false
 >Note:
 
  **1.Occupant number should be same for one family/group.**
+ 
  **2.Only those persons are showing which is resident in Select Persons form.**
 
 
@@ -40,7 +40,6 @@ comments: false
 **Step-1**:  Click on **Admin->Property Details.**Property** List will appear
 
 ![](/images/APropertyListwin.png)
-
 
 
 ## Edit
@@ -53,7 +52,6 @@ You can edit the Property by following the given steps:
 **STEP-2**: Right click on it and select **Edit Property** option.                            
                                    
 **STEP-3**: Edit the details.
-
 
 ![](/images/PropertyEditwin.png)
 

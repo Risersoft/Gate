@@ -12,7 +12,7 @@ comments: false
 
 ## Create
 
-**Step-1**:  Click on **Admin-> Party->New Party**. **Party** form will appear. Fill the details.
+**Step-1**: Click on **Admin-> Party->New Party**. **Party** form will appear. Fill the details.
 
 ![](/images/Admin-PartyNewMenu.png)
 
@@ -40,8 +40,10 @@ comments: false
 You can edit the Party by following the given steps:
 
 **Step-1**: Select the Party that you want to edit from Party list.
-                **or**
- select the MainParty  that you want to edit from MainParty list.
+
+**or**
+				
+Select the MainParty  that you want to edit from MainParty list.
 
 **Step-2**: Right click and select **Edit MainParty** option. **Party** details will open.
                                

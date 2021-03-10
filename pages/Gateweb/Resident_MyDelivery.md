@@ -12,13 +12,13 @@ comments: false
 
 ## Create
 
-**Step-1**:   click on **Resident-> My Delivery->New Delivery**. **Delivery** form will appear. Fill the details.
+**Step-1**: Click on **Resident-> My Delivery->New Delivery**. **Delivery** form will appear. Fill the details.
 
 ![](/images/MyDelivery-SelectMenuweb.png)
 
 ![](/images/MyDelivery-NewDeliveryweb.png)
 
-**Step-2**: Click on Save button.
+**Step-2**: Click on **Save** button.
 
 
 

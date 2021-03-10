@@ -26,7 +26,9 @@ comments: false
 **Step-3**: Fill the details and click on **Save** button.
 
 
->Note : 1 - All Property will show in Select Person form in case of Resident. Only those property will show in Select Person form which is in Security in case of Guard.
+>Note : 
+
+>1 - All Property will show in Select Person form in case of Resident. Only those property will show in Select Person form which is in Security in case of Guard.
 
 >2 - Occupant Type and Occupant No must compulsory field in case of Resident. Occupant type and Occupant No will be read only in case of Guard.
 

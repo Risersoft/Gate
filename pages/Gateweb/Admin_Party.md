@@ -17,7 +17,7 @@ comments: false
 ![](/images/APartyCreateSelectMenu.png)
 
 
-**Step-2**: Fill this details.
+**Step-2**: Fill the details.
 
 ![](/images/APartyCreateSelectForm1.png)
 

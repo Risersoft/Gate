@@ -16,9 +16,7 @@ comments: false
 
 ![](/images/ASocietyCreateSelectMenuwin.png)
 
-
-
-**Step-2**: Fill this Details.
+**Step-2**: Fill the Details.
 
 ![](/images/ASocietyCreateSelectFormwin.png)
 
@@ -28,10 +26,9 @@ comments: false
 ## List
 
 
-**Step-1**:  Click on **Admin->Society->List Of Society**.**Society** List will appear
+**Step-1**: Click on **Admin->Society->List Of Society**.**Society** List will appear
 
 ![](/images/ASocietyListwin.png)
-
 
 
 ## Edit
@@ -41,11 +38,9 @@ You can edit the Society by following the given steps:
 
 **Step-1**: Select the Society name that you want to edit from society list.
 
-**Step-2**: Right click on it and select **Edit Society** option                             
+**Step-2**: Right click on it and select **Edit Society** option.                        
                                    
-
 **Step-3**: Edit the details.
-
 
 ![](/images/ASocietyEditwin.png)
 

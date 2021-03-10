@@ -15,7 +15,6 @@ comments: false
 **Step-1:**  Click on **Resident-> My Guest->Invite Guest**. Guest Form will appear and Fill the details.
 
 ![](/images/Resident-My-Guest-Options.png)
-
 ![](/images/Resident-Invite-Guest-Form.png)
 
 **Step-2:** Click on **Save** button.

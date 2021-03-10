@@ -22,7 +22,6 @@ comments: false
 **Step-2:** **Double Click** and Select **Edit Request Details** option.
 
 ![](/images/Edit-Resident-Request.png)
-
 ![](/images/Edit-Resident-Request-frm.png)
 
 **Step-3: Edit** the details and click on **Save**.

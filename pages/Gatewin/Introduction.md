@@ -12,7 +12,7 @@ comments: false
 
 Streamlining & simplifying your gated community.
 
-![](/images/imagebanner.png)
+![](/images/GateNirvana.png)
 
 
 ## Society Admin Portal

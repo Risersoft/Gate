@@ -15,7 +15,6 @@ comments: false
 **Step-1:**  Click on **Resident-> My Cab Details->New Cab. Cab form** will appear and Fill the Details.
 
 ![](/images/Resident-My-Cab-Details-Options.png)
-
 ![](/images/Resident-Cab-Form.png)
 
 **Step-2:** Click on **Save** button.

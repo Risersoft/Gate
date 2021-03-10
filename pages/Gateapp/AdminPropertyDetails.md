@@ -26,7 +26,6 @@ comments: false
 **Step-1:**  Click on **Admin->Property Details**. **Property list** will appear.
 
 ![](/images/Property-Details-List.png)
-
 ![](/images/Property-Details-ListShow.png)
 
 ## Edit
@@ -36,7 +35,5 @@ comments: false
 **Step-2:** **Edit** the details.
 
 ![](/images/Property-Edit.png)
-
-![](/images/Property-Edit-frm.png)
 
 **Step-3:** Click on **Save** button.

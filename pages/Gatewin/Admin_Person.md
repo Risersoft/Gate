@@ -12,23 +12,21 @@ comments: false
 
 ## Create
 
-**Step-1**: click on **Admin-> Person->New Person**. **Person** form will appear.
+**Step-1**: Click on **Admin-> Person->New Person**. **Person** form will appear.
 
 ![](/images/Admin-PersonMenu.png)
 
 ![](/images/Admin-PersonNewForm.png)
 
-**Step-2**: click on Add Property button.Select Property form will appear. Select the property then click on save button.
+**Step-2**: Click on **Add Property** button.Select Property form will appear. Select the property then click on **save** button.
 
 ![](/images/Admin-SelectPropertyForm.png)
 
 **Step-3**: Fill the details.
 
+**Step-4**: Click on **Save** button.
 
-
-**Step-4**: Click on Save button.
-
-**Note :**
+>**Note :**
 
 **1 : All Property will show in Select Person form in case of Resident. Only those property will show in Select Person form which is in Security in case of Guard.**
 
@@ -40,7 +38,7 @@ comments: false
 ## List
 
 
-**Step-1**:   Click on **Admin-> Person-> List of Person**. **Person** list will appear.
+**Step-1**: Click on **Admin-> Person-> List of Person**. **Person** list will appear.
 
 ![](/images/Admin-ListofPerson.png)
 

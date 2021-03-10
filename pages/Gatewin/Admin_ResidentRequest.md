@@ -12,7 +12,7 @@ comments: false
 
 ## List
 
-**Step-1**: Click on **Admin-> Resident’s Request**. **Request Request** list will appear.
+**Step-1**: Click on **Admin-> Resident’s Requests**. **Request** list will appear.
 
 ![](/images/Resident'sRequest-SelectMenuwin.png)
 

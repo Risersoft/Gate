@@ -16,13 +16,11 @@ comments: false
 
 ![](/images/DomesticHelpCreateSelectMenuwin.png)
 
-**Step-2**:  Fill this Details.
+**Step-2**:  Fill the Details.
 
 ![](/images/DomesticHelpCreateSelectFormwin.png)
 
 **Step-3**: Click on **Save** button.
-
-
 
 
 ## List
@@ -47,9 +45,13 @@ comments: false
 You can edit the domestic help by following the given steps:
 
 **Step-1**: Select the name that you want to edit from domestic help list.
-                                                    Or
+
+**Or**
+
 Select the name that you want to edit from Move In /Out Report reports list.
-                                                    Or
+
+**Or**
+													
 Select the name that you want to edit from attendance reports list.
 
 **STEP-2**: Right click on it and select **Edit Domestic Help** option.
@@ -63,7 +65,6 @@ Select the name that you want to edit from attendance reports list.
 	   
 **STEP-3**: Edit the details.
 
-
 **STEP-4**: Click on **Save** button.
 
 
@@ -72,9 +73,13 @@ Select the name that you want to edit from attendance reports list.
 ## Create
 
 **Step-1**: Select the name that you want to add punch from domestic help list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.                     
-                         Or
+                         
+**Or**
+
 Select the name that you want to add punch from Move In/Out Report list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.  
-                         Or
+                         
+**Or**
+
 Select the name that you want to add punch from attendance reports list. Right click on it and select **Add Punch Attendance** option. Punch Attend form will appear.
 
 
@@ -97,13 +102,11 @@ Select the name that you want to add punch from attendance reports list. Right c
 ![](/images/AdminPunchList.png)
 
 
-
 ## Edit
 
 You can edit the punch attend by following the given steps:
 
 **Step-1**: Select the name that you want to edit from punch attend list. Right click on it and select **Edit Punched Attendance** option.
-
 
 ![](/images/AdminPunchEdit.png)
 

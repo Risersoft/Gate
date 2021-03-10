@@ -16,7 +16,7 @@ comments: false
 
 ![](/images/ANoticeBoardCreateSelectMenuwin.png)
 
-**Step-2**: Fill this Details.
+**Step-2**: Fill the Details.
 
 ![](/images/NoriceBoardSelectFormwin.png)
 
@@ -39,7 +39,7 @@ You can edit the notice board by following the given steps:
 
 **STEP-2**: Right click on it and select **Edit Notice Board** option.                             
                                                   
-**STEP-3**: Edit the details
+**STEP-3**: Edit the details.
 
 ![](/images/NoticeBoardEditwin.png)
 

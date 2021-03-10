@@ -10,15 +10,12 @@ comments: false
 
 # Occupant Details
 
-
-
 ## List
 
 
-**Step-1**:  Click on **Admin->Occupant Details**.**Occupant** List form will appear.
+**Step-1**: Click on **Admin->Occupant Details**.**Occupant** List form will appear.
 
 ![](/images/AOccupantListwin.png)
-
 
 
 ## Edit

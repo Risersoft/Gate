@@ -18,8 +18,7 @@ comments: false
 
 ![](/images/MyGuest-NewGuestweb.png)
 
-**Step-2**: Click on Save button.
-
+**Step-2**: Click on **Save** button.
 
 
 ## List

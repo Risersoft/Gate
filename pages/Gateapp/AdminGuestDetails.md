@@ -13,10 +13,9 @@ comments: false
 
 **Step-1:**  Click on **Admin-> Guest Details->New Guest** .**Guest form** will appear.
 
-
 ![](/images/Guest-Details.png)
 
-**Step-2:** **Fill** the Details.
+**Step-2:** Fill the Details.
 
  ![](/images/Guest-Frm.png)
 
@@ -41,6 +40,8 @@ comments: false
 **Step-1:** Click on **Admin-> Guest Details-> List of Service**. **Service List** will appear.
 
  ![](/images/Guest-Service-List.png)
+ 
+ 
 ## Edit
 
 ### Guests
@@ -67,8 +68,6 @@ You can **Edit** the **Visitor** by following the given steps:
 
 ![](/images/Guest-Visitor-Edit.png)
 
-![](/images/Guest-Visitor-Edit-Frm.png)
-
 **Step-3:** **Edit** the **Details** and Click on **Save**.
 
 ### Services
@@ -80,7 +79,5 @@ You can **Edit** the **Service** by following the given steps:
 **Step-2:** **Double Click** and Select **Edit Guest** option. **Service Details** will open.
 
 ![](/images/Guest-Service-Edit.png)
-
-![](/images/Guest-Service-Edit-Frm.png)
 
 **Step-3:** **Edit** the details and click on **Save**.

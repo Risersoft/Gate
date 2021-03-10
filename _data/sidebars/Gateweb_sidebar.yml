@@ -125,7 +125,7 @@ entries:
       url: /gate-nirvana-web/my-occupants.html
       output: web, pdf
       
-    - title: My Domestic Staff
+    - title: My Domestic Helps
       url: /gate-nirvana-web/my-domestic-staff.html
       output: web, pdf
       

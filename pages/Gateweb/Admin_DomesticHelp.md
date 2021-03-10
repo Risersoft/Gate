@@ -31,8 +31,6 @@ comments: false
 ![](/images/ADomesticListweb.png)
 
 
-
-
 ## Edit
 
 You can edit the domestic help by following the given steps:
@@ -57,7 +55,9 @@ You can edit the domestic help by following the given steps:
 ## Create
 
 **Step-1**: Select the domestic help that you want to add punch from domestic help list. Right click on it and select **Add Punch Attendance** option. Punch attend form will appear.
-                                                  **Or**
+                                                  
+**Or**
+												  
 Select the domestic help that you want to add punch from attendance reports list. Right click on it and select **Add Punch Attendance** option. Punch attend form will appear.           
 
 ![](/images/AddPunchAttendanceMenuweb.png)

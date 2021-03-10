@@ -18,17 +18,15 @@ comments: false
 
 ![](/images/Cab-NewCabwin.png)
 
-**Step-2**: Click on Save button.
-
+**Step-2**: Click on **Save** button.
 
 
 ## List
 
 
-**Step-1**:   Click on **Admin-> Cab Details-> List of Cab**. **Cab** list will appear.
+**Step-1**: Click on **Admin-> Cab Details-> List of Cab**. **Cab** list will appear.
 
 ![](/images/Cab-ListofCabwin.png)
-
 
 
 ## Edit
@@ -42,7 +40,6 @@ You can edit the Cab by following the given steps:
                                 
 
 ![](/images/ListofCab-SelectMenuwin.png)
-
 
 
 **Step-3**: Edit the details and click on **Save**.

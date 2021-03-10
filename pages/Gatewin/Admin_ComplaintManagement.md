@@ -13,11 +13,10 @@ comments: false
 
 ## List
 
-**Step-1**:   Click on **Admin-> Resident Complaint **. **Complaint** list will appear.
+**Step-1**: Click on **Admin-> Resident Complaint**. **Complaint** list will appear.
 
 
 ![](/images/ListofComplaintwin.png)
-
 
 
 ## Edit
@@ -30,7 +29,5 @@ You can edit the Complaint by following the given steps:
 **Step-2**: Right click and select **Edit Complaint** option. **Complaint** details will open.
                                 
 ![](/images/ListofComplaint-SelectMenuwin.png)
-
-
 
 **Step-3**: Edit the details and click on **Save**.

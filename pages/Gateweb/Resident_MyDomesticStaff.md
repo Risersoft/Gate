@@ -1,6 +1,6 @@
 ---
-title: My Domestic Help
-keywords: My Domestic Help
+title: My Domestic Helps
+keywords: My Domestic Helps
 sidebar: Gateweb_sidebar
 permalink: gate-nirvana-web/my-domestic-staff.html
 folder: Gateweb
@@ -8,7 +8,7 @@ hide_sidebar: false
 comments: false
 ---
 
-# My Domestic Help
+# My Domestic Helps
 
 ## List
 
